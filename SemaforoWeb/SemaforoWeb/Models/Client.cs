@@ -16,7 +16,7 @@ namespace SemaforoWeb.Models
         public int ClientId { get; set; }
         public int UserId { get; set; }
         public int ClientStatusId { get; set; }
-        public int CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }
         public DateTime LastModify { get; set; }
         public int LastModifiedBy { get; set; }
         public string Status { get; set; }

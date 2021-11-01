@@ -285,7 +285,9 @@ namespace SemaforoWeb.Models
 
                 entity.Property(e => e.Comments).UseCollation("Modern_Spanish_CI_AS");
 
-                entity.Property(e => e.CreateDate).HasColumnName("Create_Date");
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("Create_Date");
 
                 entity.Property(e => e.Email)
                     .HasMaxLength(10)
