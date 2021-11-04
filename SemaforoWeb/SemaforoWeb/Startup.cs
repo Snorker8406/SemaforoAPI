@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using SemaforoWeb.Models;
 using System;
 using System.Collections.Generic;
 
@@ -25,6 +27,8 @@ namespace SemaforoWeb
         {
 
             services.AddControllersWithViews();
+
+            services.AddDbContext<db_9bc4da_semaforoContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SemaforoContext")));
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
