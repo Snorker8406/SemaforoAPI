@@ -41,9 +41,15 @@ namespace SemaforoWeb.Controllers
 
         // POST api/<SalesDetailsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<SalesDetail>> PostSaleDetail(SalesDetail salesDetail)
         {
+
+            _context.SalesDetails.Add(salesDetail);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetSalesDetail", new { id = salesDetail.SaleId }, salesDetail);
         }
+
 
         // PUT api/<SalesDetailsController>/5
         [HttpPut("{id}")]

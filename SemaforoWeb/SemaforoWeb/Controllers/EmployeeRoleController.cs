@@ -41,10 +41,14 @@ namespace SemaforoWeb.Controllers
 
         // POST api/<EmployeeRoleController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<EmployeeRole>> PostEmployeeRole(EmployeeRole employeeRole)
         {
-        }
 
+            _context.EmployeeRoles.Add(employeeRole);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetEmployeeRoles", new { id = employeeRole.EmployeeId }, employeeRole);
+        }
         // PUT api/<EmployeeRoleController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)

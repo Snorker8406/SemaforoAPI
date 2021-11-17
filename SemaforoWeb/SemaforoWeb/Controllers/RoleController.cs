@@ -41,8 +41,13 @@ namespace SemaforoWeb.Controllers
 
         // POST api/<RoleController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<Role>> PostRole(Role role)
         {
+
+            _context.Roles.Add(role);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetRole", new { id = role.RoleId }, role);
         }
 
         // PUT api/<RoleController>/5

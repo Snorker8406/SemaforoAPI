@@ -40,8 +40,13 @@ namespace SemaforoWeb.Controllers
 
         // POST api/<ProductCategoryController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<ProductCategory>> PostProductCategory(ProductCategory productCategory)
         {
+
+            _context.ProductCategories.Add(productCategory);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetProductCategory", new { id = productCategory.ProductId }, productCategory);
         }
 
         // PUT api/<ProductCategoryController>/5

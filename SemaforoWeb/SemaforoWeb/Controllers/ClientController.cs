@@ -30,7 +30,17 @@ namespace SemaforoWeb.Controllers
             var clients = await _context.Clients.ToListAsync();
             List<ClientDTO> clientDTOs = new List<ClientDTO>();
 
+            foreach (var client in clients)
+            {
+                ClientDTO clientDTO = new ClientDTO(); //Instanciar de una clase
+
+                clientDTO.Name = client.Name;
+                clientDTO.Address = client.Address;
+
+                clientDTOs.Add(clientDTO);
+            }
             return clientDTOs;
+
         }
 
         // GET api/<ClientController>/5
@@ -42,14 +52,48 @@ namespace SemaforoWeb.Controllers
 
         // POST api/<ClientController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<Client>> PostClient(Client client)
         {
+
+            _context.Clients.Add(client);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetClients", new { id = client.ClientId }, client);
         }
 
         // PUT api/<ClientController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> PutClient(int id, Client client)
         {
+            if (id != client.ClientId)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(client).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ClientExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        private bool ClientExists(int id)
+        {
+            throw new NotImplementedException();
         }
 
         // DELETE api/<ClientController>/5

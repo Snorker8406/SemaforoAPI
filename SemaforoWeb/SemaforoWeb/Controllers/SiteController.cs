@@ -41,9 +41,15 @@ namespace SemaforoWeb.Controllers
 
         // POST api/<SiteController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<Site>> PostAccount(Site site)
         {
+
+            _context.Sites.Add(site);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetAccount", new { id = site.SiteId }, site);
         }
+
 
         // PUT api/<SiteController>/5
         [HttpPut("{id}")]

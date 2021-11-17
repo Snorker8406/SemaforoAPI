@@ -41,8 +41,13 @@ namespace SemaforoWeb.Controllers
 
         // POST api/<AccountTypeController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<AccountType>> PostAccountType(AccountType accountType)
         {
+
+            _context.AccountTypes.Add(accountType);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetAccountType", new { id = accountType.AccountTypeId }, accountType);
         }
 
         // PUT api/<AccountTypeController>/5

@@ -41,8 +41,13 @@ namespace SemaforoWeb.Controllers
 
         // POST api/<ValuesController1>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<Size>> PostSize(Size size)
         {
+
+            _context.Sizes.Add(size);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetSize", new { id = size.SizeId }, size);
         }
 
         // PUT api/<ValuesController1>/5

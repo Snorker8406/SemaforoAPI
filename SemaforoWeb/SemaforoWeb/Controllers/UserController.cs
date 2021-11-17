@@ -41,8 +41,13 @@ namespace SemaforoWeb.Controllers
 
         // POST api/<UserController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<User>> PostUser(User user)
         {
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetUsers", new { id = user.UserId }, user);
         }
 
         // PUT api/<UserController>/5

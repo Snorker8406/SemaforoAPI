@@ -41,8 +41,13 @@ namespace SemaforoWeb.Controllers
 
         // POST api/<ProductPictureController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<ProductPicture>> PostProductPicture(ProductPicture productPicture)
         {
+
+            _context.ProductPictures.Add(productPicture);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetProductPicture", new { id = productPicture.ProductId }, productPicture);
         }
 
         // PUT api/<ProductPictureController>/5

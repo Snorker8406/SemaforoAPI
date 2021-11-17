@@ -41,8 +41,13 @@ namespace SemaforoWeb.Controllers
 
         // POST api/<StockController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<Stock>> PostStock(Stock stock)
         {
+
+            _context.Stocks.Add(stock);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetStock", new { id = stock.StockId }, stock);
         }
 
         // PUT api/<StockController>/5

@@ -41,8 +41,13 @@ namespace SemaforoWeb.Controllers
 
         // POST api/<AccountStatusController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<AccountStatus>> PostAccount(AccountStatus accountStatus)
         {
+
+            _context.AccountStatuses.Add(accountStatus);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetAccountStatus", new { id = accountStatus.AccountStatusId }, accountStatus);
         }
 
         // PUT api/<AccountStatusController>/5

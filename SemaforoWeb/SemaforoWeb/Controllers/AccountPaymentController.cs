@@ -41,8 +41,13 @@ namespace SemaforoWeb.Controllers
 
         // POST api/<AccountPaymentController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<AccountPayment>> PostAccountPayment(AccountPayment accountPayment)
         {
+
+            _context.AccountPayments.Add(accountPayment);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetAccountPayment", new { id = accountPayment.AccountPaymentId }, accountPayment);
         }
 
         // PUT api/<AccountPaymentController>/5

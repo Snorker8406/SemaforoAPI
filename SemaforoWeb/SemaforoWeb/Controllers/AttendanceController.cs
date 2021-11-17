@@ -41,8 +41,13 @@ namespace SemaforoWeb.Controllers
 
         // POST api/<AttendanceController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<Attendance>> PostAttendance(Attendance attendance)
         {
+
+            _context.Attendances.Add(attendance);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetAttendance", new { id = attendance.AttendanceId }, attendance);
         }
 
         // PUT api/<AttendanceController>/5

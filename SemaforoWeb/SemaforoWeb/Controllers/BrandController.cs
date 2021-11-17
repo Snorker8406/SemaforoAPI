@@ -40,9 +40,13 @@ namespace SemaforoWeb.Controllers
 
         // POST api/<BrandController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<Brand>> PostBrand(Brand brand)
         {
 
+            _context.Brands.Add(brand);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetBrand", new { id = brand.BrandId }, brand);
         }
 
         // PUT api/<BrandController>/5
