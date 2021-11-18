@@ -1,18 +1,20 @@
-import 'bootstrap/dist/css/bootstrap.css';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
-
-const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
-const rootElement = document.getElementById('root');
+import 'react-app-polyfill/stable'
+import 'core-js'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import App from './App'
+import * as serviceWorker from './serviceWorker'
+import { Provider } from 'react-redux'
+import store from './store'
 
 ReactDOM.render(
-  <BrowserRouter basename={baseUrl}>
+  <Provider store={store}>
     <App />
-  </BrowserRouter>,
-  rootElement);
+  </Provider>,
+  document.getElementById('root'),
+)
 
-registerServiceWorker();
-
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: http://bit.ly/CRA-PWA
+serviceWorker.unregister()

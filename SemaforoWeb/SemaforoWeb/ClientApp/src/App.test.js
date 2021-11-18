@@ -1,13 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { MemoryRouter } from 'react-router-dom';
-import App from './App';
+import React from 'react'
+import { shallow } from 'enzyme/build'
+import App from './App'
+import Dashboard from './views/dashboard/Dashboard.js'
 
-it('renders without crashing', async () => {
-  const div = document.createElement('div');
-  ReactDOM.render(
-    <MemoryRouter>
-      <App />
-    </MemoryRouter>, div);
-  await new Promise(resolve => setTimeout(resolve, 1000));
-});
+it('mounts App without crashing', () => {
+  const wrapper = shallow(<App />)
+  wrapper.unmount()
+})
+
+it('mounts Dashboard without crashing', () => {
+  const wrapper = shallow(<Dashboard />)
+  wrapper.unmount()
+})
