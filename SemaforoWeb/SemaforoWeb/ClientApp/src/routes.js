@@ -33,6 +33,7 @@ const Layout = React.lazy(() => import('./views/forms/layout/Layout'))
 const Range = React.lazy(() => import('./views/forms/range/Range'))
 const Select = React.lazy(() => import('./views/forms/select/Select'))
 const Validation = React.lazy(() => import('./views/forms/validation/Validation'))
+const registerClient = React.lazy(() => import('./views/forms/registerClient/registerClient'))
 
 const Charts = React.lazy(() => import('./views/charts/Charts'))
 
@@ -83,6 +84,7 @@ const routes = [
   { path: '/forms/floating-labels', name: 'Floating Labels', component: FloatingLabels },
   { path: '/forms/layout', name: 'Layout', component: Layout },
   { path: '/forms/validation', name: 'Validation', component: Validation },
+  { path: '/forms/registerClient', name: 'registerClient', component: registerClient },
   { path: '/icons', exact: true, name: 'Icons', component: CoreUIIcons },
   { path: '/icons/coreui-icons', name: 'CoreUI Icons', component: CoreUIIcons },
   { path: '/icons/flags', name: 'Flags', component: Flags },
