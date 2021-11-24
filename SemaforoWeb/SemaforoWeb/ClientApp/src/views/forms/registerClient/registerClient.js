@@ -18,9 +18,9 @@ import { DatasetController } from 'chart.js'
 
 const ClientForm = () => {
   const [data, setData] = useState({
-    clientName: '',
-    clientLastName: '',
-    clientLastNameMother: '',
+    name: '',
+    lastName: '',
+    lastNameMother: '',
     clientDateOfBirth: '',
     clientMale: '',
     clientFemale: '',
@@ -44,7 +44,20 @@ const ClientForm = () => {
 
   const clientSubmit = (event) => {
     event.preventDefault()
-    console.log(data.clientName)
+    fetch('/api/Client', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => {
+        let response = res.json()
+        console.log(response)
+      })
+      .then((result) => setData(result.rows))
+      .catch((err) => counsole.log('error'))
+    console.log(data.name)
   }
   return (
     <form onSubmit={clientSubmit}>
@@ -60,7 +73,7 @@ const ClientForm = () => {
                 <div className="col-lg-12">
                   <CFormInput
                     type="text"
-                    name="clientName"
+                    name="name"
                     placeholder="Enter name"
                     onChange={handleInputChange}
                     required
@@ -74,7 +87,7 @@ const ClientForm = () => {
                 <div className="col-sm-12">
                   <CFormInput
                     type="text"
-                    name="clientLastname"
+                    name="lastName"
                     placeholder="Enter last name"
                     onChange={handleInputChange}
                     required
@@ -88,7 +101,7 @@ const ClientForm = () => {
                 <div className="col-sm-12">
                   <CFormInput
                     type="text"
-                    name="clientLastNameMother"
+                    name="lastNameMother"
                     placeholder="Enter last name mother"
                     onChange={handleInputChange}
                     required

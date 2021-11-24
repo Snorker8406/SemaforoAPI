@@ -52,8 +52,15 @@ namespace SemaforoWeb.Controllers
 
         // POST api/<ClientController>
         [HttpPost]
-        public async Task<ActionResult<Client>> PostClient(Client client)
+        public async Task<ActionResult<Client>> PostClient(ClientDTO clientDto)
         {
+            Client client = new Client();
+            client.Name = clientDto.Name;
+            client.LastName = clientDto.LastName;
+            client.LastNameMother = clientDto.LastNameMother;
+            client.Cellphone = clientDto.Cellphone;
+            client.Email = clientDto.Email;
+
 
             _context.Clients.Add(client);
             await _context.SaveChangesAsync();
