@@ -55,11 +55,24 @@ namespace SemaforoWeb.Controllers
         public async Task<ActionResult<Client>> PostClient(ClientDTO clientDto)
         {
             Client client = new Client();
+            client.UserId = clientDto.UserId;
+            client.ClientStatusId = clientDto.ClientStatusId;
+            client.CreateDate = DateTime.Now;
+            client.LastModify = DateTime.Now;
+            client.LastModifiedBy = clientDto.LastModifiedBy;
+            client.Status = clientDto.Status;
             client.Name = clientDto.Name;
             client.LastName = clientDto.LastName;
             client.LastNameMother = clientDto.LastNameMother;
+            client.AccountDaysLimit = clientDto.AccountDaysLimit;
+            client.AccountAmountLimit = clientDto.AccountAmountLimit;
+            client.Address = clientDto.Address;
             client.Cellphone = clientDto.Cellphone;
+            client.Whatsapp = clientDto.Whatsapp;
+            client.Facebook = clientDto.Facebook;
             client.Email = clientDto.Email;
+            client.ProfileImage = clientDto.ProfileImage;
+            client.Comments = clientDto.Comments;
 
 
             _context.Clients.Add(client);

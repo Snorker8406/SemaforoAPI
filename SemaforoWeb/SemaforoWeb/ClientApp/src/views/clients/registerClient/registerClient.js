@@ -14,25 +14,25 @@ import {
   CImage,
   CContainer,
 } from '@coreui/react'
-import { DatasetController } from 'chart.js'
 
 const ClientForm = () => {
   const [data, setData] = useState({
+    clientStatusId: 1,
+    userId: 1,
+    lastModifiedBy: 1,
+    status: '',
     name: '',
     lastName: '',
     lastNameMother: '',
-    clientDateOfBirth: '',
-    clientMale: '',
-    clientFemale: '',
-    clientAddress: '',
-    clientCellphone: '',
-    clientEmail: '',
-    clientFacebook: '',
-    clientAccountDaysLimit: '',
-    clientAccountAmountLimit: '',
-    clientStatus: '',
-    clientLastModify: '',
-    clientLastModifyBy: '',
+    accountDaysLimit: 2,
+    accountAmountLimit: 2.2,
+    address: '',
+    cellphone: '',
+    whatsapp: true,
+    facebook: '',
+    email: '',
+    profileImage: '',
+    comments: '',
   })
 
   const handleInputChange = (event) => {
@@ -51,19 +51,21 @@ const ClientForm = () => {
       },
       body: JSON.stringify(data),
     })
-      .then((res) => {
-        let response = res.json()
-        console.log(response)
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result)
+        setData(result)
       })
-      .then((result) => setData(result.rows))
-      .catch((err) => counsole.log('error'))
+      .catch((err) => console.log('error'))
     console.log(data.name)
   }
   return (
     <form onSubmit={clientSubmit}>
       <CContainer>
         <CRow>
-          <CFormLabel htmlFor="validationCustom03">Name of client</CFormLabel>
+          <CFormLabel htmlFor="validationCustom03">
+            {data.name} {data.lastName} {data.lastNameMother} {data.clientId}
+          </CFormLabel>
         </CRow>
         <CCol xs={12}>
           <CRow>
@@ -121,7 +123,7 @@ const ClientForm = () => {
               <CFormLabel htmlFor="validationCustom03">Date of birth</CFormLabel>
               <CFormInput
                 type="date"
-                name="clientDateOfBirth"
+                name="dateOfBirth"
                 value="2021-11-19"
                 onChange={handleInputChange}
                 required
@@ -129,14 +131,14 @@ const ClientForm = () => {
             </CCol>
             <CCol xs={2}>
               <CFormLabel htmlFor="validationCustom03">Gender</CFormLabel>
-              <CFormCheck type="radio" name="clientMale" label="Male" />
-              <CFormCheck type="radio" name="clienteFemale" label="Female" />
+              <CFormCheck type="radio" name="male" label="Male" />
+              <CFormCheck type="radio" name="female" label="Female" />
             </CCol>
             <CCol>
               <CFormLabel htmlFor="validationCustom03">Address</CFormLabel>
               <CFormInput
                 type="text"
-                name="clientAddress"
+                name="address"
                 placeholder="Enter Address"
                 onChange={handleInputChange}
                 required
@@ -146,7 +148,7 @@ const ClientForm = () => {
               <CFormLabel htmlFor="validationCustom03">Cellphone</CFormLabel>
               <CFormInput
                 type="number"
-                name="clientCellphone"
+                name="cellphone"
                 placeholder="Enter Cellphone"
                 onChange={handleInputChange}
                 required
@@ -159,7 +161,7 @@ const ClientForm = () => {
               <CFormLabel htmlFor="validationCustom03">Email</CFormLabel>
               <CFormInput
                 type="text"
-                name="clientEmail"
+                name="email"
                 placeholder="Enter email"
                 onChange={handleInputChange}
                 required
@@ -169,7 +171,7 @@ const ClientForm = () => {
               <CFormLabel htmlFor="validationCustom03">Facebook</CFormLabel>
               <CFormInput
                 type="text"
-                name="clientFacebook"
+                name="facebook"
                 placeholder="Enter Facebook profile"
                 onChange={handleInputChange}
                 required
@@ -180,7 +182,7 @@ const ClientForm = () => {
               <div className="col-sm-12">
                 <CFormInput
                   type="number"
-                  name="clientAccountDaysLimit"
+                  name="accountDaysLimit1"
                   placeholder="Place the account days limit"
                   onChange={handleInputChange}
                   required
@@ -192,7 +194,7 @@ const ClientForm = () => {
               <div className="col-sm-12">
                 <CFormInput
                   type="number"
-                  name="clientAccountAmountLimit"
+                  name="accountAmountLimit1"
                   placeholder="Place the account amount limit"
                   onChange={handleInputChange}
                   required
@@ -206,7 +208,7 @@ const ClientForm = () => {
               <CFormLabel htmlFor="validationCustom03">Status</CFormLabel>
               <CFormSelect
                 aria-label="Default select example"
-                name="clientStatus"
+                name="status"
                 onChange={handleInputChange}
               >
                 <option disabled>Choose</option>
@@ -218,7 +220,7 @@ const ClientForm = () => {
               <CFormLabel htmlFor="validationCustom03">Last Modify</CFormLabel>
               <CFormInput
                 type="date"
-                name="clientLastModify"
+                name="lastModify"
                 placeholder="Enter email"
                 value="2021-11-19"
                 readonly
@@ -230,7 +232,7 @@ const ClientForm = () => {
               <CFormLabel htmlFor="validationCustom03">Last Modify By</CFormLabel>
               <CFormInput
                 type="text"
-                name="clientLastModifyBy"
+                name="lastModifyBy"
                 disabled
                 readonly
                 onChange={handleInputChange}

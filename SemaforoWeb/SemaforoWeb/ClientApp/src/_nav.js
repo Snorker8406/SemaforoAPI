@@ -18,6 +18,7 @@ import {
   cilEducation,
   cilHouse,
   cibTeespring,
+  cilContact,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
@@ -36,74 +37,74 @@ const _nav = [
   //Catalogo
   {
     component: CNavTitle,
-    name: 'Catálogo',
+    name: 'Catalog',
   },
   {
     component: CNavGroup,
-    name: 'Productos',
+    name: 'Products',
     to: '/base/popovers',
     icon: <CIcon icon={cilBasket} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Listado de Productos',
+        name: 'List of Products',
         to: '/base/accordion',
       },
       {
         component: CNavItem,
-        name: 'Registro de Productos',
+        name: 'Product Register',
         to: '/base/accordion',
       },
       {
         component: CNavGroup,
-        name: 'Entrada de Productos',
+        name: 'Product Entry',
         to: '/base/accordion',
         items: [
           {
             component: CNavItem,
-            name: 'Productos Unicos',
+            name: 'Unique Products',
             to: '/base/accordion',
           },
           {
             component: CNavItem,
-            name: 'Pedidos',
+            name: 'Orders',
             to: '/base/accordion',
           },
         ],
       },
       {
         component: CNavItem,
-        name: 'Buscar Productos',
+        name: 'Search Products',
         to: '/base/accordion',
       },
       {
         component: CNavItem,
-        name: 'Temporadas para Stock',
+        name: 'Season for Stock',
         to: '/base/accordion',
       },
       {
         component: CNavItem,
-        name: 'Establecer Stock',
+        name: 'Set Stock',
         to: '/base/accordion',
       },
       {
         component: CNavItem,
-        name: 'Reporte de Stocks',
+        name: 'Stock report',
         to: '/base/accordion',
       },
       {
         component: CNavItem,
-        name: 'Administrar Existencias',
+        name: 'Manage Stock',
         to: '/base/accordion',
       },
       {
         component: CNavGroup,
-        name: 'Imprimir Etiquetas',
+        name: 'Print Labels',
         to: '/base/accordion',
         items: [
           {
             component: CNavItem,
-            name: 'Codigo Standar',
+            name: 'Standard Code',
             to: '/base/accordion',
           },
           {
@@ -115,157 +116,163 @@ const _nav = [
       },
       {
         component: CNavItem,
-        name: 'Descuentos',
+        name: 'Discount',
         to: '/base/accordion',
       },
       {
         component: CNavItem,
-        name: 'Revision por Producto',
+        name: 'Review by Product',
         to: '/base/accordion',
       },
       {
         component: CNavItem,
-        name: 'Administrar Conceptos',
+        name: 'Manage Concepts',
         to: '/base/accordion',
       },
     ],
   },
   {
     component: CNavGroup,
-    name: 'Clientes',
+    name: 'Clients',
     icon: <CIcon icon={cilPeople} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Registro de Clientes',
+        name: 'Clients Register',
         to: '/forms/registerClient',
       },
       {
         component: CNavItem,
-        name: 'Listado de Clientes',
+        name: 'List of Clients',
         to: '/base/accordion',
       },
       {
         component: CNavItem,
-        name: 'Administrar Cuentas por Cobrar',
+        name: 'Manage Accounts Receivable',
         to: '/base/accordion',
       },
     ],
   },
   {
     component: CNavGroup,
-    name: 'Empleados',
+    name: 'Employees',
     to: '/theme/colors',
     icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Administrar Empleados',
+        name: 'Manage Employees',
+        to: '/forms/manageEmployees',
+      },
+      {
+        component: CNavItem,
+        name: 'Employee Permits',
         to: '/base/accordion',
       },
       {
         component: CNavItem,
-        name: 'Permisos a Empleados',
+        name: 'Payment to Employees',
         to: '/base/accordion',
       },
       {
         component: CNavItem,
-        name: 'Pagos a Empleados',
+        name: 'Rectify Attendance',
         to: '/base/accordion',
       },
       {
         component: CNavItem,
-        name: 'Rectificar Asistencias',
-        to: '/base/accordion',
-      },
-      {
-        component: CNavItem,
-        name: 'Asistencia',
+        name: 'Attendance',
         to: '/base/accordion',
       },
     ],
   },
   {
     component: CNavGroup,
-    name: 'Proveedores',
+    name: 'Providers',
     to: '/base/accordion',
     icon: <CIcon icon={cilFlightTakeoff} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Administrar Proveedores',
+        name: 'Manage Suppliers',
         to: '/base/accordion',
       },
       {
         component: CNavItem,
-        name: 'Cuentas por Pagar',
+        name: 'Debts to Pay',
         to: '/base/accordion',
       },
       {
         component: CNavItem,
-        name: 'Pagos',
+        name: 'Payments',
         to: '/base/accordion',
       },
     ],
   },
   {
     component: CNavGroup,
-    name: 'Escuelas',
+    name: 'Schools',
     to: '/base/paginations',
     icon: <CIcon icon={cilEducation} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Listado de Escuelas',
+        name: 'Schools List',
         to: '/base/accordion',
       },
       {
         component: CNavItem,
-        name: 'Registro de Escuelas',
+        name: 'Schools Register',
         to: '/base/accordion',
       },
       {
         component: CNavItem,
-        name: 'Letreros de Escuelas',
+        name: 'School Sign',
         to: '/base/accordion',
       },
       {
         component: CNavItem,
-        name: 'Ponchados',
+        name: 'Embroidery',
         to: '/base/accordion',
       },
     ],
   },
   {
     component: CNavGroup,
-    name: 'Sucursales',
+    name: 'Stores',
     to: '/base/spinners',
     icon: <CIcon icon={cilHouse} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Administrar Sucursales',
+        name: 'Manage Stores',
         to: '/base/accordion',
       },
     ],
   },
   {
     component: CNavGroup,
-    name: 'Ponchados',
+    name: 'Embroidery',
     to: '/base/tooltips',
     icon: <CIcon icon={cibTeespring} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Registro de Ponchados',
+        name: 'Embroidery Register',
         to: '/base/accordion',
       },
       {
         component: CNavItem,
-        name: 'Buscar Ponchados',
+        name: 'Search Embroidery',
         to: '/base/accordion',
       },
     ],
+  },
+  {
+    component: CNavItem,
+    name: 'Users',
+    to: '/forms/users',
+    icon: <CIcon icon={cilContact} customClassName="nav-icon" />,
   },
 
   //Componentes

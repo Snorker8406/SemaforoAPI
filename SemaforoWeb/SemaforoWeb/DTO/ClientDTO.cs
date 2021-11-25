@@ -24,7 +24,6 @@ namespace SemaforoWeb.DTO
         public string Cellphone { get; set; }
         public bool Whatsapp { get; set; }
         public string Facebook { get; set; }
-        public string FacebookName { get; set; }
         public string Email { get; set; }
         public byte[] ProfileImage { get; set; }
         public string Comments { get; set; }
