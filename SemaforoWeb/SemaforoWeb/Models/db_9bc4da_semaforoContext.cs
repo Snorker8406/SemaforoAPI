@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.SqlServer;
 
 #nullable disable
 
@@ -43,7 +42,6 @@ namespace SemaforoWeb.Models
         public virtual DbSet<Size> Sizes { get; set; }
         public virtual DbSet<Stock> Stocks { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public object EmployeSalaries { get; internal set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -292,7 +290,7 @@ namespace SemaforoWeb.Models
                     .HasColumnName("Create_Date");
 
                 entity.Property(e => e.Email)
-                    .HasMaxLength(10)
+                    .HasMaxLength(100)
                     .IsFixedLength(true)
                     .UseCollation("Modern_Spanish_CI_AS");
 
@@ -301,10 +299,12 @@ namespace SemaforoWeb.Models
                     .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.FacebookName)
-                    .HasMaxLength(10)
+                    .HasMaxLength(100)
                     .HasColumnName("Facebook_Name")
                     .IsFixedLength(true)
                     .UseCollation("Modern_Spanish_CI_AS");
+
+                entity.Property(e => e.Gender).HasMaxLength(1);
 
                 entity.Property(e => e.LastModifiedBy).HasColumnName("Last_Modified_By");
 

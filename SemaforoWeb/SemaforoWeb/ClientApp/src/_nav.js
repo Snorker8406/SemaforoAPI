@@ -144,7 +144,7 @@ const _nav = [
       {
         component: CNavItem,
         name: 'List of Clients',
-        to: '/base/accordion',
+        to: '/forms/listOfClients',
       },
       {
         component: CNavItem,

@@ -34,6 +34,7 @@ const Range = React.lazy(() => import('./views/forms/range/Range'))
 const Select = React.lazy(() => import('./views/forms/select/Select'))
 const Validation = React.lazy(() => import('./views/forms/validation/Validation'))
 const registerClient = React.lazy(() => import('./views/clients/registerClient/registerClient'))
+const listOfClients = React.lazy(() => import('./views/clients/listOfClients/listOfClients'))
 const Charts = React.lazy(() => import('./views/charts/Charts'))
 
 // Icons
@@ -84,6 +85,7 @@ const routes = [
   { path: '/forms/layout', name: 'Layout', component: Layout },
   { path: '/forms/validation', name: 'Validation', component: Validation },
   { path: '/forms/registerClient', name: 'registerClient', component: registerClient },
+  { path: '/forms/listOfClients', name: 'listOfClients', component: listOfClients },
   { path: '/icons', exact: true, name: 'Icons', component: CoreUIIcons },
   { path: '/icons/coreui-icons', name: 'CoreUI Icons', component: CoreUIIcons },
   { path: '/icons/flags', name: 'Flags', component: Flags },

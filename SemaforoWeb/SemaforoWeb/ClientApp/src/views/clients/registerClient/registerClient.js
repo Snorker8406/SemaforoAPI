@@ -111,15 +111,10 @@ const ClientForm = () => {
                 </div>
               </CRow>
             </CCol>
-            {/* <CCol xs={3}>
-              <div className="clearfix">
-                <CImage align="start" rounded src="/images/react400.jpg" width={250} height={250} />
-              </div>
-            </CCol> */}
           </CRow>
           <br />
           <CRow>
-            <CCol xs={2}>
+            <CCol xs={3}>
               <CFormLabel htmlFor="validationCustom03">Date of birth</CFormLabel>
               <CFormInput
                 type="date"
@@ -129,7 +124,7 @@ const ClientForm = () => {
                 required
               />
             </CCol>
-            <CCol xs={2}>
+            <CCol xs={1}>
               <CFormLabel htmlFor="validationCustom03">Gender</CFormLabel>
               <CFormCheck type="radio" name="male" label="Male" />
               <CFormCheck type="radio" name="female" label="Female" />
@@ -204,7 +199,7 @@ const ClientForm = () => {
           </CRow>
           <br />
           <CRow>
-            <CCol xs={2}>
+            <CCol xs={4}>
               <CFormLabel htmlFor="validationCustom03">Status</CFormLabel>
               <CFormSelect
                 aria-label="Default select example"
@@ -216,7 +211,7 @@ const ClientForm = () => {
                 <option value="2">Inactive</option>
               </CFormSelect>
             </CCol>
-            <CCol xs={2}>
+            <CCol xs={4}>
               <CFormLabel htmlFor="validationCustom03">Last Modify</CFormLabel>
               <CFormInput
                 type="date"
@@ -228,7 +223,7 @@ const ClientForm = () => {
                 required
               />
             </CCol>
-            <CCol xs={2}>
+            <CCol xs={4}>
               <CFormLabel htmlFor="validationCustom03">Last Modify By</CFormLabel>
               <CFormInput
                 type="text"
