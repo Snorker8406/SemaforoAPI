@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useTable, useSortBy } from 'react-table'
 import {
   CTable,
@@ -10,38 +10,37 @@ import {
 } from '@coreui/react'
 
 const ListOfClients = () => {
-  const data = React.useMemo(
-    () => [
-      {
-        col1: 'Hello',
-        col2: 'World',
+  const [clients, setClients] = useState([])
+
+  useEffect(() => {
+    fetch('/api/Client', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
       },
-      {
-        col1: 'react-table',
-        col2: 'rocks',
-      },
-      {
-        col1: 'whatever',
-        col2: 'you want',
-        col3: 'Hola',
-      },
-    ],
-    [],
-  )
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        setClients(result)
+      })
+      .catch((err) => console.log('error'))
+  }, [])
+
+  const data = React.useMemo(() => clients, [clients])
 
   const columns = React.useMemo(
     () => [
       {
-        Header: 'Column 1',
-        accessor: 'col1', // accessor is the "key" in the data
+        Header: 'Name',
+        accessor: 'name', // accessor is the "key" in the data
       },
       {
-        Header: 'Column 2',
-        accessor: 'col2',
+        Header: 'Address',
+        accessor: 'address',
       },
       {
-        Header: 'Column 3',
-        accessor: 'col3',
+        Header: 'User Id',
+        accessor: 'userId',
       },
     ],
     [],
@@ -54,6 +53,7 @@ const ListOfClients = () => {
     },
     useSortBy,
   )
+  console.log('Clientes desde el State', clients)
 
   return (
     <CTable {...getTableProps()} striped>
