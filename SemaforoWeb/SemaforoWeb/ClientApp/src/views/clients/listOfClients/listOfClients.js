@@ -1,5 +1,13 @@
 import React, { useState } from 'react'
-import { useTable } from 'react-table'
+import { useTable, useSortBy } from 'react-table'
+import {
+  CTable,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+  CTableDataCell,
+  CTableBody,
+} from '@coreui/react'
 
 const ListOfClients = () => {
   const data = React.useMemo(
@@ -15,6 +23,7 @@ const ListOfClients = () => {
       {
         col1: 'whatever',
         col2: 'you want',
+        col3: 'Hola',
       },
     ],
     [],
@@ -30,62 +39,56 @@ const ListOfClients = () => {
         Header: 'Column 2',
         accessor: 'col2',
       },
+      {
+        Header: 'Column 3',
+        accessor: 'col3',
+      },
     ],
     [],
   )
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
-    columns,
-    data,
-  })
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
+    {
+      columns,
+      data,
+    },
+    useSortBy,
+  )
 
   return (
-    <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
-      <thead>
+    <CTable {...getTableProps()} striped>
+      <CTableHead>
         {headerGroups.map((headerGroup) => (
-          <tr {...headerGroup.getHeaderGroupProps()} key={'accessor'}>
+          <CTableRow {...headerGroup.getHeaderGroupProps()} key={'accessor'}>
             {headerGroup.headers.map((column) => (
-              <th
-                {...column.getHeaderProps()}
+              <CTableHeaderCell
+                {...column.getHeaderProps(column.getSortByToggleProps())}
                 key={'accessor'}
-                style={{
-                  borderBottom: 'solid 3px red',
-                  background: 'aliceblue',
-                  color: 'black',
-                  fontWeight: 'bold',
-                }}
               >
                 {column.render('Header')}
-              </th>
+                <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
+              </CTableHeaderCell>
             ))}
-          </tr>
+          </CTableRow>
         ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
+      </CTableHead>
+      <CTableBody {...getTableBodyProps()}>
         {rows.map((row) => {
           prepareRow(row)
           return (
-            <tr {...row.getRowProps()} key={'accessor'}>
+            <CTableRow {...row.getRowProps()} key={'accessor'}>
               {row.cells.map((cell) => {
                 return (
-                  <td
-                    {...cell.getCellProps()}
-                    key={'accessor'}
-                    style={{
-                      padding: '10px',
-                      border: 'solid 1px gray',
-                      background: 'papayawhip',
-                    }}
-                  >
+                  <CTableDataCell {...cell.getCellProps()} key={'accessor'}>
                     {cell.render('Cell')}
-                  </td>
+                  </CTableDataCell>
                 )
               })}
-            </tr>
+            </CTableRow>
           )
         })}
-      </tbody>
-    </table>
+      </CTableBody>
+    </CTable>
   )
 }
 
