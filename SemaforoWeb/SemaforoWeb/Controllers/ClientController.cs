@@ -36,6 +36,13 @@ namespace SemaforoWeb.Controllers
 
                 clientDTO.Name = client.Name;
                 clientDTO.Address = client.Address;
+                clientDTO.UserId = client.UserId;
+                clientDTO.Cellphone = client.Cellphone;
+                clientDTO.Email = client.Email;
+                clientDTO.AccountDaysLimit = client.AccountDaysLimit;
+                clientDTO.AccountAmountLimit = client.AccountAmountLimit;
+                clientDTO.LastModify = client.LastModify;
+                clientDTO.LastModifiedBy = client.LastModifiedBy;
 
                 clientDTOs.Add(clientDTO);
             }
@@ -64,6 +71,7 @@ namespace SemaforoWeb.Controllers
             client.Name = clientDto.Name;
             client.LastName = clientDto.LastName;
             client.LastNameMother = clientDto.LastNameMother;
+            client.Gender = clientDto.Gender;
             client.AccountDaysLimit = clientDto.AccountDaysLimit;
             client.AccountAmountLimit = clientDto.AccountAmountLimit;
             client.Address = clientDto.Address;

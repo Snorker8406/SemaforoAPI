@@ -162,7 +162,7 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Manage Employees',
-        to: '/forms/manageEmployees',
+        to: '/forms/manageEmployee',
       },
       {
         component: CNavItem,
@@ -218,12 +218,12 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Schools List',
-        to: '/base/accordion',
+        to: '/forms/schoolsList',
       },
       {
         component: CNavItem,
         name: 'Schools Register',
-        to: '/base/accordion',
+        to: '/forms/schoolsRegister',
       },
       {
         component: CNavItem,

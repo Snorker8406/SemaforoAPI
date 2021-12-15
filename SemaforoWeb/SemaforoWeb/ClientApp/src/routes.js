@@ -35,6 +35,10 @@ const Select = React.lazy(() => import('./views/forms/select/Select'))
 const Validation = React.lazy(() => import('./views/forms/validation/Validation'))
 const registerClient = React.lazy(() => import('./views/clients/registerClient/registerClient'))
 const listOfClients = React.lazy(() => import('./views/clients/listOfClients/listOfClients'))
+const manageEmployee = React.lazy(() => import('./views/employees/manageEmployee/manageEmployee'))
+const schoolsList = React.lazy(() => import('./views/schools/schoolsList/schoolsList'))
+const users = React.lazy(() => import('./views/users/users/users'))
+const schoolsRegister = React.lazy(() => import('./views/schools/schoolsRegister/schoolsRegister'))
 const Charts = React.lazy(() => import('./views/charts/Charts'))
 
 // Icons
@@ -86,6 +90,10 @@ const routes = [
   { path: '/forms/validation', name: 'Validation', component: Validation },
   { path: '/forms/registerClient', name: 'registerClient', component: registerClient },
   { path: '/forms/listOfClients', name: 'listOfClients', component: listOfClients },
+  { path: '/forms/manageEmployee', name: 'manageEmployee', component: manageEmployee },
+  { path: '/forms/schoolsList', name: 'schoolsList', component: schoolsList },
+  { path: '/forms/schoolsRegister', name: 'schoolsRegister', component: schoolsRegister },
+  { path: '/forms/users', name: 'users', component: users },
   { path: '/icons', exact: true, name: 'Icons', component: CoreUIIcons },
   { path: '/icons/coreui-icons', name: 'CoreUI Icons', component: CoreUIIcons },
   { path: '/icons/flags', name: 'Flags', component: Flags },

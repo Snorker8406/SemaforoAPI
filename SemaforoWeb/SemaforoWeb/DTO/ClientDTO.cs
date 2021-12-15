@@ -17,6 +17,7 @@ namespace SemaforoWeb.DTO
         public string Name { get; set; }
         public string LastName { get; set; }
         public string LastNameMother { get; set; }
+        public string Gender { get; set; }
         public int? AccountDaysLimit { get; set; }
         public decimal? AccountAmountLimit { get; set; }
         public bool? Student { get; set; }

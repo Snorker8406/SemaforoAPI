@@ -11,7 +11,7 @@ import {
   CPaginationItem,
 } from '@coreui/react'
 
-const ListOfClients = () => {
+const SchoolsList = () => {
   const [clients, setClients] = useState([])
 
   useEffect(() => {
@@ -37,8 +37,12 @@ const ListOfClients = () => {
         accessor: 'name', // accessor is the "key" in the data
       },
       {
-        Header: 'Address',
+        Header: 'Street',
         accessor: 'address',
+      },
+      {
+        Header: 'Suburb',
+        accesor: 'suburb',
       },
       {
         Header: 'User Id',
@@ -51,18 +55,6 @@ const ListOfClients = () => {
       {
         Header: 'Email',
         accesor: 'email',
-      },
-      {
-        Header: 'Account Days Limit',
-        accesor: 'accountDaysLimit',
-      },
-      {
-        Header: 'Account Amount Limit',
-        accesor: 'accountAmountLimit',
-      },
-      {
-        Header: 'Gender',
-        accesor: 'gender',
       },
     ],
     [],
@@ -128,4 +120,4 @@ const ListOfClients = () => {
   )
 }
 
-export default ListOfClients
+export default SchoolsList
