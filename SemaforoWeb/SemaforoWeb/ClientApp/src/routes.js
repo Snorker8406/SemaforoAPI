@@ -37,8 +37,10 @@ const registerClient = React.lazy(() => import('./views/clients/registerClient/r
 const listOfClients = React.lazy(() => import('./views/clients/listOfClients/listOfClients'))
 const manageEmployee = React.lazy(() => import('./views/employees/manageEmployee/manageEmployee'))
 const schoolsList = React.lazy(() => import('./views/schools/schoolsList/schoolsList'))
+const productRegister = React.lazy(() => import('./views/products/productRegister/productRegister'))
 const users = React.lazy(() => import('./views/users/users/users'))
 const schoolsRegister = React.lazy(() => import('./views/schools/schoolsRegister/schoolsRegister'))
+const manageStores = React.lazy(() => import('./views/stores/manageStores/manageStores'))
 const Charts = React.lazy(() => import('./views/charts/Charts'))
 
 // Icons
@@ -92,7 +94,9 @@ const routes = [
   { path: '/forms/listOfClients', name: 'listOfClients', component: listOfClients },
   { path: '/forms/manageEmployee', name: 'manageEmployee', component: manageEmployee },
   { path: '/forms/schoolsList', name: 'schoolsList', component: schoolsList },
+  { path: '/forms/manageStores', name: 'manageStores', component: manageStores },
   { path: '/forms/schoolsRegister', name: 'schoolsRegister', component: schoolsRegister },
+  { path: '/forms/productRegister', name: 'productRegister', component: productRegister },
   { path: '/forms/users', name: 'users', component: users },
   { path: '/icons', exact: true, name: 'Icons', component: CoreUIIcons },
   { path: '/icons/coreui-icons', name: 'CoreUI Icons', component: CoreUIIcons },

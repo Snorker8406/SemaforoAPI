@@ -53,7 +53,7 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Product Register',
-        to: '/base/accordion',
+        to: '/forms/productRegister',
       },
       {
         component: CNavGroup,
@@ -246,7 +246,7 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Manage Stores',
-        to: '/base/accordion',
+        to: '/forms/manageStores',
       },
     ],
   },

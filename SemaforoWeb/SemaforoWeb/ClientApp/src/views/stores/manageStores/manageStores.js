@@ -17,7 +17,8 @@ import {
 } from '@coreui/react'
 import ImageUpload from 'src/imageUpload'
 
-const SchoolForm = () => {
+const manageStoresForm = () => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [data, setData] = useState({
     clientStatusId: 1,
     userId: 1,
@@ -73,7 +74,7 @@ const SchoolForm = () => {
               <CCol>
                 <CForm validated={true}>
                   <CRow>
-                    <CFormLabel htmlFor="validationCustom03">Name of school</CFormLabel>
+                    <CFormLabel htmlFor="validationCustom03">Name of store</CFormLabel>
                     <div className="col-lg-12">
                       <CFormInput
                         type="text"
@@ -165,7 +166,7 @@ const SchoolForm = () => {
                 />
                 <br />
                 <CCol>
-                  <CFormLabel htmlFor="validationCustom03">Cellphone</CFormLabel>
+                  <CFormLabel htmlFor="validationCustom03">Phone</CFormLabel>
                   <CFormInput
                     type="number"
                     name="cellphone"
@@ -174,45 +175,6 @@ const SchoolForm = () => {
                     required
                   />
                 </CCol>
-              </CCol>
-              <CCol xl={3}>
-                <CFormLabel htmlFor="validationCustom03">Level</CFormLabel>
-                <CFormCheck
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="flexRadioDefault1"
-                  label="Kinder garden"
-                />
-                <CFormCheck
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="flexRadioDefault1"
-                  label="Primary school"
-                />
-                <CFormCheck
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="flexRadioDefault1"
-                  label="Middle School"
-                />
-                <CFormCheck
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="flexRadioDefault1"
-                  label="High School"
-                />
-                <CFormCheck
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="flexRadioDefault1"
-                  label="University"
-                />
-                <CFormCheck
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="flexRadioDefault1"
-                  label="Other"
-                />
                 <br />
               </CCol>
               <CFormFloating>
@@ -260,20 +222,6 @@ const SchoolForm = () => {
                 height={240}
               />
             </CRow>
-            <CFormFloating className="mb-3">
-              <CFormInput type="text" name="namePrincipal" placeholder="Name of principal" />
-              <CFormLabel htmlFor="floatingInput">Principal</CFormLabel>
-            </CFormFloating>
-            <br />
-            <CFormFloating className="mb-3">
-              <CFormInput type="number" name="directorCellphone" placeholder="Directors phone" />
-              <CFormLabel htmlFor="floatingInput">Directors phone</CFormLabel>
-            </CFormFloating>
-            <br />
-            <CFormFloating className="mb-3">
-              <CFormInput type="text" name="nameSecretary" placeholder="name of Secretary" />
-              <CFormLabel htmlFor="floatingInput">Secretary</CFormLabel>
-            </CFormFloating>
           </CCol>
         </CRow>
       </CContainer>
@@ -281,19 +229,19 @@ const SchoolForm = () => {
   )
 }
 
-const schoolsRegister = () => {
+const manageStores = () => {
   return (
     <CRow>
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
-            <strong>School</strong> <small>Register</small>
+            <strong>Register</strong> <small>Store</small>
           </CCardHeader>
-          <CCardBody>{SchoolForm()}</CCardBody>
+          <CCardBody>{manageStoresForm()}</CCardBody>
         </CCard>
       </CCol>
     </CRow>
   )
 }
 
-export default schoolsRegister
+export default manageStores
