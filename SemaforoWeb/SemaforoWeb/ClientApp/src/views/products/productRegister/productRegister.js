@@ -14,10 +14,10 @@ import {
   CFormTextarea,
   CFormFloating,
   CForm,
+  CFormSelect,
 } from '@coreui/react'
-import ImageUpload from 'src/imageUpload'
 
-const SchoolForm = () => {
+const ProductForm = () => {
   const [data, setData] = useState({
     clientStatusId: 1,
     userId: 1,
@@ -71,61 +71,39 @@ const SchoolForm = () => {
           <CCol xs={9}>
             <CRow>
               <CCol>
+                <CFormLabel htmlFor="validationCustom03">Provider</CFormLabel>
+                <CFormSelect aria-label="Default select example">
+                  <option disabled>Choose a provider</option>
+                  <option value="1">AMARO ZARATE</option>
+                  <option value="2">MARTHA PEREZ</option>
+                  <option value="3">TABITAS</option>
+                  <option value="3">TWINS</option>
+                </CFormSelect>
+              </CCol>
+              <CCol>
+                <CFormLabel htmlFor="validationCustom03">Name of Product</CFormLabel>
                 <CForm validated={true}>
-                  <CRow>
-                    <CFormLabel htmlFor="validationCustom03">Name of school</CFormLabel>
-                    <div className="col-lg-12">
-                      <CFormInput
-                        type="text"
-                        name="name"
-                        placeholder="Enter name of school"
-                        onChange={handleInputChange}
-                        invalid
-                        required
-                      />
-                    </div>
-                  </CRow>
+                  <div className="col-lg-12">
+                    <CFormInput
+                      type="text"
+                      name="name"
+                      placeholder="Enter name of school"
+                      onChange={handleInputChange}
+                      invalid
+                      required
+                    />
+                  </div>
                 </CForm>
               </CCol>
             </CRow>
             <br />
             <CRow>
               <CCol>
-                <CFormLabel htmlFor="validationCustom03">Street</CFormLabel>
+                <CFormLabel htmlFor="validationCustom03">Brand</CFormLabel>
                 <CFormInput
                   type="text"
                   name="street"
-                  placeholder="Enter Street"
-                  onChange={handleInputChange}
-                  required
-                />
-              </CCol>
-              <CCol xs={2}>
-                <CFormLabel htmlFor="validationCustom03">Number</CFormLabel>
-                <CFormInput
-                  type="number"
-                  name="number"
-                  placeholder="#"
-                  onChange={handleInputChange}
-                  required
-                />
-              </CCol>
-              <CCol>
-                <CFormLabel htmlFor="validationCustom03">Suburb</CFormLabel>
-                <CFormInput
-                  type="text"
-                  name="suburb"
-                  placeholder="Enter Suburb"
-                  onChange={handleInputChange}
-                  required
-                />
-              </CCol>
-              <CCol>
-                <CFormLabel htmlFor="validationCustom03">City</CFormLabel>
-                <CFormInput
-                  type="text"
-                  name="city"
-                  placeholder="Enter City"
+                  placeholder="Enter Brand"
                   onChange={handleInputChange}
                   required
                 />
@@ -174,45 +152,6 @@ const SchoolForm = () => {
                     required
                   />
                 </CCol>
-              </CCol>
-              <CCol xl={3}>
-                <CFormLabel htmlFor="validationCustom03">Level</CFormLabel>
-                <CFormCheck
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="flexRadioDefault1"
-                  label="Kinder garden"
-                />
-                <CFormCheck
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="flexRadioDefault1"
-                  label="Primary school"
-                />
-                <CFormCheck
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="flexRadioDefault1"
-                  label="Middle School"
-                />
-                <CFormCheck
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="flexRadioDefault1"
-                  label="High School"
-                />
-                <CFormCheck
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="flexRadioDefault1"
-                  label="University"
-                />
-                <CFormCheck
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="flexRadioDefault1"
-                  label="Other"
-                />
                 <br />
               </CCol>
               <CFormFloating>
@@ -245,8 +184,8 @@ const SchoolForm = () => {
                 color="warning"
                 variant="outline"
                 shape="rounded-pill"
-                type="button"
-                name="uploadImage"
+                type="file"
+                name="schoolsSubmit"
               >
                 Upload Image
               </CButton>
@@ -260,20 +199,6 @@ const SchoolForm = () => {
                 height={240}
               />
             </CRow>
-            <CFormFloating className="mb-3">
-              <CFormInput type="text" name="namePrincipal" placeholder="Name of principal" />
-              <CFormLabel htmlFor="floatingInput">Principal</CFormLabel>
-            </CFormFloating>
-            <br />
-            <CFormFloating className="mb-3">
-              <CFormInput type="number" name="directorCellphone" placeholder="Directors phone" />
-              <CFormLabel htmlFor="floatingInput">Directors phone</CFormLabel>
-            </CFormFloating>
-            <br />
-            <CFormFloating className="mb-3">
-              <CFormInput type="text" name="nameSecretary" placeholder="name of Secretary" />
-              <CFormLabel htmlFor="floatingInput">Secretary</CFormLabel>
-            </CFormFloating>
           </CCol>
         </CRow>
       </CContainer>
@@ -281,19 +206,19 @@ const SchoolForm = () => {
   )
 }
 
-const schoolsRegister = () => {
+const productRegister = () => {
   return (
     <CRow>
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
-            <strong>School</strong> <small>Register</small>
+            <strong>Product</strong> <small>Register</small>
           </CCardHeader>
-          <CCardBody>{SchoolForm()}</CCardBody>
+          <CCardBody>{ProductForm()}</CCardBody>
         </CCard>
       </CCol>
     </CRow>
   )
 }
 
-export default schoolsRegister
+export default productRegister
