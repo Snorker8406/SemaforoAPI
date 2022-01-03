@@ -34,6 +34,7 @@ namespace SemaforoWeb.Controllers
             {
                 ClientDTO clientDTO = new ClientDTO(); //Instanciar de una clase
 
+                clientDTO.ClientId = client.ClientId;
                 clientDTO.Name = client.Name;
                 clientDTO.Address = client.Address;
                 clientDTO.UserId = client.UserId;

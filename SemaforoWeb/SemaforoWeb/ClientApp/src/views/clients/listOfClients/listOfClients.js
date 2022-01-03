@@ -10,10 +10,12 @@ import {
   CPagination,
   CPaginationItem,
 } from '@coreui/react'
+import { cilPencil, cilTrash } from '@coreui/icons'
+import CIcon from '@coreui/icons-react'
 
 const ListOfClients = () => {
   const [clients, setClients] = useState([])
-
+  const [selectedClient, setSelectedClient] = useState([])
   useEffect(() => {
     fetch('/api/Client', {
       method: 'GET',
@@ -33,6 +35,10 @@ const ListOfClients = () => {
   const columns = React.useMemo(
     () => [
       {
+        Header: 'ID',
+        accessor: 'clientId', // accessor is the "key" in the data
+      },
+      {
         Header: 'Name',
         accessor: 'name', // accessor is the "key" in the data
       },
@@ -50,19 +56,23 @@ const ListOfClients = () => {
       },
       {
         Header: 'Email',
-        accesor: 'email',
+        accessor: 'email',
       },
       {
         Header: 'Account Days Limit',
-        accesor: 'accountDaysLimit',
+        accessor: 'accountDaysLimit',
       },
       {
         Header: 'Account Amount Limit',
-        accesor: 'accountAmountLimit',
+        accessor: 'accountAmountLimit',
       },
       {
         Header: 'Gender',
-        accesor: 'gender',
+        accessor: 'gender',
+      },
+      {
+        Header: 'Actions',
+        accessor: 'actions',
       },
     ],
     [],
@@ -75,18 +85,31 @@ const ListOfClients = () => {
     },
     useSortBy,
   )
-  console.log('Clientes desde el State', clients)
+
+  const editClient = (clientId) => {
+    fetch('/api/Client/' + clientId, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        setSelectedClient(result)
+      })
+      .catch((err) => console.log('error'))
+  }
 
   return (
     <>
       <CTable {...getTableProps()} striped>
         <CTableHead>
           {headerGroups.map((headerGroup) => (
-            <CTableRow {...headerGroup.getHeaderGroupProps()} key={'accessor'}>
+            <CTableRow {...headerGroup.getHeaderGroupProps()} key={'a'}>
               {headerGroup.headers.map((column) => (
                 <CTableHeaderCell
                   {...column.getHeaderProps(column.getSortByToggleProps())}
-                  key={'accessor'}
+                  key={'hd_' + column}
                 >
                   {column.render('Header')}
                   <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
@@ -99,10 +122,22 @@ const ListOfClients = () => {
           {rows.map((row) => {
             prepareRow(row)
             return (
-              <CTableRow {...row.getRowProps()} key={'accessor'}>
+              <CTableRow {...row.getRowProps()} key={row.clientId}>
                 {row.cells.map((cell) => {
+                  if (cell.column.id === 'actions') {
+                    return (
+                      <CTableDataCell {...cell.getCellProps()} key={'d'}>
+                        <CIcon
+                          icon={cilPencil}
+                          onClick={() => editClient(cell.row.values.clientId)}
+                          id={'edit-icon-' + cell.row.values.clientId}
+                        />
+                        <CIcon icon={cilTrash} />
+                      </CTableDataCell>
+                    )
+                  }
                   return (
-                    <CTableDataCell {...cell.getCellProps()} key={'accessor'}>
+                    <CTableDataCell {...cell.getCellProps()} key={'d'}>
                       {cell.render('Cell')}
                     </CTableDataCell>
                   )
