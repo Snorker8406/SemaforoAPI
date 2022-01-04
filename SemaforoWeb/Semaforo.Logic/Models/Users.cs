@@ -1,0 +1,42 @@
+﻿using System;
+using System.Collections.Generic;
+
+// Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
+// If you have enabled NRTs for your project, then un-comment the following line:
+// #nullable disable
+
+namespace Semaforo.Logic.Models
+{
+    public partial class Users
+    {
+        public Users()
+        {
+            Accounts = new HashSet<Accounts>();
+            Sales = new HashSet<Sales>();
+        }
+
+        public int UserId { get; set; }
+        public DateTime CreateDate { get; set; }
+        public int CreatedBy { get; set; }
+        public DateTime LastModify { get; set; }
+        public int LastModifiedBy { get; set; }
+        public string Status { get; set; }
+        public bool Deleted { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string Name { get; set; }
+        public string FirstLastName { get; set; }
+        public string SecondLastName { get; set; }
+        public string Address { get; set; }
+        public string Cellphone { get; set; }
+        public bool? Whatsapp { get; set; }
+        public string Facebook { get; set; }
+        public string Email { get; set; }
+        public string Comments { get; set; }
+        public byte[] ProfileImage { get; set; }
+        public byte[] Photo { get; set; }
+
+        public virtual ICollection<Accounts> Accounts { get; set; }
+        public virtual ICollection<Sales> Sales { get; set; }
+    }
+}

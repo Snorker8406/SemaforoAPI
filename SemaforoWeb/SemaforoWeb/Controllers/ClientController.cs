@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
+using Semaforo.Logic.Services;
 using SemaforoWeb.DTO;
-using SemaforoWeb.Models;
+using Semaforo.Logic.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Semaforo.Logic.BO;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,52 +19,33 @@ namespace SemaforoWeb.Controllers
     {
 
         private readonly db_9bc4da_semaforoContext _context;
+        private ClientService _clientService;
 
         public ClientController(db_9bc4da_semaforoContext context)
         {
             _context = context;
+            _clientService = new ClientService(context, null);
         }
 
-        // GET: api/<ClientController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ClientDTO>>> GetClients()
+        public async Task<ActionResult<IEnumerable<ClientBO>>> GetClients()
         {
-            var clients = await _context.Clients.ToListAsync();
-            List<ClientDTO> clientDTOs = new List<ClientDTO>();
-
-            foreach (var client in clients)
-            {
-                ClientDTO clientDTO = new ClientDTO(); //Instanciar de una clase
-
-                clientDTO.ClientId = client.ClientId;
-                clientDTO.Name = client.Name;
-                clientDTO.Address = client.Address;
-                clientDTO.UserId = client.UserId;
-                clientDTO.Cellphone = client.Cellphone;
-                clientDTO.Email = client.Email;
-                clientDTO.AccountDaysLimit = client.AccountDaysLimit;
-                clientDTO.AccountAmountLimit = client.AccountAmountLimit;
-                clientDTO.LastModify = client.LastModify;
-                clientDTO.LastModifiedBy = client.LastModifiedBy;
-
-                clientDTOs.Add(clientDTO);
-            }
-            return clientDTOs;
+            return await _clientService.GetClientList();
 
         }
 
         // GET api/<ClientController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public ClientBO Get(int id)
         {
-            return "value";
+            return _clientService.GetClientById(id);
         }
 
         // POST api/<ClientController>
         [HttpPost]
-        public async Task<ActionResult<Client>> PostClient(ClientDTO clientDto)
+        public async Task<ActionResult<Clients>> PostClient(ClientDTO clientDto)
         {
-            Client client = new Client();
+            Clients client = new Clients();
             client.UserId = clientDto.UserId;
             client.ClientStatusId = clientDto.ClientStatusId;
             client.CreateDate = DateTime.Now;
@@ -92,7 +75,7 @@ namespace SemaforoWeb.Controllers
 
         // PUT api/<ClientController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutClient(int id, Client client)
+        public async Task<IActionResult> PutClient(int id, Clients client)
         {
             if (id != client.ClientId)
             {
