@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace SemaforoWeb.Models
+namespace Semaforo.Logic.Models
 {
-    public partial class Price
+    public partial class ProductPrice
     {
         public int PriceId { get; set; }
-        public decimal Price1 { get; set; }
+        public decimal Price { get; set; }
         public int ProductId { get; set; }
         public int? SizeId { get; set; }
 

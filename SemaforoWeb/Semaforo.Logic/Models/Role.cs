@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-// Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
-// If you have enabled NRTs for your project, then un-comment the following line:
-// #nullable disable
+#nullable disable
 
 namespace Semaforo.Logic.Models
 {
@@ -16,7 +14,7 @@ namespace Semaforo.Logic.Models
         public int LastModifiedBy { get; set; }
         public string Status { get; set; }
         public bool Deleted { get; set; }
-        public string Role1 { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
     }
 }

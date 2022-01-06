@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace SemaforoWeb.Models
+namespace Semaforo.Logic.Models
 {
     public partial class Product
     {
         public Product()
         {
-            Prices = new HashSet<Price>();
             ProductCategories = new HashSet<ProductCategory>();
             ProductPictures = new HashSet<ProductPicture>();
+            ProductPrices = new HashSet<ProductPrice>();
             SalesDetails = new HashSet<SalesDetail>();
             Stocks = new HashSet<Stock>();
         }
@@ -30,9 +30,9 @@ namespace SemaforoWeb.Models
 
         public virtual Brand Brand { get; set; }
         public virtual ProductPicture ProductPicture { get; set; }
-        public virtual ICollection<Price> Prices { get; set; }
         public virtual ICollection<ProductCategory> ProductCategories { get; set; }
         public virtual ICollection<ProductPicture> ProductPictures { get; set; }
+        public virtual ICollection<ProductPrice> ProductPrices { get; set; }
         public virtual ICollection<SalesDetail> SalesDetails { get; set; }
         public virtual ICollection<Stock> Stocks { get; set; }
     }

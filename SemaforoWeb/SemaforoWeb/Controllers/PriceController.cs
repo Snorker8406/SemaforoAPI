@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SemaforoWeb.DTO;
-using SemaforoWeb.Models;
+using Semaforo.Logic.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +26,7 @@ namespace SemaforoWeb.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PriceDTO>>> GetPrices()
         {
-            var prices = await _context.Prices.ToListAsync();
+            var prices = await _context.ProductPrices.ToListAsync();
             List<PriceDTO> priceDTOs = new List<PriceDTO>();
 
             return priceDTOs;
@@ -41,10 +41,10 @@ namespace SemaforoWeb.Controllers
 
         // POST api/<PriceController>
         [HttpPost]
-        public async Task<ActionResult<Price>> PostPrice(Price price)
+        public async Task<ActionResult<ProductPrice>> PostPrice(ProductPrice price)
         {
 
-            _context.Prices.Add(price);
+            _context.ProductPrices.Add(price);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetPrices", new { id = price.PriceId }, price);

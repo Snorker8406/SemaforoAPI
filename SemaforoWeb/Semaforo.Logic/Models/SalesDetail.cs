@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace SemaforoWeb.Models
+namespace Semaforo.Logic.Models
 {
     public partial class SalesDetail
     {

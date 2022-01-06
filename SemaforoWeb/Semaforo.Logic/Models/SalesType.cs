@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace SemaforoWeb.Models
+namespace Semaforo.Logic.Models
 {
     public partial class SalesType
     {
@@ -13,7 +13,7 @@ namespace SemaforoWeb.Models
         }
 
         public int SaleTypeId { get; set; }
-        public string SaleType { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
 
         public virtual ICollection<Sale> Sales { get; set; }

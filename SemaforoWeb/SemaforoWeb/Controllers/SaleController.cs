@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SemaforoWeb.DTO;
-using SemaforoWeb.Models;
+using Semaforo.Logic.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

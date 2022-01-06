@@ -43,9 +43,9 @@ namespace SemaforoWeb.Controllers
 
         // POST api/<ClientController>
         [HttpPost]
-        public async Task<ActionResult<Clients>> PostClient(ClientDTO clientDto)
+        public async Task<ActionResult<Client>> PostClient(ClientDTO clientDto)
         {
-            Clients client = new Clients();
+            Client client = new Client();
             client.UserId = clientDto.UserId;
             client.ClientStatusId = clientDto.ClientStatusId;
             client.CreateDate = DateTime.Now;
@@ -75,7 +75,7 @@ namespace SemaforoWeb.Controllers
 
         // PUT api/<ClientController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutClient(int id, Clients client)
+        public async Task<IActionResult> PutClient(int id, Client client)
         {
             if (id != client.ClientId)
             {

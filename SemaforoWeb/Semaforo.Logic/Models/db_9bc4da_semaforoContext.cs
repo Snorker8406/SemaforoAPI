@@ -2,9 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-// Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
-// If you have enabled NRTs for your project, then un-comment the following line:
-// #nullable disable
+#nullable disable
 
 namespace Semaforo.Logic.Models
 {
@@ -19,106 +17,47 @@ namespace Semaforo.Logic.Models
         {
         }
 
-        public virtual DbSet<AccountPayments> AccountPayments { get; set; }
-        public virtual DbSet<AccountStatus> AccountStatus { get; set; }
-        public virtual DbSet<AccountTypes> AccountTypes { get; set; }
-        public virtual DbSet<Accounts> Accounts { get; set; }
-        public virtual DbSet<Attendance> Attendance { get; set; }
-        public virtual DbSet<Brands> Brands { get; set; }
-        public virtual DbSet<Categories> Categories { get; set; }
-        public virtual DbSet<ClientStatus> ClientStatus { get; set; }
-        public virtual DbSet<Clients> Clients { get; set; }
-        public virtual DbSet<EmployeeRole> EmployeeRole { get; set; }
-        public virtual DbSet<EmployeeSalary> EmployeeSalary { get; set; }
-        public virtual DbSet<EmployeeSchedule> EmployeeSchedule { get; set; }
-        public virtual DbSet<Employees> Employees { get; set; }
-        public virtual DbSet<Prices> Prices { get; set; }
-        public virtual DbSet<ProductCategory> ProductCategory { get; set; }
-        public virtual DbSet<ProductPictures> ProductPictures { get; set; }
-        public virtual DbSet<Products> Products { get; set; }
-        public virtual DbSet<Role> Role { get; set; }
-        public virtual DbSet<Sales> Sales { get; set; }
-        public virtual DbSet<SalesDetails> SalesDetails { get; set; }
-        public virtual DbSet<SalesTypes> SalesTypes { get; set; }
-        public virtual DbSet<Sites> Sites { get; set; }
-        public virtual DbSet<Sizes> Sizes { get; set; }
-        public virtual DbSet<Stock> Stock { get; set; }
-        public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<AccountPayment> AccountPayments { get; set; }
+        public virtual DbSet<AccountStatus> AccountStatuses { get; set; }
+        public virtual DbSet<AccountType> AccountTypes { get; set; }
+        public virtual DbSet<Attendance> Attendances { get; set; }
+        public virtual DbSet<Brand> Brands { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Client> Clients { get; set; }
+        public virtual DbSet<ClientStatus> ClientStatuses { get; set; }
+        public virtual DbSet<Employee> Employees { get; set; }
+        public virtual DbSet<EmployeeRole> EmployeeRoles { get; set; }
+        public virtual DbSet<EmployeeSalary> EmployeeSalaries { get; set; }
+        public virtual DbSet<EmployeeSchedule> EmployeeSchedules { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<ProductCategory> ProductCategories { get; set; }
+        public virtual DbSet<ProductPicture> ProductPictures { get; set; }
+        public virtual DbSet<ProductPrice> ProductPrices { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<Sale> Sales { get; set; }
+        public virtual DbSet<SalesDetail> SalesDetails { get; set; }
+        public virtual DbSet<SalesType> SalesTypes { get; set; }
+        public virtual DbSet<Site> Sites { get; set; }
+        public virtual DbSet<Size> Sizes { get; set; }
+        public virtual DbSet<Stock> Stocks { get; set; }
+        public virtual DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Data Source=SQL5063.site4now.net;Initial Catalog=db_9bc4da_semaforo;User Id=db_9bc4da_semaforo_admin;Password=semaforo123");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AccountPayments>(entity =>
+            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+
+            modelBuilder.Entity<Account>(entity =>
             {
-                entity.HasKey(e => e.AccountPaymentId);
-
-                entity.ToTable("ACCOUNT_PAYMENTS");
-
-                entity.Property(e => e.AccountPaymentId).HasColumnName("Account_Payment_ID");
-
-                entity.Property(e => e.AccountId).HasColumnName("Account_ID");
-
-                entity.Property(e => e.Amount).HasColumnType("money");
-
-                entity.Property(e => e.Notes).HasMaxLength(500);
-
-                entity.Property(e => e.PaymentDate)
-                    .HasColumnName("Payment_Date")
-                    .HasColumnType("datetime");
-
-                entity.Property(e => e.SiteId).HasColumnName("Site_ID");
-
-                entity.Property(e => e.UserId).HasColumnName("User_ID");
-
-                entity.HasOne(d => d.Account)
-                    .WithMany(p => p.AccountPayments)
-                    .HasForeignKey(d => d.AccountId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ACCOUNT_PAYMENTS_ACCOUNTS");
-            });
-
-            modelBuilder.Entity<AccountStatus>(entity =>
-            {
-                entity.ToTable("ACCOUNT_STATUS");
-
-                entity.Property(e => e.AccountStatusId).HasColumnName("Account_Status_ID");
-
-                entity.Property(e => e.AccountStatus1)
-                    .IsRequired()
-                    .HasColumnName("Account_Status")
-                    .HasMaxLength(20);
-
-                entity.Property(e => e.Description).HasMaxLength(250);
-            });
-
-            modelBuilder.Entity<AccountTypes>(entity =>
-            {
-                entity.HasKey(e => e.AccountTypeId);
-
-                entity.ToTable("ACCOUNT_TYPES");
-
-                entity.Property(e => e.AccountTypeId).HasColumnName("Account_Type_ID");
-
-                entity.Property(e => e.AccountType)
-                    .IsRequired()
-                    .HasColumnName("Account_Type")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.Description).HasMaxLength(250);
-            });
-
-            modelBuilder.Entity<Accounts>(entity =>
-            {
-                entity.HasKey(e => e.AccountId);
-
                 entity.ToTable("ACCOUNTS");
 
                 entity.Property(e => e.AccountId).HasColumnName("Account_ID");
@@ -131,25 +70,28 @@ namespace Semaforo.Logic.Models
 
                 entity.Property(e => e.Barcode)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasMaxLength(50)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.CancellationDate)
-                    .HasColumnName("Cancellation_Date")
-                    .HasColumnType("datetime");
+                    .HasColumnType("datetime")
+                    .HasColumnName("Cancellation_Date");
 
                 entity.Property(e => e.ClientId).HasColumnName("Client_ID");
 
-                entity.Property(e => e.Notes).HasMaxLength(1000);
+                entity.Property(e => e.Notes)
+                    .HasMaxLength(1000)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.OpeningDate)
-                    .HasColumnName("Opening_Date")
-                    .HasColumnType("datetime");
+                    .HasColumnType("datetime")
+                    .HasColumnName("Opening_Date");
 
                 entity.Property(e => e.SaleId).HasColumnName("Sale_ID");
 
                 entity.Property(e => e.SettlementDate)
-                    .HasColumnName("Settlement_Date")
-                    .HasColumnType("datetime");
+                    .HasColumnType("datetime")
+                    .HasColumnName("Settlement_Date");
 
                 entity.Property(e => e.SiteId).HasColumnName("Site_ID");
 
@@ -192,144 +134,203 @@ namespace Semaforo.Logic.Models
                     .HasConstraintName("FK_ACCOUNTS_USERS");
             });
 
+            modelBuilder.Entity<AccountPayment>(entity =>
+            {
+                entity.ToTable("ACCOUNT_PAYMENTS");
+
+                entity.Property(e => e.AccountPaymentId).HasColumnName("Account_Payment_ID");
+
+                entity.Property(e => e.AccountId).HasColumnName("Account_ID");
+
+                entity.Property(e => e.Amount).HasColumnType("money");
+
+                entity.Property(e => e.Notes)
+                    .HasMaxLength(500)
+                    .UseCollation("Modern_Spanish_CI_AS");
+
+                entity.Property(e => e.PaymentDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("Payment_Date");
+
+                entity.Property(e => e.SiteId).HasColumnName("Site_ID");
+
+                entity.Property(e => e.UserId).HasColumnName("User_ID");
+
+                entity.HasOne(d => d.Account)
+                    .WithMany(p => p.AccountPayments)
+                    .HasForeignKey(d => d.AccountId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ACCOUNT_PAYMENTS_ACCOUNTS");
+            });
+
+            modelBuilder.Entity<AccountStatus>(entity =>
+            {
+                entity.ToTable("ACCOUNT_STATUS");
+
+                entity.Property(e => e.AccountStatusId).HasColumnName("Account_Status_ID");
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(250)
+                    .UseCollation("Modern_Spanish_CI_AS");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .UseCollation("Modern_Spanish_CI_AS");
+            });
+
+            modelBuilder.Entity<AccountType>(entity =>
+            {
+                entity.ToTable("ACCOUNT_TYPES");
+
+                entity.Property(e => e.AccountTypeId).HasColumnName("Account_Type_ID");
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(250)
+                    .UseCollation("Modern_Spanish_CI_AS");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .UseCollation("Modern_Spanish_CI_AS");
+            });
+
             modelBuilder.Entity<Attendance>(entity =>
             {
                 entity.ToTable("ATTENDANCE");
 
                 entity.Property(e => e.AttendanceId)
-                    .HasColumnName("Attendance_ID")
-                    .ValueGeneratedNever();
+                    .ValueGeneratedNever()
+                    .HasColumnName("Attendance_ID");
 
                 entity.Property(e => e.EmployeeId).HasColumnName("Employee_ID");
 
                 entity.Property(e => e.StartDate)
-                    .HasColumnName("Start_Date")
-                    .HasColumnType("datetime");
+                    .HasColumnType("datetime")
+                    .HasColumnName("Start_Date");
 
                 entity.Property(e => e.StopDate)
-                    .HasColumnName("Stop_Date")
-                    .HasColumnType("datetime");
+                    .HasColumnType("datetime")
+                    .HasColumnName("Stop_Date");
 
                 entity.HasOne(d => d.Employee)
-                    .WithMany(p => p.Attendance)
+                    .WithMany(p => p.Attendances)
                     .HasForeignKey(d => d.EmployeeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ATTENDANCE_EMPLOYEES");
             });
 
-            modelBuilder.Entity<Brands>(entity =>
+            modelBuilder.Entity<Brand>(entity =>
             {
-                entity.HasKey(e => e.BrandId);
-
                 entity.ToTable("BRANDS");
 
                 entity.Property(e => e.BrandId).HasColumnName("Brand_ID");
 
-                entity.Property(e => e.Description).HasMaxLength(250);
+                entity.Property(e => e.Description)
+                    .HasMaxLength(250)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
-                entity.Property(e => e.Name).HasMaxLength(100);
+                entity.Property(e => e.Name)
+                    .HasMaxLength(100)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.SupplierId).HasColumnName("Supplier_ID");
             });
 
-            modelBuilder.Entity<Categories>(entity =>
+            modelBuilder.Entity<Category>(entity =>
             {
-                entity.HasKey(e => e.CategoryId);
-
                 entity.ToTable("CATEGORIES");
 
                 entity.Property(e => e.CategoryId).HasColumnName("Category_ID");
 
                 entity.Property(e => e.CreateDate)
-                    .HasColumnName("Create_Date")
-                    .HasColumnType("datetime");
+                    .HasColumnType("datetime")
+                    .HasColumnName("Create_Date");
 
-                entity.Property(e => e.Description).HasMaxLength(250);
+                entity.Property(e => e.Description)
+                    .HasMaxLength(250)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasMaxLength(50)
+                    .UseCollation("Modern_Spanish_CI_AS");
             });
 
-            modelBuilder.Entity<ClientStatus>(entity =>
+            modelBuilder.Entity<Client>(entity =>
             {
-                entity.ToTable("CLIENT_STATUS");
-
-                entity.Property(e => e.ClientStatusId)
-                    .HasColumnName("Client_Status_ID")
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.Description).HasMaxLength(250);
-
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasMaxLength(20);
-            });
-
-            modelBuilder.Entity<Clients>(entity =>
-            {
-                entity.HasKey(e => e.ClientId)
-                    .HasName("PK_CLIENTE");
-
                 entity.ToTable("CLIENTS");
 
                 entity.Property(e => e.ClientId).HasColumnName("Client_ID");
 
                 entity.Property(e => e.AccountAmountLimit)
-                    .HasColumnName("Account_Amount_Limit")
-                    .HasColumnType("money");
+                    .HasColumnType("money")
+                    .HasColumnName("Account_Amount_Limit");
 
                 entity.Property(e => e.AccountDaysLimit).HasColumnName("Account_Days_Limit");
 
                 entity.Property(e => e.Address)
                     .IsRequired()
-                    .HasMaxLength(300);
+                    .HasMaxLength(300)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.Cellphone)
                     .IsRequired()
-                    .HasMaxLength(20);
+                    .HasMaxLength(20)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.ClientStatusId).HasColumnName("Client_Status_ID");
 
+                entity.Property(e => e.Comments).UseCollation("Modern_Spanish_CI_AS");
+
                 entity.Property(e => e.CreateDate)
-                    .HasColumnName("Create_Date")
-                    .HasColumnType("datetime");
+                    .HasColumnType("datetime")
+                    .HasColumnName("Create_Date");
 
-                entity.Property(e => e.Email).HasMaxLength(100);
+                entity.Property(e => e.Email)
+                    .HasMaxLength(100)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
-                entity.Property(e => e.Facebook).HasMaxLength(200);
+                entity.Property(e => e.Facebook)
+                    .HasMaxLength(200)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.FacebookName)
-                    .HasColumnName("Facebook_Name")
                     .HasMaxLength(100)
-                    .IsFixedLength();
+                    .HasColumnName("Facebook_Name")
+                    .IsFixedLength(true)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.Gender).HasMaxLength(1);
 
                 entity.Property(e => e.LastModifiedBy).HasColumnName("Last_Modified_By");
 
                 entity.Property(e => e.LastModify)
-                    .HasColumnName("Last_Modify")
-                    .HasColumnType("datetime");
+                    .HasColumnType("datetime")
+                    .HasColumnName("Last_Modify");
 
                 entity.Property(e => e.LastName)
                     .IsRequired()
+                    .HasMaxLength(30)
                     .HasColumnName("Last_Name")
-                    .HasMaxLength(30);
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.LastNameMother)
+                    .HasMaxLength(30)
                     .HasColumnName("Last_Name_Mother")
-                    .HasMaxLength(30);
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(30);
+                    .HasMaxLength(30)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.ProfileImage).HasColumnName("Profile_Image");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(10);
+                    .HasMaxLength(10)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.Student).HasDefaultValueSql("((0))");
 
@@ -340,6 +341,90 @@ namespace Semaforo.Logic.Models
                     .HasForeignKey(d => d.ClientStatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CLIENTS_CLIENT_STATUS");
+            });
+
+            modelBuilder.Entity<ClientStatus>(entity =>
+            {
+                entity.ToTable("CLIENT_STATUS");
+
+                entity.Property(e => e.ClientStatusId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("Client_Status_ID");
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(250)
+                    .UseCollation("Modern_Spanish_CI_AS");
+
+                entity.Property(e => e.Status)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .UseCollation("Modern_Spanish_CI_AS");
+            });
+
+            modelBuilder.Entity<Employee>(entity =>
+            {
+                entity.ToTable("EMPLOYEES");
+
+                entity.Property(e => e.EmployeeId).HasColumnName("Employee_ID");
+
+                entity.Property(e => e.Address)
+                    .HasMaxLength(150)
+                    .UseCollation("Modern_Spanish_CI_AS");
+
+                entity.Property(e => e.Birthdate).HasColumnType("date");
+
+                entity.Property(e => e.Cellphone)
+                    .HasMaxLength(10)
+                    .UseCollation("Modern_Spanish_CI_AS");
+
+                entity.Property(e => e.Comments).UseCollation("Modern_Spanish_CI_AS");
+
+                entity.Property(e => e.EndDate)
+                    .HasColumnType("date")
+                    .HasColumnName("End_Date");
+
+                entity.Property(e => e.Facebook)
+                    .HasMaxLength(300)
+                    .UseCollation("Modern_Spanish_CI_AS");
+
+                entity.Property(e => e.FirstLastName)
+                    .HasMaxLength(100)
+                    .HasColumnName("First_Last_Name")
+                    .UseCollation("Modern_Spanish_CI_AS");
+
+                entity.Property(e => e.Gender)
+                    .HasMaxLength(10)
+                    .UseCollation("Modern_Spanish_CI_AS");
+
+                entity.Property(e => e.HealthInfo)
+                    .HasMaxLength(10)
+                    .HasColumnName("Health_Info")
+                    .IsFixedLength(true)
+                    .UseCollation("Modern_Spanish_CI_AS");
+
+                entity.Property(e => e.MaritalStatus)
+                    .HasMaxLength(20)
+                    .HasColumnName("Marital_Status")
+                    .UseCollation("Modern_Spanish_CI_AS");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(100)
+                    .UseCollation("Modern_Spanish_CI_AS");
+
+                entity.Property(e => e.Phone)
+                    .HasMaxLength(10)
+                    .UseCollation("Modern_Spanish_CI_AS");
+
+                entity.Property(e => e.Picture).HasColumnType("image");
+
+                entity.Property(e => e.SecondLastName)
+                    .HasMaxLength(100)
+                    .HasColumnName("Second_Last_Name")
+                    .UseCollation("Modern_Spanish_CI_AS");
+
+                entity.Property(e => e.StartDate)
+                    .HasColumnType("date")
+                    .HasColumnName("Start_Date");
             });
 
             modelBuilder.Entity<EmployeeRole>(entity =>
@@ -374,15 +459,15 @@ namespace Semaforo.Logic.Models
                 entity.Property(e => e.EmployeeId).HasColumnName("Employee_ID");
 
                 entity.Property(e => e.SalaryDay)
-                    .HasColumnName("Salary_Day")
-                    .HasColumnType("money");
+                    .HasColumnType("money")
+                    .HasColumnName("Salary_Day");
 
                 entity.Property(e => e.SalaryHour)
-                    .HasColumnName("Salary_Hour")
-                    .HasColumnType("money");
+                    .HasColumnType("money")
+                    .HasColumnName("Salary_Hour");
 
                 entity.HasOne(d => d.Employee)
-                    .WithMany(p => p.EmployeeSalary)
+                    .WithMany(p => p.EmployeeSalaries)
                     .HasForeignKey(d => d.EmployeeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_EMPLOYEE_SALARY_EMPLOYEES");
@@ -403,158 +488,41 @@ namespace Semaforo.Logic.Models
                 entity.Property(e => e.StopTime).HasColumnName("Stop_Time");
 
                 entity.HasOne(d => d.Employee)
-                    .WithMany(p => p.EmployeeSchedule)
+                    .WithMany(p => p.EmployeeSchedules)
                     .HasForeignKey(d => d.EmployeeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_EMPLOYEE_SCHEDULE_EMPLOYEES");
             });
 
-            modelBuilder.Entity<Employees>(entity =>
+            modelBuilder.Entity<Product>(entity =>
             {
-                entity.HasKey(e => e.EmployeeId);
-
-                entity.ToTable("EMPLOYEES");
-
-                entity.Property(e => e.EmployeeId).HasColumnName("Employee_ID");
-
-                entity.Property(e => e.Address).HasMaxLength(150);
-
-                entity.Property(e => e.Birthdate).HasColumnType("date");
-
-                entity.Property(e => e.Cellphone).HasMaxLength(10);
-
-                entity.Property(e => e.EndDate)
-                    .HasColumnName("End_Date")
-                    .HasColumnType("date");
-
-                entity.Property(e => e.Facebook).HasMaxLength(300);
-
-                entity.Property(e => e.FirstLastName)
-                    .HasColumnName("First_Last_Name")
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.Gender).HasMaxLength(10);
-
-                entity.Property(e => e.HealthInfo)
-                    .HasColumnName("Health_Info")
-                    .HasMaxLength(10)
-                    .IsFixedLength();
-
-                entity.Property(e => e.MaritalStatus)
-                    .HasColumnName("Marital_Status")
-                    .HasMaxLength(20);
-
-                entity.Property(e => e.Name).HasMaxLength(100);
-
-                entity.Property(e => e.Phone).HasMaxLength(10);
-
-                entity.Property(e => e.Picture).HasColumnType("image");
-
-                entity.Property(e => e.SecondLastName)
-                    .HasColumnName("Second_Last_Name")
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.StartDate)
-                    .HasColumnName("Start_Date")
-                    .HasColumnType("date");
-            });
-
-            modelBuilder.Entity<Prices>(entity =>
-            {
-                entity.HasKey(e => e.PriceId)
-                    .HasName("PK_PRICES_1");
-
-                entity.ToTable("PRICES");
-
-                entity.Property(e => e.PriceId)
-                    .HasColumnName("Price_ID")
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.Price).HasColumnType("money");
-
-                entity.Property(e => e.ProductId).HasColumnName("Product_ID");
-
-                entity.Property(e => e.SizeId).HasColumnName("Size_ID");
-
-                entity.HasOne(d => d.Product)
-                    .WithMany(p => p.Prices)
-                    .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_PRICES_PRODUCTS");
-
-                entity.HasOne(d => d.Size)
-                    .WithMany(p => p.Prices)
-                    .HasForeignKey(d => d.SizeId)
-                    .HasConstraintName("FK_PRICES_SIZES");
-            });
-
-            modelBuilder.Entity<ProductCategory>(entity =>
-            {
-                entity.HasKey(e => new { e.ProductId, e.CategoryId });
-
-                entity.ToTable("PRODUCT_CATEGORY");
-
-                entity.Property(e => e.ProductId).HasColumnName("Product_ID");
-
-                entity.Property(e => e.CategoryId).HasColumnName("Category_ID");
-
-                entity.HasOne(d => d.Category)
-                    .WithMany(p => p.ProductCategory)
-                    .HasForeignKey(d => d.CategoryId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_PRODUCT_CATEGORY_CATEGORIES");
-
-                entity.HasOne(d => d.Product)
-                    .WithMany(p => p.ProductCategory)
-                    .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_PRODUCT_CATEGORY_PRODUCTS");
-            });
-
-            modelBuilder.Entity<ProductPictures>(entity =>
-            {
-                entity.HasKey(e => e.ProductPictureId);
-
-                entity.ToTable("PRODUCT_PICTURES");
-
-                entity.Property(e => e.ProductPictureId).HasColumnName("Product_Picture_ID");
-
-                entity.Property(e => e.CreateDate)
-                    .HasColumnName("Create_Date")
-                    .HasColumnType("date");
-
-                entity.Property(e => e.Picture).HasColumnType("image");
-
-                entity.Property(e => e.ProductId).HasColumnName("Product_ID");
-
-                entity.HasOne(d => d.Product)
-                    .WithMany(p => p.ProductPictures)
-                    .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_PRODUCT_PICTURES_PRODUCTS");
-            });
-
-            modelBuilder.Entity<Products>(entity =>
-            {
-                entity.HasKey(e => e.ProductId);
-
                 entity.ToTable("PRODUCTS");
 
                 entity.Property(e => e.ProductId).HasColumnName("Product_ID");
 
-                entity.Property(e => e.Barcode).HasMaxLength(50);
+                entity.Property(e => e.Barcode)
+                    .HasMaxLength(50)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.BrandId).HasColumnName("Brand_ID");
 
+                entity.Property(e => e.Comments).UseCollation("Modern_Spanish_CI_AS");
+
                 entity.Property(e => e.CreateDate)
-                    .HasColumnName("Create_Date")
-                    .HasColumnType("datetime");
+                    .HasColumnType("datetime")
+                    .HasColumnName("Create_Date");
 
-                entity.Property(e => e.Description).HasMaxLength(250);
+                entity.Property(e => e.Description)
+                    .HasMaxLength(250)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
-                entity.Property(e => e.Model).HasMaxLength(50);
+                entity.Property(e => e.Model)
+                    .HasMaxLength(50)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
-                entity.Property(e => e.Name).HasMaxLength(50);
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.ProductPictureId).HasColumnName("Product_Picture_ID");
 
@@ -571,39 +539,113 @@ namespace Semaforo.Logic.Models
                     .HasConstraintName("FK_PRODUCTS_PRODUCT_PICTURES");
             });
 
+            modelBuilder.Entity<ProductCategory>(entity =>
+            {
+                entity.HasKey(e => new { e.ProductId, e.CategoryId });
+
+                entity.ToTable("PRODUCT_CATEGORY");
+
+                entity.Property(e => e.ProductId).HasColumnName("Product_ID");
+
+                entity.Property(e => e.CategoryId).HasColumnName("Category_ID");
+
+                entity.HasOne(d => d.Category)
+                    .WithMany(p => p.ProductCategories)
+                    .HasForeignKey(d => d.CategoryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PRODUCT_CATEGORY_CATEGORIES");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.ProductCategories)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PRODUCT_CATEGORY_PRODUCTS");
+            });
+
+            modelBuilder.Entity<ProductPicture>(entity =>
+            {
+                entity.ToTable("PRODUCT_PICTURES");
+
+                entity.Property(e => e.ProductPictureId).HasColumnName("Product_Picture_ID");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("date")
+                    .HasColumnName("Create_Date");
+
+                entity.Property(e => e.Picture).HasColumnType("image");
+
+                entity.Property(e => e.ProductId).HasColumnName("Product_ID");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.ProductPictures)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PRODUCT_PICTURES_PRODUCTS");
+            });
+
+            modelBuilder.Entity<ProductPrice>(entity =>
+            {
+                entity.HasKey(e => e.PriceId)
+                    .HasName("PK_PRICES_1");
+
+                entity.ToTable("PRODUCT_PRICES");
+
+                entity.Property(e => e.PriceId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("Price_ID");
+
+                entity.Property(e => e.Price).HasColumnType("money");
+
+                entity.Property(e => e.ProductId).HasColumnName("Product_ID");
+
+                entity.Property(e => e.SizeId).HasColumnName("Size_ID");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.ProductPrices)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PRICES_PRODUCTS");
+
+                entity.HasOne(d => d.Size)
+                    .WithMany(p => p.ProductPrices)
+                    .HasForeignKey(d => d.SizeId)
+                    .HasConstraintName("FK_PRICES_SIZES");
+            });
+
             modelBuilder.Entity<Role>(entity =>
             {
-                entity.ToTable("ROLE");
+                entity.ToTable("ROLES");
 
                 entity.Property(e => e.RoleId).HasColumnName("Role_ID");
 
                 entity.Property(e => e.CreateDate)
-                    .HasColumnName("Create_date")
-                    .HasColumnType("datetime");
+                    .HasColumnType("datetime")
+                    .HasColumnName("Create_date");
 
                 entity.Property(e => e.CreatedBy).HasColumnName("Created_by");
 
-                entity.Property(e => e.Description).HasColumnType("ntext");
+                entity.Property(e => e.Description)
+                    .HasColumnType("ntext")
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.LastModifiedBy).HasColumnName("Last_modified_by");
 
                 entity.Property(e => e.LastModify)
-                    .HasColumnName("Last_modify")
-                    .HasColumnType("datetime");
+                    .HasColumnType("datetime")
+                    .HasColumnName("Last_modify");
 
-                entity.Property(e => e.Role1)
-                    .HasColumnName("Role")
-                    .HasMaxLength(10);
+                entity.Property(e => e.Name)
+                    .HasMaxLength(10)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(10);
+                    .HasMaxLength(10)
+                    .UseCollation("Modern_Spanish_CI_AS");
             });
 
-            modelBuilder.Entity<Sales>(entity =>
+            modelBuilder.Entity<Sale>(entity =>
             {
-                entity.HasKey(e => e.SaleId);
-
                 entity.ToTable("SALES");
 
                 entity.Property(e => e.SaleId).HasColumnName("Sale_ID");
@@ -611,14 +653,17 @@ namespace Semaforo.Logic.Models
                 entity.Property(e => e.ClientId).HasColumnName("Client_ID");
 
                 entity.Property(e => e.ClientName)
+                    .HasMaxLength(150)
                     .HasColumnName("Client_Name")
-                    .HasMaxLength(150);
+                    .UseCollation("Modern_Spanish_CI_AS");
 
-                entity.Property(e => e.Notes).HasMaxLength(250);
+                entity.Property(e => e.Notes)
+                    .HasMaxLength(250)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.SaleDate)
-                    .HasColumnName("Sale_Date")
-                    .HasColumnType("datetime");
+                    .HasColumnType("datetime")
+                    .HasColumnName("Sale_Date");
 
                 entity.Property(e => e.SaleTypeId).HasColumnName("Sale_Type_ID");
 
@@ -652,7 +697,7 @@ namespace Semaforo.Logic.Models
                     .HasConstraintName("FK_SALES_USERS");
             });
 
-            modelBuilder.Entity<SalesDetails>(entity =>
+            modelBuilder.Entity<SalesDetail>(entity =>
             {
                 entity.HasKey(e => e.SaleDetailId);
 
@@ -662,7 +707,8 @@ namespace Semaforo.Logic.Models
 
                 entity.Property(e => e.Barcode)
                     .IsRequired()
-                    .HasMaxLength(100);
+                    .HasMaxLength(100)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.Price).HasColumnType("money");
 
@@ -673,8 +719,8 @@ namespace Semaforo.Logic.Models
                 entity.Property(e => e.SizeId).HasColumnName("Size_ID");
 
                 entity.Property(e => e.SpecialPrice)
-                    .HasColumnName("Special_Price")
-                    .HasColumnType("money");
+                    .HasColumnType("money")
+                    .HasColumnName("Special_Price");
 
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.SalesDetails)
@@ -694,7 +740,7 @@ namespace Semaforo.Logic.Models
                     .HasConstraintName("FK_SALES_DETAILS_SIZES");
             });
 
-            modelBuilder.Entity<SalesTypes>(entity =>
+            modelBuilder.Entity<SalesType>(entity =>
             {
                 entity.HasKey(e => e.SaleTypeId);
 
@@ -702,35 +748,41 @@ namespace Semaforo.Logic.Models
 
                 entity.Property(e => e.SaleTypeId).HasColumnName("Sale_Type_ID");
 
-                entity.Property(e => e.Description).HasMaxLength(250);
+                entity.Property(e => e.Description)
+                    .HasMaxLength(250)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
-                entity.Property(e => e.SaleType)
+                entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasColumnName("Sale_Type")
-                    .HasMaxLength(50);
+                    .HasMaxLength(50)
+                    .UseCollation("Modern_Spanish_CI_AS");
             });
 
-            modelBuilder.Entity<Sites>(entity =>
+            modelBuilder.Entity<Site>(entity =>
             {
-                entity.HasKey(e => e.SiteId);
-
                 entity.ToTable("SITES");
 
                 entity.Property(e => e.SiteId).HasColumnName("Site_ID");
 
                 entity.Property(e => e.Address)
                     .IsRequired()
-                    .HasMaxLength(150);
+                    .HasMaxLength(150)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.Color)
                     .IsRequired()
-                    .HasMaxLength(20);
+                    .HasMaxLength(20)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
-                entity.Property(e => e.Description).HasMaxLength(250);
+                entity.Property(e => e.Description)
+                    .HasMaxLength(250)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.Image).HasColumnType("image");
 
-                entity.Property(e => e.Location).HasMaxLength(150);
+                entity.Property(e => e.Location)
+                    .HasMaxLength(150)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.Logo)
                     .IsRequired()
@@ -738,27 +790,32 @@ namespace Semaforo.Logic.Models
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasMaxLength(50)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
-                entity.Property(e => e.Phone).HasMaxLength(50);
+                entity.Property(e => e.Phone)
+                    .HasMaxLength(50)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
-                entity.Property(e => e.Type).HasMaxLength(50);
+                entity.Property(e => e.Type)
+                    .HasMaxLength(50)
+                    .UseCollation("Modern_Spanish_CI_AS");
             });
 
-            modelBuilder.Entity<Sizes>(entity =>
+            modelBuilder.Entity<Size>(entity =>
             {
-                entity.HasKey(e => e.SizeId)
-                    .HasName("PK_SIZES_1");
-
                 entity.ToTable("SIZES");
 
                 entity.Property(e => e.SizeId).HasColumnName("Size_ID");
 
-                entity.Property(e => e.Description).HasMaxLength(250);
+                entity.Property(e => e.Description)
+                    .HasMaxLength(250)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
-                entity.Property(e => e.Size)
+                entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasMaxLength(50)
+                    .UseCollation("Modern_Spanish_CI_AS");
             });
 
             modelBuilder.Entity<Stock>(entity =>
@@ -770,15 +827,16 @@ namespace Semaforo.Logic.Models
                 entity.Property(e => e.Barcode)
                     .IsRequired()
                     .HasMaxLength(4)
-                    .HasDefaultValueSql("((100))");
+                    .HasDefaultValueSql("((100))")
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.CreateDate)
-                    .HasColumnName("Create_Date")
-                    .HasColumnType("datetime");
+                    .HasColumnType("datetime")
+                    .HasColumnName("Create_Date");
 
                 entity.Property(e => e.PriceSpecial)
-                    .HasColumnName("Price_Special")
-                    .HasColumnType("money");
+                    .HasColumnType("money")
+                    .HasColumnName("Price_Special");
 
                 entity.Property(e => e.ProductId).HasColumnName("Product_ID");
 
@@ -791,84 +849,98 @@ namespace Semaforo.Logic.Models
                 entity.Property(e => e.SizeId).HasColumnName("Size_ID");
 
                 entity.HasOne(d => d.Product)
-                    .WithMany(p => p.Stock)
+                    .WithMany(p => p.Stocks)
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_STOCK_PRODUCTS");
 
                 entity.HasOne(d => d.SaleDetail)
-                    .WithMany(p => p.Stock)
+                    .WithMany(p => p.Stocks)
                     .HasForeignKey(d => d.SaleDetailId)
                     .HasConstraintName("FK_STOCK_SALES_DETAILS");
 
                 entity.HasOne(d => d.Site)
-                    .WithMany(p => p.Stock)
+                    .WithMany(p => p.Stocks)
                     .HasForeignKey(d => d.SiteId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_STOCK_SITES");
 
                 entity.HasOne(d => d.Size)
-                    .WithMany(p => p.Stock)
+                    .WithMany(p => p.Stocks)
                     .HasForeignKey(d => d.SizeId)
                     .HasConstraintName("FK_STOCK_SIZES");
             });
 
-            modelBuilder.Entity<Users>(entity =>
+            modelBuilder.Entity<User>(entity =>
             {
-                entity.HasKey(e => e.UserId)
-                    .HasName("PK_USER");
-
                 entity.ToTable("USERS");
 
                 entity.Property(e => e.UserId).HasColumnName("User_ID");
 
-                entity.Property(e => e.Address).HasMaxLength(300);
+                entity.Property(e => e.Address)
+                    .HasMaxLength(300)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
-                entity.Property(e => e.Cellphone).HasMaxLength(20);
+                entity.Property(e => e.Cellphone)
+                    .HasMaxLength(20)
+                    .UseCollation("Modern_Spanish_CI_AS");
+
+                entity.Property(e => e.Comments).UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.CreateDate)
-                    .HasColumnName("Create_Date")
-                    .HasColumnType("datetime");
+                    .HasColumnType("datetime")
+                    .HasColumnName("Create_Date");
 
                 entity.Property(e => e.CreatedBy).HasColumnName("Created_By");
 
-                entity.Property(e => e.Email).HasMaxLength(100);
+                entity.Property(e => e.Email)
+                    .HasMaxLength(100)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
-                entity.Property(e => e.Facebook).HasMaxLength(200);
+                entity.Property(e => e.Facebook)
+                    .HasMaxLength(200)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.FirstLastName)
+                    .HasMaxLength(50)
                     .HasColumnName("First_Last_Name")
-                    .HasMaxLength(50);
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.LastModifiedBy).HasColumnName("Last_Modified_By");
 
                 entity.Property(e => e.LastModify)
-                    .HasColumnName("Last_Modify")
-                    .HasColumnType("datetime");
+                    .HasColumnType("datetime")
+                    .HasColumnName("Last_Modify");
 
-                entity.Property(e => e.Name).HasMaxLength(50);
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.Password)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasMaxLength(50)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.Photo).HasColumnType("image");
 
                 entity.Property(e => e.ProfileImage)
-                    .HasColumnName("Profile_Image")
-                    .HasColumnType("image");
+                    .HasColumnType("image")
+                    .HasColumnName("Profile_Image");
 
                 entity.Property(e => e.SecondLastName)
+                    .HasMaxLength(50)
                     .HasColumnName("Second_Last_Name")
-                    .HasMaxLength(50);
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(10);
+                    .HasMaxLength(10)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.Username)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasMaxLength(50)
+                    .UseCollation("Modern_Spanish_CI_AS");
             });
 
             OnModelCreatingPartial(modelBuilder);
