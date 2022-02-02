@@ -488,6 +488,16 @@ namespace Semaforo.Logic.Models
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_EMPLOYEES_USERS");
 
+                entity.HasMany(e => e.Roles)
+                    .WithMany(r => r.Employees)
+                    .UsingEntity<EmployeeRole>(
+                        er => er.HasOne(prop => prop.Role)
+                        .WithMany()
+                        .HasForeignKey(prop => prop.RoleId),
+                        er => er.HasOne(prop => prop.Employee)
+                        .WithMany()
+                        .HasForeignKey(prop => prop.EmployeeId)
+                    );
             });
 
             modelBuilder.Entity<EmployeeRole>(entity =>
