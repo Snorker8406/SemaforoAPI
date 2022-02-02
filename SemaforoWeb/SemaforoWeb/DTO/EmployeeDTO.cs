@@ -24,6 +24,7 @@ namespace SemaforoWeb.DTO
         public string MaritalStatus { get; set; }
         public bool Active { get; set; }
         public string Comments { get; set; }
+        public List<RoleDTO> Roles { get; set; }
 
     }
 }

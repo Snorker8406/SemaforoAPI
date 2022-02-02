@@ -10,8 +10,10 @@ namespace Semaforo.Logic.Models
         public Product()
         {
             ProductCategories = new HashSet<ProductCategory>();
+            ProductComboDetails = new HashSet<ProductComboDetail>();
             ProductPictures = new HashSet<ProductPicture>();
             ProductPrices = new HashSet<ProductPrice>();
+            ProductsSchools = new HashSet<ProductsSchool>();
             SalesDetails = new HashSet<SalesDetail>();
             Stocks = new HashSet<Stock>();
         }
@@ -31,8 +33,10 @@ namespace Semaforo.Logic.Models
         public virtual Brand Brand { get; set; }
         public virtual ProductPicture ProductPicture { get; set; }
         public virtual ICollection<ProductCategory> ProductCategories { get; set; }
+        public virtual ICollection<ProductComboDetail> ProductComboDetails { get; set; }
         public virtual ICollection<ProductPicture> ProductPictures { get; set; }
         public virtual ICollection<ProductPrice> ProductPrices { get; set; }
+        public virtual ICollection<ProductsSchool> ProductsSchools { get; set; }
         public virtual ICollection<SalesDetail> SalesDetails { get; set; }
         public virtual ICollection<Stock> Stocks { get; set; }
     }
