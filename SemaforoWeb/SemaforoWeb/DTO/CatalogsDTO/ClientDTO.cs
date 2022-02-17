@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SemaforoWeb.DTO
+namespace SemaforoWeb.DTO.CatalogsDTO.Catalogs
 {
     public class ClientDTO
     {
@@ -28,10 +28,5 @@ namespace SemaforoWeb.DTO
         public string Email { get; set; }
         public byte[] ProfileImage { get; set; }
         public string Comments { get; set; }
-
-        public static implicit operator List<object>(ClientDTO v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
