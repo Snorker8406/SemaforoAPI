@@ -1,4 +1,6 @@
-﻿using SemaforoWeb.DTO.CatalogsDTO;
+﻿
+using AutoMapper;
+using SemaforoWeb.Profiles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace SemaforoWeb.DTO.CatalogsDTO.Lib
 {
-    public static class Catalog
+    public static class Catalog<T>
     {
         public static string[,] ClientColumnsConfigs = {
-                { "ClientId",           "ID",                   "",             "1",    "1",    "1" },
-                { "UserId",             "ID",                   "userOptions",  "1",    "1",    "1" },
-                { "Name",               "Nombre",               "",             "1",    "0",    "1" },
-                { "LastName",           "Apellido Paterno",     "",             "1",    "1",    "0" },
-                { "LastNameMother",     "Apellido Materno",     "",             "0",    "1",    "1" }
+                { "ClientId",           "ID",                   "",             "1",    "1"},
+                { "UserId",             "ID",                   "userOptions",  "1",    "1"},
+                { "Name",               "Nombre",               "",             "1",    "0"},
+                { "LastName",           "Apellido Paterno",     "",             "1",    "1"},
+                { "LastNameMother",     "Apellido Materno",     "",             "0",    "1"}
             };
 
 
@@ -37,11 +39,9 @@ namespace SemaforoWeb.DTO.CatalogsDTO.Lib
                         catalogField.Type = columnsConfigs[i, 2] != "" ? columnsConfigs[i, 2] : catalogField.Type;
                         catalogField.IsColumn = (columnsConfigs[i, 3] == "1");
                         catalogField.IsInForm = (columnsConfigs[i, 4] == "1");
-                        catalogField.IsInResponse = (columnsConfigs[i, 5] == "1");
                         break;
                     }
                 }
-
                 //if (type == typeof(DateTime))
                 //{
                 //    Console.WriteLine(prop.GetValue(clients[0], null).ToString());
@@ -52,22 +52,13 @@ namespace SemaforoWeb.DTO.CatalogsDTO.Lib
             return columns;
         }
 
-        public static CatalogDTO<Object> BuildCatalog(object DTO, string[,] columnsConfigs, List<object> data) {
-            if (data == null)
+        public static CatalogDTO<T> BuildCatalog(string[,] columnsConfigs, IEnumerable<T> data, IMapper mapper) {
+            CatalogDTO<T> catalog = new CatalogDTO<T>();
+            catalog.Columns = BuildColumns(data.FirstOrDefault(), columnsConfigs);
+            foreach (var item in data.ToList())
             {
-                return null;
-            }
-            CatalogDTO<Object> catalog = new CatalogDTO<Object>();
-            catalog.Columns = Catalog.BuildColumns(data[0], Catalog.ClientColumnsConfigs);
-
-            foreach (var item in data)
-            {
-                object itemDTO = new ClientDTO();
-                itemDTO.ClientId = client.ClientId;
-                itemDTO.Name = client.Name;
-                itemDTO.LastName = client.LastName;
-                itemDTO.LastNameMother = client.LastNameMother;
-                catalog.Data.Add(itemDTO);
+                T clientDTO = mapper.Map<T>(item);
+                catalog.Data.Add(clientDTO);
             }
             return catalog;
         }

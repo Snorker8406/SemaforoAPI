@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 
 namespace Semaforo.Logic.Services
 {
     public class ClientService : BaseService
     {
-        public ClientService(db_9bc4da_semaforoContext context, UserBO currentUser) : base(context, currentUser)
+        public ClientService(db_9bc4da_semaforoContext context, IMapper mapper, UserBO currentUser) : base(context, mapper, currentUser)
         {}
 
         public async Task<List<ClientBO>> GetClientList()
@@ -20,19 +21,7 @@ namespace Semaforo.Logic.Services
 
             foreach (var client in clients)
             {
-                ClientBO clientBO = new ClientBO(); //Instanciar de una clase
-
-                clientBO.ClientId = client.ClientId;
-                clientBO.Name = client.Name;
-                clientBO.Address = client.Address;
-                clientBO.UserId = client.UserId;
-                clientBO.Cellphone = client.Cellphone;
-                clientBO.Email = client.Email;
-                clientBO.AccountDaysLimit = client.AccountDaysLimit;
-                clientBO.AccountAmountLimit = client.AccountAmountLimit;
-                clientBO.LastModify = client.LastModify;
-                clientBO.LastModifiedBy = client.LastModifiedBy;
-
+                ClientBO clientBO = _mapper.Map<ClientBO>(client); //Instanciar de una clase
                 clientBOs.Add(clientBO);
             }
             return clientBOs;

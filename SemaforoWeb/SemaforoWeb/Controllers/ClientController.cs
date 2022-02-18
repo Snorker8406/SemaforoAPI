@@ -8,11 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Semaforo.Logic.BO;
-using System.Linq;
 using SemaforoWeb.DTO.CatalogsDTO;
-using System.Reflection;
 using SemaforoWeb.DTO.CatalogsDTO.Catalogs;
 using SemaforoWeb.DTO.CatalogsDTO.Lib;
+using AutoMapper;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,76 +23,33 @@ namespace SemaforoWeb.Controllers
     {
 
         private readonly db_9bc4da_semaforoContext _context;
-        private ClientService _clientService;
+        private readonly ClientService _clientService;
+        private readonly IMapper _mapper;
 
-        public ClientController(db_9bc4da_semaforoContext context)
+        public ClientController(db_9bc4da_semaforoContext context, IMapper mapper)
         {
             _context = context;
-            _clientService = new ClientService(context, null);
+            _clientService = new ClientService(context, mapper, null);
+            _mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ClientBO>>> GetClients()
-        {
-            return await _clientService.GetClientList();
-
-        }
-
+        
         [HttpGet]
         [Route("[action]")]
-        public async Task<ActionResult<CatalogDTO<ClientDTO>>> GetClients2()
+        public async Task<ActionResult<CatalogDTO<ClientBO>>> GetClients()
         {
-            var clients = await _clientService.GetClientList();
-            CatalogDTO<ClientDTO> catalog = new CatalogDTO<ClientDTO>();
-            catalog.Columns = Catalogs.BuildColumns(clients[0], Catalogs.clientColumnsConfigs);
-
-            //string[,] columns = {
-            //    { "ClientId",           "ID",                   "",             "1",    "1",    "1" },
-            //    { "UserId",             "ID",                   "userOptions",  "1",    "1",    "1" },
-            //    { "Name",               "Nombre",               "",             "1",    "0",    "1" },
-            //    { "LastName",           "Apellido Paterno",     "",             "1",    "1",    "0" },
-            //    { "LastNameMother",     "Apellido Materno",     "",             "0",    "1",    "1" }
-            //};
-
-            //foreach (PropertyInfo prop in clients[0].GetType().GetProperties())
-            //{
-            //    CatalogFieldDTO catalogField = new CatalogFieldDTO();
-            //    catalogField.Name = prop.Name;
-            //    catalogField.Type = (Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType).ToString();
-            //    var x = columns.GetLength(0);
-            //    //var fieldSettings = columns[0].Where(c => c.ToString() == prop.Name);
-            //    for (int i = 0; i < columns.GetLength(0); i++)
-            //    {
-            //        if (columns[i, 0] == prop.Name) {
-            //            catalogField.ColumnName = columns[i, 1];
-            //            catalogField.Type = columns[i, 2] != "" ? columns[i, 2] : catalogField.Type;
-            //            catalogField.IsColumn = (columns[i, 3] == "1");
-            //            catalogField.IsInForm = (columns[i, 4] == "1");
-            //            catalogField.IsInResponse = (columns[i, 5] == "1");
-            //            break;
-            //        }
-            //    }
-
-            //    //if (type == typeof(DateTime))
-            //    //{
-            //    //    Console.WriteLine(prop.GetValue(clients[0], null).ToString());
-            //    //}
-
-            //    catalog.Columns.Add(catalogField);
-            //};
-
-            foreach (var client in clients)
+            try
             {
-                ClientDTO clientDTO = new ClientDTO();
-                clientDTO.ClientId = client.ClientId;
-                clientDTO.Name = client.Name;
-                clientDTO.LastName = client.LastName;
-                clientDTO.LastNameMother = client.LastNameMother;
-                catalog.Data.Add(clientDTO);
+                var clients = await _clientService.GetClientList();
+                if (clients == null) {
+                    return null;
+                }
+                return Catalog<ClientBO>.BuildCatalog(Catalog<ClientBO>.ClientColumnsConfigs, clients, _mapper);
             }
-            return catalog; 
-
-
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         // GET api/<ClientController>/5

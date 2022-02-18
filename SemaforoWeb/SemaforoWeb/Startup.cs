@@ -29,7 +29,7 @@ namespace SemaforoWeb
             services.AddControllersWithViews();
 
             services.AddDbContext<db_9bc4da_semaforoContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("SemaforoContext")));
-
+            services.AddAutoMapper(typeof(Startup));
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
