@@ -1,11 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
+using Semaforo.Logic.Services;
 using SemaforoWeb.DTO;
 using Semaforo.Logic.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Semaforo.Logic.BO;
+using SemaforoWeb.DTO.CatalogsDTO;
+using SemaforoWeb.DTO.CatalogsDTO.Catalogs;
+using SemaforoWeb.DTO.CatalogsDTO.Lib;
+using AutoMapper;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,20 +22,33 @@ namespace SemaforoWeb.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly db_9bc4da_semaforoContext _context;
+        private readonly EmployeeService _employeeService;
+        private readonly IMapper _mapper;
 
-        public EmployeeController(db_9bc4da_semaforoContext context)
+        public EmployeeController(db_9bc4da_semaforoContext context, IMapper mapper)
         {
             _context = context;
+            _employeeService = new EmployeeService(context, mapper, null);
+            _mapper = mapper;
         }
 
-        // GET: api/<EmployeeController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EmployeeDTO>>> GetEmployees()
+        [Route("[action]")]
+        public async Task<ActionResult<CatalogDTO<EmployeeBO>>> GetEmployees()
         {
-            var employees = await _context.Employees.ToListAsync();
-            List<EmployeeDTO> employeeDTOs = new List<EmployeeDTO>();
-
-            return employeeDTOs;
+            try
+            {
+                var employees = await _employeeService.GetEmployeeList();
+                if (employees == null)
+                {
+                    return null;
+                }
+                return Catalog<EmployeeBO>.BuildCatalog(Catalog<EmployeeBO>.EmployeeColumnsConfigs, employees, _mapper);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         // GET api/<EmployeeController>/5

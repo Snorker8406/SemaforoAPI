@@ -19,6 +19,14 @@ namespace SemaforoWeb.DTO.CatalogsDTO.Lib
                 { "LastNameMother",     "Apellido Materno",     "",             "0",    "1"}
             };
 
+        public static string[,] EmployeeColumnsConfigs = {
+                { "ClientId",           "ID",                   "",             "1",    "1"},
+                { "UserId",             "ID",                   "userOptions",  "1",    "1"},
+                { "Name",               "Nombre",               "",             "1",    "0"},
+                { "LastName",           "Apellido Paterno",     "",             "1",    "1"},
+                { "LastNameMother",     "Apellido Materno",     "",             "0",    "1"}
+            };
+
 
 
         public static List<CatalogFieldDTO> BuildColumns(object DTO, string[,] columnsConfigs)
