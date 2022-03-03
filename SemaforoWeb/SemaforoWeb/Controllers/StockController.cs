@@ -6,6 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Semaforo.Logic.Services;
+using AutoMapper;
+using SemaforoWeb.DTO.CatalogsDTO;
+using Semaforo.Logic.BO;
+using SemaforoWeb.DTO.CatalogsDTO.Lib;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,21 +20,36 @@ namespace SemaforoWeb.Controllers
     [ApiController]
     public class StockController : ControllerBase
     {
-        private readonly db_9bc4da_semaforoContext _context;
 
-        public StockController(db_9bc4da_semaforoContext context)
+        private readonly db_9bc4da_semaforoContext _context;
+        private readonly StockService _stockService;
+        private readonly IMapper _mapper;
+
+        public StockController(db_9bc4da_semaforoContext context, IMapper mapper)
         {
             _context = context;
+            _stockService = new StockService(context, mapper, null);
+            _mapper = mapper;
         }
 
-        // GET: api/<StockController>
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<StockDTO>>> GetStocks()
-        {
-            var stocks = await _context.Stocks.ToListAsync();
-            List<StockDTO> stockDTOs = new List<StockDTO>();
 
-            return stockDTOs;
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<ActionResult<CatalogDTO<StockBO>>> GetStocks()
+        {
+            try
+            {
+                var stocks = await _stockService.GetStockList();
+                if (stocks == null)
+                {
+                    return null;
+                }
+                return Catalog<StockBO>.BuildCatalog(Catalog<StockBO>.StockColumnsConfigs, stocks, _mapper);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         // GET api/<StockController>/5

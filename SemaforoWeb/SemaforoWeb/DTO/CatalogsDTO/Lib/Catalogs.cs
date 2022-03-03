@@ -1,5 +1,7 @@
 ﻿
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Semaforo.Logic.BO;
 using SemaforoWeb.Profiles;
 using System;
 using System.Collections.Generic;
@@ -25,6 +27,30 @@ namespace SemaforoWeb.DTO.CatalogsDTO.Lib
                 { "Name",               "Nombre",               "",             "1",    "0"},
                 { "LastName",           "Apellido Paterno",     "",             "1",    "1"},
                 { "LastNameMother",     "Apellido Materno",     "",             "0",    "1"}
+            };
+
+        public static string[,] ProductColumnsConfigs = {
+                { "ClientId",           "ID",                   "",             "1",    "1"},
+                { "UserId",             "ID",                   "userOptions",  "1",    "1"},
+                { "Name",               "Nombre",               "",             "1",    "0"},
+                { "LastName",           "Apellido Paterno",     "",             "1",    "1"},
+                { "LastNameMother",     "Apellido Materno",     "",             "0",    "1"}
+            };
+
+        public static string[,] BrandColumnsConfigs = {
+                { "BrandId",           "ID",                   "",             "1",    "1"},
+            };
+
+        public static string[,] CategoryColumnsConfigs = {
+                { "CategoryId",           "ID",                   "",             "1",    "1"},
+            };
+
+        public static string[,] StockColumnsConfigs = {
+                { "StockId",           "ID",                   "",             "1",    "1"},
+            };
+
+        public static string[,] SizeColumnsConfigs = {
+                { "SizeId",           "ID",                   "",             "1",    "1"},
             };
 
 

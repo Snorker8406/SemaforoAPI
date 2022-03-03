@@ -6,6 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Semaforo.Logic.Services;
+using AutoMapper;
+using SemaforoWeb.DTO.CatalogsDTO;
+using Semaforo.Logic.BO;
+using SemaforoWeb.DTO.CatalogsDTO.Lib;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,21 +20,36 @@ namespace SemaforoWeb.Controllers
     [ApiController]
     public class SizeController : ControllerBase
     {
-        private readonly db_9bc4da_semaforoContext _context;
 
-        public SizeController(db_9bc4da_semaforoContext context)
+        private readonly db_9bc4da_semaforoContext _context;
+        private readonly SizeService _sizeService;
+        private readonly IMapper _mapper;
+
+        public SizeController(db_9bc4da_semaforoContext context, IMapper mapper)
         {
             _context = context;
+            _sizeService = new SizeService(context, mapper, null);
+            _mapper = mapper;
         }
 
-        // GET: api/<ClientController>
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<SizeDTO>>> GetSizes()
-        {
-            var sizes = await _context.Sizes.ToListAsync();
-            List<SizeDTO> sizesDTOs = new List<SizeDTO>();
 
-            return sizesDTOs;
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<ActionResult<CatalogDTO<SizeBO>>> GetSizes()
+        {
+            try
+            {
+                var sizes = await _sizeService.GetSizeList();
+                if (sizes == null)
+                {
+                    return null;
+                }
+                return Catalog<SizeBO>.BuildCatalog(Catalog<SizeBO>.SizeColumnsConfigs, sizes, _mapper);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         // GET api/<ValuesController1>/5

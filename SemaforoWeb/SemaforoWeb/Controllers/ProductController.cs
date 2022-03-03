@@ -6,6 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using SemaforoWeb.DTO.CatalogsDTO;
+using Semaforo.Logic.BO;
+using SemaforoWeb.DTO.CatalogsDTO.Lib;
+using Semaforo.Logic.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,20 +21,33 @@ namespace SemaforoWeb.Controllers
     public class ProductController : ControllerBase
     {
         private readonly db_9bc4da_semaforoContext _context;
+        private readonly ProductService _productService;
+        private readonly IMapper _mapper;
 
-        public ProductController(db_9bc4da_semaforoContext context)
+        public ProductController(db_9bc4da_semaforoContext context, IMapper mapper)
         {
             _context = context;
+            _productService = new ProductService(context, mapper, null);
+            _mapper = mapper;
         }
 
-        // GET: api/<ProductController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts()
+        [Route("[action]")]
+        public async Task<ActionResult<CatalogDTO<ProductBO>>> GetProducts()
         {
-                var products = await _context.Products.ToListAsync();
-                List<ProductDTO> productDTOs = new List<ProductDTO>();
-
-            return productDTOs;
+            try
+            {
+                var products = await _productService.GetProductList();
+                if (products == null)
+                {
+                    return null;
+                }
+                return Catalog<ProductBO>.BuildCatalog(Catalog<ProductBO>.ProductColumnsConfigs, products, _mapper);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         // GET api/<ProductController>/5

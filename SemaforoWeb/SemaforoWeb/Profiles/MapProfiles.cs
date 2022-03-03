@@ -25,6 +25,18 @@ namespace SemaforoWeb.Profiles
             CreateMap<Product, ProductBO>();
             CreateMap<ProductBO, ProductDTO>();
 
+            CreateMap<Brand, BrandBO>();
+            CreateMap<BrandBO, BrandDTO>();
+
+            CreateMap<Category, CategoryBO>();
+            CreateMap<CategoryBO, CategoryDTO>();
+
+            CreateMap<Stock, StockBO>();
+            CreateMap<StockBO, StockDTO>();
+
+            CreateMap<Size, SizeBO>();
+            CreateMap<SizeBO, SizeDTO>();
+
         }
     }
 }

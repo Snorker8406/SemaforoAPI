@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SemaforoWeb.DTO
+namespace SemaforoWeb.DTO.CatalogsDTO.Catalogs
 {
     public class ProductDTO
     {

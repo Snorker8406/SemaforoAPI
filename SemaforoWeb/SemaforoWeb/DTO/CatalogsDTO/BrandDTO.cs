@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SemaforoWeb.DTO
+namespace SemaforoWeb.DTO.CatalogsDTO.Catalogs
 {
-    public class CategoryDTO
+    public class BrandDTO
     {
-        public int CategoryId { get; set; }
+        public int BrandId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public DateTime CreateDate { get; set; }
-        public bool? Enabled { get; set; }
+        public int? SupplierId { get; set; }
 
     }
 }

@@ -1,11 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
+using Semaforo.Logic.Services;
 using SemaforoWeb.DTO;
 using Semaforo.Logic.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Semaforo.Logic.BO;
+using SemaforoWeb.DTO.CatalogsDTO;
+using SemaforoWeb.DTO.CatalogsDTO.Catalogs;
+using SemaforoWeb.DTO.CatalogsDTO.Lib;
+using AutoMapper;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,20 +21,36 @@ namespace SemaforoWeb.Controllers
     [ApiController]
     public class BrandController : ControllerBase
     {
-        private readonly db_9bc4da_semaforoContext _context;
 
-        public BrandController(db_9bc4da_semaforoContext context)
+        private readonly db_9bc4da_semaforoContext _context;
+        private readonly BrandService _brandService;
+        private readonly IMapper _mapper;
+
+        public BrandController(db_9bc4da_semaforoContext context, IMapper mapper)
         {
             _context = context;
+            _brandService = new BrandService(context, mapper, null);
+            _mapper = mapper;
         }
-        // GET: api/<BrandController>
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<BrandDTO>>> GetBrands()
-        {
-            var brands = await _context.Brands.ToListAsync();
-            List<BrandDTO> brandsDTOs = new List<BrandDTO>();
 
-            return brandsDTOs;
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<ActionResult<CatalogDTO<BrandBO>>> GetBrands()
+        {
+            try
+            {
+                var brands = await _brandService.GetBrandList();
+                if (brands == null)
+                {
+                    return null;
+                }
+                return Catalog<BrandBO>.BuildCatalog(Catalog<BrandBO>.BrandColumnsConfigs, brands, _mapper);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         // GET api/<BrandController>/5

@@ -6,6 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Semaforo.Logic.Services;
+using SemaforoWeb.DTO.CatalogsDTO.Lib;
+using Semaforo.Logic.BO;
+using SemaforoWeb.DTO.CatalogsDTO;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,21 +20,36 @@ namespace SemaforoWeb.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly db_9bc4da_semaforoContext _context;
 
-        public CategoryController(db_9bc4da_semaforoContext context)
+        private readonly db_9bc4da_semaforoContext _context;
+        private readonly CategoryService _categoryService;
+        private readonly IMapper _mapper;
+
+        public CategoryController(db_9bc4da_semaforoContext context, IMapper mapper)
         {
             _context = context;
+            _categoryService = new CategoryService(context, mapper, null);
+            _mapper = mapper;
         }
 
-        // GET: api/<CategoryController>
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<CategoryDTO>>> GetClients()
-        {
-            var clients = await _context.Clients.ToListAsync();
-            List<CategoryDTO> categoryDTOs = new List<CategoryDTO>();
 
-            return categoryDTOs;
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<ActionResult<CatalogDTO<CategoryBO>>> GetCategories()
+        {
+            try
+            {
+                var categories = await _categoryService.GetCategoryList();
+                if (categories == null)
+                {
+                    return null;
+                }
+                return Catalog<CategoryBO>.BuildCatalog(Catalog<CategoryBO>.CategoryColumnsConfigs, categories, _mapper);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         // GET api/<CategoryController>/5
