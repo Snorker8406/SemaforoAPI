@@ -37,6 +37,12 @@ namespace SemaforoWeb.Profiles
             CreateMap<Size, SizeBO>();
             CreateMap<SizeBO, SizeDTO>();
 
+            CreateMap<AccountStatus, AccountStatusBO>();
+            CreateMap<AccountStatusBO, AccountStatusDTO>();
+
+            CreateMap<AccountType, AccountTypeBO>();
+            CreateMap<AccountTypeBO, AccountTypeDTO>();
+
         }
     }
 }

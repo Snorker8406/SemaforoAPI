@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 
 namespace SemaforoWeb.DTO
 {
-    public class AccountTypeDTO
+    public class AccountStatusDTO
     {
-
-        public int AccountTypeId { get; set; }
-        public string AccountType1 { get; set; }
+        public int AccountStatusId { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
 
     }

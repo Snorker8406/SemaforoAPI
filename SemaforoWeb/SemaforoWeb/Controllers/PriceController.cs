@@ -24,10 +24,10 @@ namespace SemaforoWeb.Controllers
 
         // GET: api/<PriceController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PriceDTO>>> GetPrices()
+        public async Task<ActionResult<IEnumerable<ProductPriceDTO>>> GetPrices()
         {
             var prices = await _context.ProductPrices.ToListAsync();
-            List<PriceDTO> priceDTOs = new List<PriceDTO>();
+            List<ProductPriceDTO> priceDTOs = new List<ProductPriceDTO>();
 
             return priceDTOs;
         }

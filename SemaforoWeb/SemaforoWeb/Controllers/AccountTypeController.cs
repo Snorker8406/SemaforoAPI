@@ -6,6 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Semaforo.Logic.Services;
+using SemaforoWeb.DTO.CatalogsDTO;
+using Semaforo.Logic.BO;
+using SemaforoWeb.DTO.CatalogsDTO.Lib;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,21 +20,36 @@ namespace SemaforoWeb.Controllers
     [ApiController]
     public class AccountTypeController : ControllerBase
     {
-        private readonly db_9bc4da_semaforoContext _context;
 
-        public AccountTypeController(db_9bc4da_semaforoContext context)
+        private readonly db_9bc4da_semaforoContext _context;
+        private readonly AccountTypeService _accountTypeService;
+        private readonly IMapper _mapper;
+
+        public AccountTypeController(db_9bc4da_semaforoContext context, IMapper mapper)
         {
             _context = context;
+            _accountTypeService = new AccountTypeService(context, mapper, null);
+            _mapper = mapper;
         }
 
-        // GET: api/<AccountTypeController>
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<AccountTypeDTO>>> GetAccountTypes()
-        {
-            var accountTypes = await _context.AccountTypes.ToListAsync();
-            List<AccountTypeDTO> accounttypeDTOs = new List<AccountTypeDTO>();
 
-            return accounttypeDTOs;
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<ActionResult<CatalogDTO<AccountTypeBO>>> GetAccountTypes()
+        {
+            try
+            {
+                var accountTypes = await _accountTypeService.GetAccountTypeList();
+                if (accountTypes == null)
+                {
+                    return null;
+                }
+                return Catalog<AccountTypeBO>.BuildCatalog(Catalog<AccountTypeBO>.AccountTypeColumnsConfigs, accountTypes, _mapper);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         // GET api/<AccountTypeController>/5

@@ -8,7 +8,7 @@ namespace Semaforo.Logic.BO
     public class AccountStatusBO
     {
         public int AccountStatusId { get; set; }
-        public string AccountStatus1 { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
 
     }

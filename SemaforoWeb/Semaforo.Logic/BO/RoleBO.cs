@@ -14,7 +14,7 @@ namespace  Semaforo.Logic.BO
         public int LastModifiedBy { get; set; }
         public string Status { get; set; }
         public bool Deleted { get; set; }
-        public string Role1 { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
 
     }

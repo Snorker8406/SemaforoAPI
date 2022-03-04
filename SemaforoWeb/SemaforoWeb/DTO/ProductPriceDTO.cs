@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace SemaforoWeb.DTO
 {
-    public class PriceDTO
+    public class ProductPriceDTO
     {
         public int PriceId { get; set; }
-        public decimal Price1 { get; set; }
+        public decimal Price { get; set; }
         public int ProductId { get; set; }
         public int? SizeId { get; set; }
 

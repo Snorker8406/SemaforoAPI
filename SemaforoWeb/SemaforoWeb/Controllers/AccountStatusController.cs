@@ -6,6 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Semaforo.Logic.Services;
+using AutoMapper;
+using Semaforo.Logic.BO;
+using SemaforoWeb.DTO.CatalogsDTO;
+using SemaforoWeb.DTO.CatalogsDTO.Lib;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,21 +20,36 @@ namespace SemaforoWeb.Controllers
     [ApiController]
     public class AccountStatusController : ControllerBase
     {
-        private readonly db_9bc4da_semaforoContext _context;
 
-        public AccountStatusController(db_9bc4da_semaforoContext context)
+        private readonly db_9bc4da_semaforoContext _context;
+        private readonly AccountStatusService _accountStatusService;
+        private readonly IMapper _mapper;
+
+        public AccountStatusController(db_9bc4da_semaforoContext context, IMapper mapper)
         {
             _context = context;
+            _accountStatusService = new AccountStatusService(context, mapper, null);
+            _mapper = mapper;
         }
 
-        // GET: api/<AccountStatusController>
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<AccountStatusDTO>>> GetAccountStatus()
-        {
-            var accountStatuses = await _context.AccountStatuses.ToListAsync();
-            List<AccountStatusDTO> accountstatusDTOs = new List<AccountStatusDTO>();
 
-            return accountstatusDTOs;
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<ActionResult<CatalogDTO<AccountStatusBO>>> GetAccountStatuses()
+        {
+            try
+            {
+                var accountStatuses = await _accountStatusService.GetAccountStatusList();
+                if (accountStatuses == null)
+                {
+                    return null;
+                }
+                return Catalog<AccountStatusBO>.BuildCatalog(Catalog<AccountStatusBO>.AccountStatusColumnsConfigs, accountStatuses, _mapper);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         // GET api/<AccountStatusController>/5

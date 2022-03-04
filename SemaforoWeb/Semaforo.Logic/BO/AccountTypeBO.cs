@@ -9,7 +9,7 @@ namespace Semaforo.Logic.BO
     {
 
         public int AccountTypeId { get; set; }
-        public string AccountType1 { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
 
     }
