@@ -61,6 +61,10 @@ namespace SemaforoWeb.DTO.CatalogsDTO.Lib
                 { "AccountTypeId",           "ID",                   "",             "1",    "1"},
             };
 
+        public static string[,] ClientStatusColumnsConfigs = {
+                { "ClientStatusId",           "ID",                   "",             "1",    "1"},
+            };
+
 
         public static List<CatalogFieldDTO> BuildColumns(object DTO, string[,] columnsConfigs)
         {

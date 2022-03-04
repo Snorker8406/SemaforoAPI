@@ -43,6 +43,9 @@ namespace SemaforoWeb.Profiles
             CreateMap<AccountType, AccountTypeBO>();
             CreateMap<AccountTypeBO, AccountTypeDTO>();
 
+            CreateMap<ClientStatus, ClientStatusBO>();
+            CreateMap<ClientStatusBO, ClientStatusDTO>();
+
         }
     }
 }
