@@ -2,6 +2,7 @@
 using Semaforo.Logic.BO;
 using Semaforo.Logic.Models;
 using SemaforoWeb.DTO;
+using SemaforoWeb.DTO.CatalogsDTO;
 using SemaforoWeb.DTO.CatalogsDTO.Catalogs;
 using System;
 using System.Collections.Generic;
@@ -45,6 +46,12 @@ namespace SemaforoWeb.Profiles
 
             CreateMap<ClientStatus, ClientStatusBO>();
             CreateMap<ClientStatusBO, ClientStatusDTO>();
+
+            CreateMap<Embroidery, EmbroideryBO>();
+            CreateMap<EmbroideryBO, EmbroideryDTO>();
+
+            CreateMap<ProductCombo, ProductComboBO>();
+            CreateMap<ProductComboBO, ProductComboDTO>();
 
         }
     }
