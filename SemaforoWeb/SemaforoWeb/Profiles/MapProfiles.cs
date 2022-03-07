@@ -53,6 +53,12 @@ namespace SemaforoWeb.Profiles
             CreateMap<ProductCombo, ProductComboBO>();
             CreateMap<ProductComboBO, ProductComboDTO>();
 
+            CreateMap<SchoolLevel, SchoolLevelBO>();
+            CreateMap<SchoolLevelBO, SchoolLevelDTO>();
+
+            CreateMap<School, SchoolBO>();
+            CreateMap<SchoolBO, SchoolDTO>();
+
         }
     }
 }

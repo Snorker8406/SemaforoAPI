@@ -73,6 +73,13 @@ namespace SemaforoWeb.DTO.CatalogsDTO.Lib
                 { "ProductComboId",           "ID",                   "",             "1",    "1"},
             };
 
+        public static string[,] SchoolLevelColumnsConfigs = {
+                { "SchoolLevelId",           "ID",                   "",             "1",    "1"},
+            };
+
+        public static string[,] SchoolColumnsConfigs = {
+                { "SchoolId",           "ID",                   "",             "1",    "1"},
+            };
 
         public static List<CatalogFieldDTO> BuildColumns(object DTO, string[,] columnsConfigs)
         {
