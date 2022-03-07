@@ -32,9 +32,6 @@ namespace SemaforoWeb.Profiles
             CreateMap<Category, CategoryBO>();
             CreateMap<CategoryBO, CategoryDTO>();
 
-            CreateMap<Stock, StockBO>();
-            CreateMap<StockBO, StockDTO>();
-
             CreateMap<Size, SizeBO>();
             CreateMap<SizeBO, SizeDTO>();
 

@@ -45,10 +45,6 @@ namespace SemaforoWeb.DTO.CatalogsDTO.Lib
                 { "CategoryId",           "ID",                   "",             "1",    "1"},
             };
 
-        public static string[,] StockColumnsConfigs = {
-                { "StockId",           "ID",                   "",             "1",    "1"},
-            };
-
         public static string[,] SizeColumnsConfigs = {
                 { "SizeId",           "ID",                   "",             "1",    "1"},
             };
