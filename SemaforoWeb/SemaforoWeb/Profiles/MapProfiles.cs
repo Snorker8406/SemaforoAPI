@@ -59,6 +59,12 @@ namespace SemaforoWeb.Profiles
             CreateMap<School, SchoolBO>();
             CreateMap<SchoolBO, SchoolDTO>();
 
+            CreateMap<Site, SiteBO>();
+            CreateMap<SiteBO, SiteDTO>();
+
+            CreateMap<User, UserBO>();
+            CreateMap<UserBO, UserDTO>();
+
         }
     }
 }

@@ -81,6 +81,14 @@ namespace SemaforoWeb.DTO.CatalogsDTO.Lib
                 { "SchoolId",           "ID",                   "",             "1",    "1"},
             };
 
+        public static string[,] SiteColumnsConfigs = {
+                { "SiteId",           "ID",                   "",             "1",    "1"},
+            };
+
+        public static string[,] UserColumnsConfigs = {
+                { "UserId",           "ID",                   "",             "1",    "1"},
+            };
+
         public static List<CatalogFieldDTO> BuildColumns(object DTO, string[,] columnsConfigs)
         {
             List<CatalogFieldDTO> columns = new List<CatalogFieldDTO>();

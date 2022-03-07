@@ -1,4 +1,10 @@
-﻿namespace SemaforoWeb.DTO.CatalogsDTO
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+
+namespace SemaforoWeb.DTO.CatalogsDTO
 {
     public class SchoolDTO
     {

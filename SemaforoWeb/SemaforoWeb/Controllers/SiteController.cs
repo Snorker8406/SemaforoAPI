@@ -6,6 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Semaforo.Logic.Services;
+using AutoMapper;
+using SemaforoWeb.DTO.CatalogsDTO.Lib;
+using Semaforo.Logic.BO;
+using SemaforoWeb.DTO.CatalogsDTO;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,20 +21,33 @@ namespace SemaforoWeb.Controllers
     public class SiteController : ControllerBase
     {
         private readonly db_9bc4da_semaforoContext _context;
+        private readonly SiteService _siteService;
+        private readonly IMapper _mapper;
 
-        public SiteController(db_9bc4da_semaforoContext context)
+        public SiteController(db_9bc4da_semaforoContext context, IMapper mapper)
         {
             _context = context;
+            _siteService = new SiteService(context, mapper, null);
+            _mapper = mapper;
         }
 
         // GET: api/<SiteController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<SiteDTO>>> GetSites()
+        public async Task<ActionResult<CatalogDTO<SiteBO>>> GetSites()
         {
-            var sites = await _context.Sites.ToListAsync();
-            List<SiteDTO> siteDTOs = new List<SiteDTO>();
-
-            return siteDTOs;
+            try
+            {
+                var sites = await _siteService.GetSiteList();
+                if (sites == null)
+                {
+                    return null;
+                }
+                return Catalog<SiteBO>.BuildCatalog(Catalog<SiteBO>.SiteColumnsConfigs, sites, _mapper);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         // GET api/<SiteController>/5

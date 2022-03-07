@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SemaforoWeb.DTO.CatalogsDTO
+namespace SemaforoWeb.DTO.CatalogsDTO.Catalogs
 {
     public class EmbroideryDTO
     {

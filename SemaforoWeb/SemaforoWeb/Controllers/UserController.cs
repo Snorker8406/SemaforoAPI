@@ -6,6 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Semaforo.Logic.BO;
+using SemaforoWeb.DTO.CatalogsDTO;
+using SemaforoWeb.DTO.CatalogsDTO.Lib;
+using Semaforo.Logic.Services;
+using AutoMapper;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,20 +21,33 @@ namespace SemaforoWeb.Controllers
     public class UserController : ControllerBase
     {
         private readonly db_9bc4da_semaforoContext _context;
+        private readonly UserService _userService;
+        private readonly IMapper _mapper;
 
-        public UserController(db_9bc4da_semaforoContext context)
+        public UserController(db_9bc4da_semaforoContext context, IMapper mapper)
         {
             _context = context;
+            _userService = new UserService(context, mapper, null);
+            _mapper = mapper;
         }
 
         // GET: api/<UserController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
+        public async Task<ActionResult<CatalogDTO<UserBO>>> GetUsers()
         {
-            var users = await _context.Users.ToListAsync();
-            List<UserDTO> userDTOs = new List<UserDTO>();
-
-            return userDTOs;
+            try
+            {
+                var users = await _userService.GetUserList();
+                if (users == null)
+                {
+                    return null;
+                }
+                return Catalog<UserBO>.BuildCatalog(Catalog<UserBO>.UserColumnsConfigs, users, _mapper);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         // GET api/<UserController>/5
