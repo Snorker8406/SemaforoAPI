@@ -32,7 +32,7 @@ const fields = [
   },
 ]
 const ListOfClients = () => {
-  return <ItemsList APIurl="/api/Client/" idField="clientId" fields={fields} />
+  return <ItemsList APIurl="/api/Client/GetClients" idField="clientId" />
 }
 
 export default ListOfClients

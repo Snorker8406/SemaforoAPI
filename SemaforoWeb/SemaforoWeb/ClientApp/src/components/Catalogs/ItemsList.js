@@ -15,7 +15,8 @@ import CIcon from '@coreui/icons-react'
 
 const ItemsList = (props) => {
   // eslint-disable-next-line react/prop-types
-  const { APIurl, idField, fields } = props
+  const { APIurl, idField } = props
+  const [catalogColumns, setCatalogColumns] = useState([])
   const [catalogItems, setCatalogItems] = useState([])
   const [selectedItem, setSelectedItem] = useState([])
   useEffect(() => {
@@ -27,14 +28,15 @@ const ItemsList = (props) => {
     })
       .then((res) => res.json())
       .then((result) => {
-        setCatalogItems(result)
+        setCatalogColumns(handleColumns(result.columns))
+        setCatalogItems(result.data)
       })
       .catch((err) => console.log('error'))
   }, [])
 
   const data = React.useMemo(() => catalogItems, [catalogItems])
 
-  const columns = React.useMemo(() => fields, [])
+  const columns = React.useMemo(() => catalogColumns, [catalogColumns])
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
     {
@@ -43,6 +45,22 @@ const ItemsList = (props) => {
     },
     useSortBy,
   )
+
+  const handleColumns = (columns) => {
+    var columnsList = columns
+      .filter((c) => c.isColumn)
+      .map((column) => {
+        return {
+          Header: column.columnName,
+          accessor: column.name.charAt(0).toLowerCase() + column.name.slice(1),
+        }
+      })
+    columnsList.push({
+      Header: 'Actions',
+      accessor: 'actions',
+    })
+    return columnsList
+  }
 
   const editItem = (itemId) => {
     fetch(APIurl + itemId, {
