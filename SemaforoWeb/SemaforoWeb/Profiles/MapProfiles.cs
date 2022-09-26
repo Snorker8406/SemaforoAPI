@@ -16,6 +16,7 @@ namespace SemaforoWeb.Profiles
         public MapProfiles()
         {
             CreateMap<Client, ClientBO>();
+            CreateMap<ClientBO, Client>();
             CreateMap<ClientBO, ClientDTO>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName));

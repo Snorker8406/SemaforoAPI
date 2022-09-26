@@ -26,9 +26,25 @@ namespace Semaforo.Logic.Services
             }
             return clientBOs;
         }
-        public ClientBO GetClientById(int id)
+        public async Task<ClientBO> GetClientById(int id)
         {
-            return new ClientBO();
+            var client = await Context.Clients.FindAsync(id);
+            return _mapper.Map<ClientBO>(client);
+        }
+
+        public async Task<int> updateClient(ClientBO clientBO) {
+            try
+            {
+                Client client = _mapper.Map<Client>(clientBO);
+                Context.Entry(client).State = EntityState.Modified;
+                await Context.SaveChangesAsync();
+                return client.ClientId;
+            }
+            catch (Exception e)
+            {
+                var x = e.Message;
+                throw;
+            }
         }
     }
 }

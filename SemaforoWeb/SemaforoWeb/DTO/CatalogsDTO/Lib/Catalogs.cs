@@ -14,11 +14,11 @@ namespace SemaforoWeb.DTO.CatalogsDTO.Lib
     public static class Catalog<T>
     {
         public static string[,] ClientColumnsConfigs = {
-                { "ClientId",           "ID",                   "",             "1",    "1"},
-                { "UserId",             "ID",                   "userOptions",  "1",    "1"},
-                { "Name",               "Nombre",               "",             "1",    "0"},
+                { "ClientId",           "ID Cliente",           "",             "1",    "1"},
+                { "UserId",             "ID Usuario",           "userOptions",  "1",    "1"},
+                { "Name",               "Nombre",               "",             "1",    "1"},
                 { "LastName",           "Apellido Paterno",     "",             "1",    "1"},
-                { "LastNameMother",     "Apellido Materno",     "",             "0",    "1"}
+                { "LastNameMother",     "Apellido Materno",     "",             "1",    "1"}
             };
 
         public static string[,] EmployeeColumnsConfigs = {

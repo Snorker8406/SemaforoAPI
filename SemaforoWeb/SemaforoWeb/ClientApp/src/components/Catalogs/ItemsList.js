@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { useTable, useSortBy } from 'react-table'
 import {
   CTable,
@@ -12,13 +13,15 @@ import {
 } from '@coreui/react'
 import { cilPencil, cilTrash } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
+import EditItem from './EditItem'
 
 const ItemsList = (props) => {
-  // eslint-disable-next-line react/prop-types
-  const { APIurl, idField } = props
-  const [catalogColumns, setCatalogColumns] = useState([])
+  const { APIurl, IdField } = props
+  const [tableColumns, setTableColumns] = useState([])
+  const [catalogFields, setCatalogFields] = useState([])
   const [catalogItems, setCatalogItems] = useState([])
-  const [selectedItem, setSelectedItem] = useState([])
+  const [selectedItem, setSelectedItem] = useState()
+  const [showEdit, setShowEdit] = useState(false)
   useEffect(() => {
     fetch(APIurl, {
       method: 'GET',
@@ -28,7 +31,8 @@ const ItemsList = (props) => {
     })
       .then((res) => res.json())
       .then((result) => {
-        setCatalogColumns(handleColumns(result.columns))
+        setCatalogFields(result.columns)
+        setTableColumns(handleColumns(result.columns))
         setCatalogItems(result.data)
       })
       .catch((err) => console.log('error'))
@@ -36,7 +40,7 @@ const ItemsList = (props) => {
 
   const data = React.useMemo(() => catalogItems, [catalogItems])
 
-  const columns = React.useMemo(() => catalogColumns, [catalogColumns])
+  const columns = React.useMemo(() => tableColumns, [tableColumns])
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
     {
@@ -72,6 +76,23 @@ const ItemsList = (props) => {
       .then((res) => res.json())
       .then((result) => {
         setSelectedItem(result)
+        setShowEdit(true)
+      })
+      .catch((err) => console.log('error'))
+  }
+
+  const onCloseEdit = () => {
+    fetch(APIurl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        setCatalogFields(result.columns)
+        setTableColumns(handleColumns(result.columns))
+        setCatalogItems(result.data)
       })
       .catch((err) => console.log('error'))
   }
@@ -98,15 +119,15 @@ const ItemsList = (props) => {
           {rows.map((row) => {
             prepareRow(row)
             return (
-              <CTableRow {...row.getRowProps()} key={row[idField]}>
+              <CTableRow {...row.getRowProps()} key={row[IdField]}>
                 {row.cells.map((cell) => {
                   if (cell.column.id === 'actions') {
                     return (
                       <CTableDataCell {...cell.getCellProps()} key={'d'}>
                         <CIcon
                           icon={cilPencil}
-                          onClick={() => editItem(cell.row.values[idField])}
-                          id={'edit-icon-' + cell.row.values[idField]}
+                          onClick={() => editItem(cell.row.values[IdField])}
+                          id={'edit-icon-' + cell.row.values[IdField]}
                         />
                         <CIcon icon={cilTrash} />
                       </CTableDataCell>
@@ -135,8 +156,20 @@ const ItemsList = (props) => {
           <span aria-hidden="true">&raquo;</span>
         </CPaginationItem>
       </CPagination>
+      <EditItem
+        visible={showEdit}
+        setVisible={setShowEdit}
+        itemIdField={IdField}
+        itemData={selectedItem}
+        catalogFields={catalogFields.filter((f) => f.isInForm)}
+        onClose={onCloseEdit}
+      />
     </>
   )
+}
+ItemsList.propTypes = {
+  APIurl: PropTypes.string,
+  IdField: PropTypes.string,
 }
 
 export default ItemsList

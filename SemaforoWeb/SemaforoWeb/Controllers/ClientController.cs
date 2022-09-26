@@ -35,7 +35,6 @@ namespace SemaforoWeb.Controllers
 
         
         [HttpGet]
-        [Route("[action]")]
         public async Task<ActionResult<CatalogDTO<ClientBO>>> GetClients()
         {
             try
@@ -54,9 +53,9 @@ namespace SemaforoWeb.Controllers
 
         // GET api/<ClientController>/5
         [HttpGet("{id}")]
-        public ClientBO Get(int id)
-        {
-            return _clientService.GetClientById(id);
+        public async Task<ClientBO> Get(int id)
+        { 
+            return await _clientService.GetClientById(id);
         }
 
         // POST api/<ClientController>
@@ -93,32 +92,29 @@ namespace SemaforoWeb.Controllers
 
         // PUT api/<ClientController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutClient(int id, Client client)
+        public async Task<IActionResult> PutClient(int id, ClientBO clientBO)
         {
-            if (id != client.ClientId)
+            if (id != clientBO.ClientId)
             {
-                return BadRequest();
+                return BadRequest("information inconsistent");
             }
-
-            _context.Entry(client).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ClientExists(id))
+                int updatedId = await _clientService.updateClient(clientBO);
+                if (updatedId > 0)
                 {
+                    return Ok(updatedId);
+                }
+                else {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
             }
-
-            return NoContent();
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+                throw;
+            }
+            
         }
 
         private bool ClientExists(int id)
