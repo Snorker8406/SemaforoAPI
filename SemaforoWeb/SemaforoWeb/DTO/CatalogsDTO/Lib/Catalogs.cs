@@ -17,72 +17,76 @@ namespace SemaforoWeb.DTO.CatalogsDTO.Lib
                 { "ClientId",           "ID Cliente",           "",             "1",    "1"},
                 { "UserId",             "ID Usuario",           "userOptions",  "1",    "1"},
                 { "Name",               "Nombre",               "",             "1",    "1"},
-                { "LastName",           "Apellido Paterno",     "",             "1",    "1"},
+                { "LastName",           "Apellido Paterno",     "",             "1",    "1",    "0",},
                 { "LastNameMother",     "Apellido Materno",     "",             "1",    "1"}
             };
 
         public static string[,] EmployeeColumnsConfigs = {
-                { "ClientId",           "ID",                   "",             "1",    "1"},
-                { "UserId",             "ID",                   "userOptions",  "1",    "1"},
-                { "Name",               "Nombre",               "",             "1",    "0"},
-                { "LastName",           "Apellido Paterno",     "",             "1",    "1"},
-                { "LastNameMother",     "Apellido Materno",     "",             "0",    "1"}
+                { "EmployeeId",         "ID",                   "",             "1",    "1",    "1",},
+                { "UserId",             "User ID",              "userOptions",  "1",    "1",    "0",},
+                { "Name",               "Nombre",               "",             "1",    "0",    "0",},
+                { "FirstLastName",      "Apellido Paterno",     "",             "1",    "1",    "0",},
+                { "SecondLastName",     "Apellido Materno",     "",             "0",    "1",    "0",}
             };
 
         public static string[,] ProductColumnsConfigs = {
-                { "ClientId",           "ID",                   "",             "1",    "1"},
-                { "UserId",             "ID",                   "userOptions",  "1",    "1"},
-                { "Name",               "Nombre",               "",             "1",    "0"},
-                { "LastName",           "Apellido Paterno",     "",             "1",    "1"},
-                { "LastNameMother",     "Apellido Materno",     "",             "0",    "1"}
+                { "ProductId",          "ID",                   "",             "1",    "1",    "1",},
+                { "BrandId",            "Marca",                "userOptions",  "1",    "1",    "0",},
+                { "Name",               "Nombre",               "",             "1",    "0",    "0",},
+                { "CreateDate",         "Fecha",                "",             "1",    "1",    "0",},
+                { "Model",              "Modelo",               "",             "0",    "1",    "0",}
             };
 
         public static string[,] BrandColumnsConfigs = {
-                { "BrandId",           "ID",                   "",             "1",    "1"},
+                { "BrandId",            "ID",                   "",             "1",    "1",    "1",},
+                { "Name",               "Nombre",               "",             "1",    "1",    "0",},
+                { "Description",        "Descripcion",          "",             "1",    "1",    "0",},
             };
 
         public static string[,] CategoryColumnsConfigs = {
-                { "CategoryId",           "ID",                   "",             "1",    "1"},
+                { "CategoryId",         "ID",                   "",             "1",    "1",    "1",},
+                { "Name",               "Nombre",               "",             "1",    "1",    "0",},
+                { "Description",        "Descripcion",          "",             "1",    "1",    "0",},
             };
 
         public static string[,] SizeColumnsConfigs = {
-                { "SizeId",           "ID",                   "",             "1",    "1"},
+                { "SizeId",             "ID",                   "",             "1",    "1",    "0",},
             };
 
         public static string[,] AccountStatusColumnsConfigs = {
-                { "AccountStatusId",           "ID",                   "",             "1",    "1"},
+                { "AccountStatusId",    "ID",                   "",             "1",    "1",    "0",},
             };
 
         public static string[,] AccountTypeColumnsConfigs = {
-                { "AccountTypeId",           "ID",                   "",             "1",    "1"},
+                { "AccountTypeId",      "ID",                   "",             "1",    "1",    "0",},
             };
 
         public static string[,] ClientStatusColumnsConfigs = {
-                { "ClientStatusId",           "ID",                   "",             "1",    "1"},
+                { "ClientStatusId",     "ID",                   "",             "1",    "1",    "0",},
             };
 
         public static string[,] EmbroideryColumnsConfigs = {
-                { "EmbroideryId",           "ID",                   "",             "1",    "1"},
+                { "EmbroideryId",       "ID",                   "",             "1",    "1",    "0",},
             };
 
         public static string[,] ProductComboColumnsConfigs = {
-                { "ProductComboId",           "ID",                   "",             "1",    "1"},
+                { "ProductComboId",     "ID",                   "",             "1",    "1",    "0",},
             };
 
         public static string[,] SchoolLevelColumnsConfigs = {
-                { "SchoolLevelId",           "ID",                   "",             "1",    "1"},
+                { "SchoolLevelId",      "ID",                   "",             "1",    "1",    "0",},
             };
 
         public static string[,] SchoolColumnsConfigs = {
-                { "SchoolId",           "ID",                   "",             "1",    "1"},
+                { "SchoolId",           "ID",                   "",             "1",    "1",    "0",},
             };
 
         public static string[,] SiteColumnsConfigs = {
-                { "SiteId",           "ID",                   "",             "1",    "1"},
+                { "SiteId",             "ID",                   "",             "1",    "1",    "0",},
             };
 
         public static string[,] UserColumnsConfigs = {
-                { "UserId",           "ID",                   "",             "1",    "1"},
+                { "UserId",             "ID",                   "",             "1",    "1",    "0",},
             };
 
         public static List<CatalogFieldDTO> BuildColumns(object DTO, string[,] columnsConfigs)
@@ -103,6 +107,7 @@ namespace SemaforoWeb.DTO.CatalogsDTO.Lib
                         catalogField.Type = columnsConfigs[i, 2] != "" ? columnsConfigs[i, 2] : catalogField.Type;
                         catalogField.IsColumn = (columnsConfigs[i, 3] == "1");
                         catalogField.IsInForm = (columnsConfigs[i, 4] == "1");
+                        catalogField.IsPrimaryKey = (columnsConfigs[i, 5] == "1");
                         break;
                     }
                 }
