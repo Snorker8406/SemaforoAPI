@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +29,7 @@ namespace SemaforoWeb
             services.AddControllersWithViews();
 
             services.AddDbContext<db_9bc4da_semaforoContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("SemaforoContext")));
-            //services.AddIdentity<User, IdentityRole>()
+            //services.AddIdentity<ApplicationUser, IdentityRole>()
             //    .AddUserStore<db_9bc4da_semaforoContext>()
             //    .AddDefaultTokenProviders();
             services.AddAutoMapper(typeof(Startup));
