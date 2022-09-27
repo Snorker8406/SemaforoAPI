@@ -37,7 +37,9 @@ namespace Semaforo.Logic.Models
         public virtual DbSet<ProductComboDetail> ProductComboDetails { get; set; }
         public virtual DbSet<ProductPicture> ProductPictures { get; set; }
         public virtual DbSet<ProductPrice> ProductPrices { get; set; }
-        public virtual DbSet<ProductsSchool> ProductsSchools { get; set; }
+        public virtual DbSet<ProductProvider> ProductProviders { get; set; }
+        public virtual DbSet<ProductSchool> ProductSchools { get; set; }
+        public virtual DbSet<Provider> Providers { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Sale> Sales { get; set; }
         public virtual DbSet<SalesDetail> SalesDetails { get; set; }
@@ -487,17 +489,6 @@ namespace Semaforo.Logic.Models
                     .WithMany(p => p.Employees)
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_EMPLOYEES_USERS");
-
-                entity.HasMany(e => e.Roles)
-                    .WithMany(r => r.Employees)
-                    .UsingEntity<EmployeeRole>(
-                        er => er.HasOne(prop => prop.Role)
-                        .WithMany()
-                        .HasForeignKey(prop => prop.RoleId),
-                        er => er.HasOne(prop => prop.Employee)
-                        .WithMany()
-                        .HasForeignKey(prop => prop.EmployeeId)
-                    );
             });
 
             modelBuilder.Entity<EmployeeRole>(entity =>
@@ -594,7 +585,7 @@ namespace Semaforo.Logic.Models
                     .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.Name)
-                    .HasMaxLength(50)
+                    .HasMaxLength(500)
                     .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.ProductPictureId).HasColumnName("Product_Picture_ID");
@@ -727,27 +718,85 @@ namespace Semaforo.Logic.Models
                     .HasConstraintName("FK_PRICES_SIZES");
             });
 
-            modelBuilder.Entity<ProductsSchool>(entity =>
+            modelBuilder.Entity<ProductProvider>(entity =>
             {
-                entity.HasKey(e => new { e.ProductId, e.SchoolId });
+                entity.HasNoKey();
 
-                entity.ToTable("PRODUCTS_SCHOOLS");
+                entity.ToTable("PRODUCT_PROVIDERS");
+
+                entity.Property(e => e.ProductId).HasColumnName("Product_ID");
+
+                entity.Property(e => e.ProviderId).HasColumnName("Provider_ID");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany()
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PRODUCT_PROVIDERS_PRODUCTS");
+
+                entity.HasOne(d => d.Provider)
+                    .WithMany()
+                    .HasForeignKey(d => d.ProviderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PRODUCT_PROVIDERS_PROVIDERS");
+            });
+
+            modelBuilder.Entity<ProductSchool>(entity =>
+            {
+                entity.HasKey(e => new { e.ProductId, e.SchoolId })
+                    .HasName("PK_PRODUCTS_SCHOOLS");
+
+                entity.ToTable("PRODUCT_SCHOOLS");
 
                 entity.Property(e => e.ProductId).HasColumnName("Product_ID");
 
                 entity.Property(e => e.SchoolId).HasColumnName("School_ID");
 
                 entity.HasOne(d => d.Product)
-                    .WithMany(p => p.ProductsSchools)
+                    .WithMany(p => p.ProductSchools)
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_PRODUCTS_SCHOOLS_PRODUCTS");
+                    .HasConstraintName("FK_PRODUCT_SCHOOLS_PRODUCTS");
 
                 entity.HasOne(d => d.School)
-                    .WithMany(p => p.ProductsSchools)
+                    .WithMany(p => p.ProductSchools)
                     .HasForeignKey(d => d.SchoolId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_PRODUCTS_SCHOOLS_SCHOOLS");
+                    .HasConstraintName("FK_PRODUCT_SCHOOLS_SCHOOLS");
+            });
+
+            modelBuilder.Entity<Provider>(entity =>
+            {
+                entity.ToTable("PROVIDERS");
+
+                entity.Property(e => e.ProviderId).HasColumnName("Provider_ID");
+
+                entity.Property(e => e.Address).HasMaxLength(250);
+
+                entity.Property(e => e.BankAccounts)
+                    .HasMaxLength(500)
+                    .HasColumnName("Bank_Accounts");
+
+                entity.Property(e => e.Cellphone).HasMaxLength(250);
+
+                entity.Property(e => e.ContactName)
+                    .IsRequired()
+                    .HasMaxLength(250)
+                    .HasColumnName("Contact_Name");
+
+                entity.Property(e => e.Description).HasMaxLength(500);
+
+                entity.Property(e => e.Image).HasColumnType("image");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.Phone).HasMaxLength(250);
+
+                entity.Property(e => e.Website).HasMaxLength(250);
+
+                entity.Property(e => e.Whatsapp).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Role>(entity =>

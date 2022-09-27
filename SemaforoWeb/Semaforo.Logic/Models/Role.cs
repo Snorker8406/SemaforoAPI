@@ -23,6 +23,5 @@ namespace Semaforo.Logic.Models
         public string Description { get; set; }
 
         public virtual ICollection<EmployeeRole> EmployeeRoles { get; set; }
-        public virtual ICollection<Employee> Employees { get; set; }
     }
 }
