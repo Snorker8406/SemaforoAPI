@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Semaforo.Logic.Models
 {
-    public partial class db_9bc4da_semaforoContext : DbContext
+    public partial class db_9bc4da_semaforoContext : IdentityDbContext<ApplicationUser>
     {
         public db_9bc4da_semaforoContext()
         {
@@ -62,6 +62,7 @@ namespace Semaforo.Logic.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.Entity<Account>(entity =>

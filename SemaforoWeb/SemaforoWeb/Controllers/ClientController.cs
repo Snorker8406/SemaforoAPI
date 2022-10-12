@@ -12,12 +12,15 @@ using SemaforoWeb.DTO.CatalogsDTO;
 using SemaforoWeb.DTO.CatalogsDTO.Catalogs;
 using SemaforoWeb.DTO.CatalogsDTO.Lib;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace SemaforoWeb.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     public class ClientController : ControllerBase
     {

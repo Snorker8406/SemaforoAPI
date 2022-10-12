@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -6,10 +7,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Semaforo.Logic.Models;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace SemaforoWeb
 {
@@ -29,9 +32,25 @@ namespace SemaforoWeb
             services.AddControllersWithViews();
 
             services.AddDbContext<db_9bc4da_semaforoContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("SemaforoContext")));
-            //services.AddIdentity<ApplicationUser, IdentityRole>()
-            //    .AddUserStore<db_9bc4da_semaforoContext>()
-            //    .AddDefaultTokenProviders();
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                 .AddEntityFrameworkStores<db_9bc4da_semaforoContext>()
+                 .AddDefaultTokenProviders();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = "yourdomain.com",
+                    ValidAudience = "yourdomain.com",
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(Configuration["App_Key"])),
+                    //Encoding.UTF8.GetBytes("ElSemaforoUniformesZapotlan")),
+
+                    ClockSkew = TimeSpan.Zero
+                });
             services.AddAutoMapper(typeof(Startup));
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -93,7 +112,14 @@ namespace SemaforoWeb
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            
+            app.UseAuthentication();
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
