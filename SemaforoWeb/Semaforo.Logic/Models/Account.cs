@@ -14,7 +14,7 @@ namespace Semaforo.Logic.Models
 
         public int AccountId { get; set; }
         public int ClientId { get; set; }
-        public int UserId { get; set; }
+        public int EmployeeId { get; set; }
         public int SiteId { get; set; }
         public int AccountTypeId { get; set; }
         public int SaleId { get; set; }
@@ -29,9 +29,9 @@ namespace Semaforo.Logic.Models
         public virtual AccountStatus AccountStatus { get; set; }
         public virtual AccountType AccountType { get; set; }
         public virtual Client Client { get; set; }
+        public virtual Employee Employee { get; set; }
         public virtual Sale Sale { get; set; }
         public virtual Site Site { get; set; }
-        public virtual User User { get; set; }
         public virtual ICollection<AccountPayment> AccountPayments { get; set; }
     }
 }

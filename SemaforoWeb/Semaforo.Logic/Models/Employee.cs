@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -9,19 +10,23 @@ namespace Semaforo.Logic.Models
     {
         public Employee()
         {
+            AccountPayments = new HashSet<AccountPayment>();
+            Accounts = new HashSet<Account>();
             Attendances = new HashSet<Attendance>();
-            EmployeeRoles = new HashSet<EmployeeRole>();
+            Clients = new HashSet<Client>();
             EmployeeSalaries = new HashSet<EmployeeSalary>();
             EmployeeSchedules = new HashSet<EmployeeSchedule>();
+            Sales = new HashSet<Sale>();
         }
 
         public int EmployeeId { get; set; }
-        public int? UserId { get; set; }
+        public string AppUserId { get; set; }
         public string Name { get; set; }
         public string FirstLastName { get; set; }
         public string SecondLastName { get; set; }
         public DateTime? Birthdate { get; set; }
         public string Gender { get; set; }
+        public DateTime? CreateDate { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public byte[] Photo { get; set; }
@@ -37,10 +42,13 @@ namespace Semaforo.Logic.Models
         public bool Active { get; set; }
         public string Comments { get; set; }
 
-        public virtual User User { get; set; }
+        public virtual ApplicationUser AppUser { get; set; }
+        public virtual ICollection<AccountPayment> AccountPayments { get; set; }
+        public virtual ICollection<Account> Accounts { get; set; }
         public virtual ICollection<Attendance> Attendances { get; set; }
-        public virtual ICollection<EmployeeRole> EmployeeRoles { get; set; }
+        public virtual ICollection<Client> Clients { get; set; }
         public virtual ICollection<EmployeeSalary> EmployeeSalaries { get; set; }
         public virtual ICollection<EmployeeSchedule> EmployeeSchedules { get; set; }
+        public virtual ICollection<Sale> Sales { get; set; }
     }
 }

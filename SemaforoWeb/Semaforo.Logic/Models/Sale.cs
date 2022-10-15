@@ -14,7 +14,7 @@ namespace Semaforo.Logic.Models
         }
 
         public int SaleId { get; set; }
-        public int UserId { get; set; }
+        public int EmployeeId { get; set; }
         public int? ClientId { get; set; }
         public int SiteId { get; set; }
         public int SaleTypeId { get; set; }
@@ -24,9 +24,9 @@ namespace Semaforo.Logic.Models
         public decimal? Total { get; set; }
 
         public virtual Client Client { get; set; }
+        public virtual Employee Employee { get; set; }
         public virtual SalesType SaleType { get; set; }
         public virtual Site Site { get; set; }
-        public virtual User User { get; set; }
         public virtual ICollection<Account> Accounts { get; set; }
         public virtual ICollection<SalesDetail> SalesDetails { get; set; }
     }

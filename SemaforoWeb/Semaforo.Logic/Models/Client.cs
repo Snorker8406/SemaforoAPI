@@ -14,7 +14,7 @@ namespace Semaforo.Logic.Models
         }
 
         public int ClientId { get; set; }
-        public int UserId { get; set; }
+        public int EmployeeId { get; set; }
         public int ClientStatusId { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime LastModify { get; set; }
@@ -37,6 +37,7 @@ namespace Semaforo.Logic.Models
         public string Comments { get; set; }
 
         public virtual ClientStatus ClientStatus { get; set; }
+        public virtual Employee Employee { get; set; }
         public virtual ICollection<Account> Accounts { get; set; }
         public virtual ICollection<Sale> Sales { get; set; }
     }

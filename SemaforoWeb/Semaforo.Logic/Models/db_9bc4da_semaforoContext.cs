@@ -28,7 +28,6 @@ namespace Semaforo.Logic.Models
         public virtual DbSet<ClientStatus> ClientStatuses { get; set; }
         public virtual DbSet<Embroidery> Embroideries { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
-        public virtual DbSet<EmployeeRole> EmployeeRoles { get; set; }
         public virtual DbSet<EmployeeSalary> EmployeeSalaries { get; set; }
         public virtual DbSet<EmployeeSchedule> EmployeeSchedules { get; set; }
         public virtual DbSet<Product> Products { get; set; }
@@ -49,7 +48,6 @@ namespace Semaforo.Logic.Models
         public virtual DbSet<Site> Sites { get; set; }
         public virtual DbSet<Size> Sizes { get; set; }
         public virtual DbSet<Stock> Stocks { get; set; }
-        public virtual DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -88,6 +86,8 @@ namespace Semaforo.Logic.Models
 
                 entity.Property(e => e.ClientId).HasColumnName("Client_ID");
 
+                entity.Property(e => e.EmployeeId).HasColumnName("Employee_ID");
+
                 entity.Property(e => e.Notes)
                     .HasMaxLength(1000)
                     .UseCollation("Modern_Spanish_CI_AS");
@@ -103,8 +103,6 @@ namespace Semaforo.Logic.Models
                     .HasColumnName("Settlement_Date");
 
                 entity.Property(e => e.SiteId).HasColumnName("Site_ID");
-
-                entity.Property(e => e.UserId).HasColumnName("User_ID");
 
                 entity.HasOne(d => d.AccountStatus)
                     .WithMany(p => p.Accounts)
@@ -124,6 +122,12 @@ namespace Semaforo.Logic.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ACCOUNTS_CLIENTS");
 
+                entity.HasOne(d => d.Employee)
+                    .WithMany(p => p.Accounts)
+                    .HasForeignKey(d => d.EmployeeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ACCOUNTS_EMPLOYEES");
+
                 entity.HasOne(d => d.Sale)
                     .WithMany(p => p.Accounts)
                     .HasForeignKey(d => d.SaleId)
@@ -135,12 +139,6 @@ namespace Semaforo.Logic.Models
                     .HasForeignKey(d => d.SiteId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ACCOUNTS_SITES");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Accounts)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ACCOUNTS_USERS");
             });
 
             modelBuilder.Entity<AccountPayment>(entity =>
@@ -152,6 +150,8 @@ namespace Semaforo.Logic.Models
                 entity.Property(e => e.AccountId).HasColumnName("Account_ID");
 
                 entity.Property(e => e.Amount).HasColumnType("money");
+
+                entity.Property(e => e.EmployeeId).HasColumnName("Employee_ID");
 
                 entity.Property(e => e.Notes)
                     .HasMaxLength(500)
@@ -170,6 +170,12 @@ namespace Semaforo.Logic.Models
                     .HasForeignKey(d => d.AccountId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ACCOUNT_PAYMENTS_ACCOUNTS");
+
+                entity.HasOne(d => d.Employee)
+                    .WithMany(p => p.AccountPayments)
+                    .HasForeignKey(d => d.EmployeeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ACCOUNT_PAYMENTS_EMPLOYEES");
             });
 
             modelBuilder.Entity<AccountStatus>(entity =>
@@ -203,6 +209,7 @@ namespace Semaforo.Logic.Models
                     .HasMaxLength(50)
                     .UseCollation("Modern_Spanish_CI_AS");
             });
+
 
             modelBuilder.Entity<Attendance>(entity =>
             {
@@ -300,6 +307,8 @@ namespace Semaforo.Logic.Models
                     .HasMaxLength(100)
                     .UseCollation("Modern_Spanish_CI_AS");
 
+                entity.Property(e => e.EmployeeId).HasColumnName("Employee_ID");
+
                 entity.Property(e => e.Facebook)
                     .HasMaxLength(200)
                     .UseCollation("Modern_Spanish_CI_AS");
@@ -343,13 +352,17 @@ namespace Semaforo.Logic.Models
 
                 entity.Property(e => e.Student).HasDefaultValueSql("((0))");
 
-                entity.Property(e => e.UserId).HasColumnName("User_ID");
-
                 entity.HasOne(d => d.ClientStatus)
                     .WithMany(p => p.Clients)
                     .HasForeignKey(d => d.ClientStatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CLIENTS_CLIENT_STATUS");
+
+                entity.HasOne(d => d.Employee)
+                    .WithMany(p => p.Clients)
+                    .HasForeignKey(d => d.EmployeeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CLIENTS_EMPLOYEES");
             });
 
             modelBuilder.Entity<ClientStatus>(entity =>
@@ -423,6 +436,10 @@ namespace Semaforo.Logic.Models
                     .HasMaxLength(150)
                     .UseCollation("Modern_Spanish_CI_AS");
 
+                entity.Property(e => e.AppUserId)
+                    .HasMaxLength(450)
+                    .HasColumnName("AppUser_ID");
+
                 entity.Property(e => e.Birthdate).HasColumnType("date");
 
                 entity.Property(e => e.Cellphone)
@@ -430,6 +447,10 @@ namespace Semaforo.Logic.Models
                     .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.Comments).UseCollation("Modern_Spanish_CI_AS");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("Create_Date");
 
                 entity.Property(e => e.Email).HasMaxLength(100);
 
@@ -484,35 +505,10 @@ namespace Semaforo.Logic.Models
                     .HasColumnType("date")
                     .HasColumnName("Start_Date");
 
-                entity.Property(e => e.UserId).HasColumnName("User_ID");
-
-                entity.HasOne(d => d.User)
+                entity.HasOne(d => d.AppUser)
                     .WithMany(p => p.Employees)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_EMPLOYEES_USERS");
-            });
-
-            modelBuilder.Entity<EmployeeRole>(entity =>
-            {
-                entity.HasKey(e => new { e.EmployeeId, e.RoleId });
-
-                entity.ToTable("EMPLOYEE_ROLE");
-
-                entity.Property(e => e.EmployeeId).HasColumnName("Employee_ID");
-
-                entity.Property(e => e.RoleId).HasColumnName("Role_ID");
-
-                entity.HasOne(d => d.Employee)
-                    .WithMany(p => p.EmployeeRoles)
-                    .HasForeignKey(d => d.EmployeeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_EMPLOYEE_ROLE_EMPLOYEES");
-
-                entity.HasOne(d => d.Role)
-                    .WithMany(p => p.EmployeeRoles)
-                    .HasForeignKey(d => d.RoleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_EMPLOYEE_ROLE_ROLE");
+                    .HasForeignKey(d => d.AppUserId)
+                    .HasConstraintName("FK_EMPLOYEES_AspNetUsers");
             });
 
             modelBuilder.Entity<EmployeeSalary>(entity =>
@@ -845,6 +841,8 @@ namespace Semaforo.Logic.Models
                     .HasColumnName("Client_Name")
                     .UseCollation("Modern_Spanish_CI_AS");
 
+                entity.Property(e => e.EmployeeId).HasColumnName("Employee_ID");
+
                 entity.Property(e => e.Notes)
                     .HasMaxLength(250)
                     .UseCollation("Modern_Spanish_CI_AS");
@@ -859,12 +857,16 @@ namespace Semaforo.Logic.Models
 
                 entity.Property(e => e.Total).HasColumnType("money");
 
-                entity.Property(e => e.UserId).HasColumnName("User_ID");
-
                 entity.HasOne(d => d.Client)
                     .WithMany(p => p.Sales)
                     .HasForeignKey(d => d.ClientId)
                     .HasConstraintName("FK_SALES_CLIENTS");
+
+                entity.HasOne(d => d.Employee)
+                    .WithMany(p => p.Sales)
+                    .HasForeignKey(d => d.EmployeeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SALES_EMPLOYEES");
 
                 entity.HasOne(d => d.SaleType)
                     .WithMany(p => p.Sales)
@@ -877,12 +879,6 @@ namespace Semaforo.Logic.Models
                     .HasForeignKey(d => d.SiteId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_SALES_SITES");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Sales)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_SALES_USERS");
             });
 
             modelBuilder.Entity<SalesDetail>(entity =>
@@ -1113,42 +1109,6 @@ namespace Semaforo.Logic.Models
                     .WithMany(p => p.Stocks)
                     .HasForeignKey(d => d.SizeId)
                     .HasConstraintName("FK_STOCK_SIZES");
-            });
-
-            modelBuilder.Entity<User>(entity =>
-            {
-                entity.ToTable("USERS");
-
-                entity.Property(e => e.UserId).HasColumnName("User_ID");
-
-                entity.Property(e => e.Comments).UseCollation("Modern_Spanish_CI_AS");
-
-                entity.Property(e => e.CreateDate)
-                    .HasColumnType("datetime")
-                    .HasColumnName("Create_Date");
-
-                entity.Property(e => e.CreatedBy).HasColumnName("Created_By");
-
-                entity.Property(e => e.LastModifiedBy).HasColumnName("Last_Modified_By");
-
-                entity.Property(e => e.LastModify)
-                    .HasColumnType("datetime")
-                    .HasColumnName("Last_Modify");
-
-                entity.Property(e => e.Password)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .UseCollation("Modern_Spanish_CI_AS");
-
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasMaxLength(10)
-                    .UseCollation("Modern_Spanish_CI_AS");
-
-                entity.Property(e => e.Username)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .UseCollation("Modern_Spanish_CI_AS");
             });
 
             OnModelCreatingPartial(modelBuilder);
