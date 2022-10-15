@@ -11,24 +11,24 @@ namespace Semaforo.Logic.Services
 {
     public class UserService : BaseService
     {
-        public UserService(db_9bc4da_semaforoContext context, IMapper mapper, UserBO currentUser) : base(context, mapper, currentUser)
+        public UserService(db_9bc4da_semaforoContext context, IMapper mapper, ApplicationUserBO currentUser) : base(context, mapper, currentUser)
         { }
 
-        public async Task<List<UserBO>> GetUserList()
+        public async Task<List<ApplicationUserBO>> GetUserList()
         {
             var users = await Context.Users.ToListAsync();
-            List<UserBO> userBOs = new List<UserBO>();
+            List<ApplicationUserBO> userBOs = new List<ApplicationUserBO>();
 
             foreach (var user in users)
             {
-                UserBO userBO = _mapper.Map<UserBO>(user); //Instanciar de una clase
+                ApplicationUserBO userBO = _mapper.Map<ApplicationUserBO>(user); //Instanciar de una clase
                 userBOs.Add(userBO);
             }
             return userBOs;
         }
-        public UserBO GetUserById(int id)
+        public ApplicationUserBO GetUserById(int id)
         {
-            return new UserBO();
+            return new ApplicationUserBO();
         }
     }
 }

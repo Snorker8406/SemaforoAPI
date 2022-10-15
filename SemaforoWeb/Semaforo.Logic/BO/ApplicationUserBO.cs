@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace  Semaforo.Logic.BO
 {
-    public class UserBO
+    public class ApplicationUserBO
     {
         public int UserId { get; set; }
         public DateTime CreateDate { get; set; }

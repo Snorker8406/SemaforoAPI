@@ -20,7 +20,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 namespace SemaforoWeb.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     public class ClientController : ControllerBase
     {

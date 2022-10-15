@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SemaforoWeb.DTO.CatalogsDTO.Catalogs
 {
-    public class UserDTO
+    public class ApplicationUserDTO
     {
         public int UserId { get; set; }
         public DateTime CreateDate { get; set; }

@@ -10,7 +10,7 @@ namespace Semaforo.Logic.Services
 {
     public class CategoryService : BaseService
     {
-        public CategoryService(db_9bc4da_semaforoContext context, IMapper mapper, UserBO currentUser) : base(context, mapper, currentUser)
+        public CategoryService(db_9bc4da_semaforoContext context, IMapper mapper, ApplicationUserBO currentUser) : base(context, mapper, currentUser)
         { }
 
         public async Task<List<CategoryBO>> GetCategoryList()

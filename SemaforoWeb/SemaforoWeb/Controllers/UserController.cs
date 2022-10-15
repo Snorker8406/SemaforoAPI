@@ -33,7 +33,7 @@ namespace SemaforoWeb.Controllers
 
         // GET: api/<UserController>
         [HttpGet]
-        public async Task<ActionResult<CatalogDTO<UserBO>>> GetUsers()
+        public async Task<ActionResult<CatalogDTO<ApplicationUserBO>>> GetUsers()
         {
             try
             {
@@ -42,7 +42,7 @@ namespace SemaforoWeb.Controllers
                 {
                     return null;
                 }
-                return Catalog<UserBO>.BuildCatalog(Catalog<UserBO>.UserColumnsConfigs, users, _mapper);
+                return Catalog<ApplicationUserBO>.BuildCatalog(Catalog<ApplicationUserBO>.UserColumnsConfigs, users, _mapper);
             }
             catch (Exception)
             {

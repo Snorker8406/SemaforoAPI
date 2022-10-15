@@ -10,9 +10,9 @@ namespace Semaforo.Logic.Services
     public class BaseService
     {
         protected readonly db_9bc4da_semaforoContext Context;
-        protected readonly UserBO CurrentUser;
+        protected readonly ApplicationUserBO CurrentUser;
         protected readonly IMapper _mapper;
-        public BaseService(db_9bc4da_semaforoContext context, IMapper mapper, UserBO currentUser)
+        public BaseService(db_9bc4da_semaforoContext context, IMapper mapper, ApplicationUserBO currentUser)
         {
             Context = context;
             CurrentUser = currentUser;
