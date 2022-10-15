@@ -66,7 +66,7 @@ namespace SemaforoWeb.Controllers
         public async Task<ActionResult<Client>> PostClient(ClientDTO clientDto)
         {
             Client client = new Client();
-            client.UserId = clientDto.UserId;
+            //client.UserId = clientDto.UserId;
             client.ClientStatusId = clientDto.ClientStatusId;
             client.CreateDate = DateTime.Now;
             client.LastModify = DateTime.Now;

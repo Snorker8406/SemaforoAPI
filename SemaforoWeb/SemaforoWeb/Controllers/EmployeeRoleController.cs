@@ -23,14 +23,14 @@ namespace SemaforoWeb.Controllers
         }
 
         // GET: api/<EmployeeRoleController>
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<EmployeeRoleDTO>>> GetEmployeeRoles()
-        {
-            var employeeRoles = await _context.EmployeeRoles.ToListAsync();
-            List<EmployeeRoleDTO> employeeRoleDTOs = new List<EmployeeRoleDTO>();
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<EmployeeRoleDTO>>> GetEmployeeRoles()
+        //{
+        //    var employeeRoles = await _context.EmployeeRoles.ToListAsync();
+        //    List<EmployeeRoleDTO> employeeRoleDTOs = new List<EmployeeRoleDTO>();
 
-            return employeeRoleDTOs;
-        }
+        //    return employeeRoleDTOs;
+        //}
 
         // GET api/<EmployeeRoleController>/5
         [HttpGet("{id}")]
@@ -41,14 +41,14 @@ namespace SemaforoWeb.Controllers
 
         // POST api/<EmployeeRoleController>
         [HttpPost]
-        public async Task<ActionResult<EmployeeRole>> PostEmployeeRole(EmployeeRole employeeRole)
-        {
+        //public async Task<ActionResult<EmployeeRole>> PostEmployeeRole(EmployeeRole employeeRole)
+        //{
 
-            _context.EmployeeRoles.Add(employeeRole);
-            await _context.SaveChangesAsync();
+        //    _context.EmployeeRoles.Add(employeeRole);
+        //    await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetEmployeeRoles", new { id = employeeRole.EmployeeId }, employeeRole);
-        }
+        //    return CreatedAtAction("GetEmployeeRoles", new { id = employeeRole.EmployeeId }, employeeRole);
+        //}
         // PUT api/<EmployeeRoleController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)

@@ -40,15 +40,15 @@ namespace SemaforoWeb.Controllers
         }
 
         // POST api/<RoleController>
-        [HttpPost]
-        public async Task<ActionResult<Role>> PostRole(Role role)
-        {
+        //[HttpPost]
+        //public async Task<ActionResult<Role>> PostRole(Role role)
+        //{
 
-            _context.Roles.Add(role);
-            await _context.SaveChangesAsync();
+        //    _context.Roles.Add(role);
+        //    await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRole", new { id = role.RoleId }, role);
-        }
+        //    return CreatedAtAction("GetRole", new { id = role.RoleId }, role);
+        //}
 
         // PUT api/<RoleController>/5
         [HttpPut("{id}")]

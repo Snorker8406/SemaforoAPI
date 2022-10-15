@@ -39,7 +39,6 @@ namespace Semaforo.Logic.Models
         public virtual DbSet<ProductProvider> ProductProviders { get; set; }
         public virtual DbSet<ProductSchool> ProductSchools { get; set; }
         public virtual DbSet<Provider> Providers { get; set; }
-        public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Sale> Sales { get; set; }
         public virtual DbSet<SalesDetail> SalesDetails { get; set; }
         public virtual DbSet<SalesType> SalesTypes { get; set; }
@@ -794,38 +793,6 @@ namespace Semaforo.Logic.Models
                 entity.Property(e => e.Website).HasMaxLength(250);
 
                 entity.Property(e => e.Whatsapp).HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<Role>(entity =>
-            {
-                entity.ToTable("ROLES");
-
-                entity.Property(e => e.RoleId).HasColumnName("Role_ID");
-
-                entity.Property(e => e.CreateDate)
-                    .HasColumnType("datetime")
-                    .HasColumnName("Create_date");
-
-                entity.Property(e => e.CreatedBy).HasColumnName("Created_by");
-
-                entity.Property(e => e.Description)
-                    .HasColumnType("ntext")
-                    .UseCollation("Modern_Spanish_CI_AS");
-
-                entity.Property(e => e.LastModifiedBy).HasColumnName("Last_modified_by");
-
-                entity.Property(e => e.LastModify)
-                    .HasColumnType("datetime")
-                    .HasColumnName("Last_modify");
-
-                entity.Property(e => e.Name)
-                    .HasMaxLength(10)
-                    .UseCollation("Modern_Spanish_CI_AS");
-
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasMaxLength(10)
-                    .UseCollation("Modern_Spanish_CI_AS");
             });
 
             modelBuilder.Entity<Sale>(entity =>
