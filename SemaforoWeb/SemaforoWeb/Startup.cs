@@ -33,7 +33,7 @@ namespace SemaforoWeb
 
             services.AddDbContext<db_9bc4da_semaforoContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("SemaforoContext")));
 
-            services.AddIdentity<ApplicationUser, ApplicationRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                  .AddEntityFrameworkStores<db_9bc4da_semaforoContext>()
                  .AddDefaultTokenProviders();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

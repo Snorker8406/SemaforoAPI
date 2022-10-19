@@ -21,13 +21,13 @@ namespace SemaforoWeb.Controllers
     public class UserController : ControllerBase
     {
         private readonly db_9bc4da_semaforoContext _context;
-        private readonly UserService _userService;
+        private readonly AuthService _userService;
         private readonly IMapper _mapper;
 
         public UserController(db_9bc4da_semaforoContext context, IMapper mapper)
         {
             _context = context;
-            _userService = new UserService(context, mapper, null);
+            _userService = new AuthService(context, mapper, null);
             _mapper = mapper;
         }
 

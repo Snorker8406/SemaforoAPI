@@ -9,9 +9,9 @@ using AutoMapper;
 
 namespace Semaforo.Logic.Services
 {
-    public class UserService : BaseService
+    public class AuthService : BaseService
     {
-        public UserService(db_9bc4da_semaforoContext context, IMapper mapper, ApplicationUserBO currentUser) : base(context, mapper, currentUser)
+        public AuthService(db_9bc4da_semaforoContext context, IMapper mapper, ApplicationUserBO currentUser) : base(context, mapper, currentUser)
         { }
 
         public async Task<List<ApplicationUserBO>> GetUserList()
@@ -29,6 +29,15 @@ namespace Semaforo.Logic.Services
         public ApplicationUserBO GetUserById(int id)
         {
             return new ApplicationUserBO();
+        }
+
+        public async Task<int> RegisterApplicationUser(ApplicationUserBO newUser) {
+            Employee employee = _mapper.Map<Employee>(newUser);
+            Context.Employees.Add(employee);
+            await Context.SaveChangesAsync();
+
+            return newUser.EmployeeId;
+            
         }
     }
 }

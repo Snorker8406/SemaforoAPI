@@ -60,8 +60,14 @@ namespace SemaforoWeb.Profiles
             CreateMap<Site, SiteBO>();
             CreateMap<SiteBO, SiteDTO>();
 
-            CreateMap<ApplicationUser, ApplicationUserBO>();
+            CreateMap<ApplicationUser, ApplicationUserBO>()
+                .ForMember(dest => dest.AppUserId, opt => opt.MapFrom(src => src.Id));
             CreateMap<ApplicationUserBO, ApplicationUserDTO>();
+            CreateMap<ApplicationUserDTO, ApplicationUserBO>();
+                
+
+            CreateMap<ApplicationUserBO, Employee>();
+            CreateMap<ApplicationUserBO, EmployeeDTO>();
 
         }
     }

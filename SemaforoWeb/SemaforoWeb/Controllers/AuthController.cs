@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Semaforo.Logic.BO;
 using Semaforo.Logic.Models;
+using Semaforo.Logic.Services;
 using SemaforoWeb.DTO;
+using SemaforoWeb.DTO.CatalogsDTO.Catalogs;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -22,32 +26,67 @@ namespace SemaforoWeb.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
-
+        private readonly db_9bc4da_semaforoContext _context;
+        private readonly IMapper _mapper;
+        private readonly AuthService _authService;
         public AuthController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            db_9bc4da_semaforoContext context,
+            IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             this._configuration = configuration;
+            _context = context;
+            _mapper = mapper;
+            _authService = new AuthService(context, mapper, null);
         }
 
-        [Route("Create")]
+        //[Route("Create")]
+        //[HttpPost]
+        //public async Task<IActionResult> CreateUser([FromBody] UserLoginDTO model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+        //        var result = await _userManager.CreateAsync(user, model.Password);
+        //        if (result.Succeeded)
+        //        {
+        //            return BuildToken(model);
+        //        }
+        //        else
+        //        {
+        //            return BadRequest("Username or password invalid");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //}
+
+        [Route("Register")]
         [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] UserLoginDTO model)
+        public async Task<IActionResult> RegisterUser([FromBody] ApplicationUserDTO model)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await _userManager.CreateAsync(user, model.Password);
+                var appUser = new ApplicationUser { UserName = model.Username, Email = model.Email };
+                var result = await _userManager.CreateAsync(appUser, model.Password);
                 if (result.Succeeded)
                 {
-                    return BuildToken(model);
+                    ApplicationUserBO newUser = _mapper.Map<ApplicationUserBO>(model);
+                    _mapper.Map(appUser, newUser);
+                    int userId = await _authService.RegisterApplicationUser(newUser);
+                    return Ok(userId);
                 }
                 else
                 {
-                    return BadRequest("Username or password invalid");
+                    string messages = string.Join("\n ", result.Errors.Select(e => e.Description).ToList());
+                    return BadRequest(messages);
                 }
             }
             else
@@ -63,7 +102,7 @@ namespace SemaforoWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(userInfo.Email, userInfo.Password, isPersistent: false, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(userInfo.Username, userInfo.Password, isPersistent: true, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     return BuildToken(userInfo);
@@ -84,7 +123,7 @@ namespace SemaforoWeb.Controllers
         {
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.Email),
+                new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.Username),
                 new Claim("miValor", "Lo que yo quiera"),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
