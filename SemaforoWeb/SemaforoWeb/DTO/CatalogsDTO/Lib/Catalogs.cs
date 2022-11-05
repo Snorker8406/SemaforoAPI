@@ -14,11 +14,22 @@ namespace SemaforoWeb.DTO.CatalogsDTO.Lib
     public static class Catalog<T>
     {
         public static string[,] ClientColumnsConfigs = {
-                { "ClientId",           "ID Cliente",           "",             "1",    "1",    "1",},
+                { "ClientId",           "ID Cliente",           "",             "1",    "1",    "1",},//columnName - Type - IsColumn - IsInForm - IsPrimaryKey
                 { "UserId",             "ID Usuario",           "userOptions",  "1",    "1",    "0",},
                 { "Name",               "Nombre",               "",             "1",    "1",    "0",},
                 { "LastName",           "Apellido Paterno",     "",             "1",    "1",    "0",},
                 { "LastNameMother",     "Apellido Materno",     "",             "1",    "1",    "0",}
+            };
+        public static string[,] ProviderColumnsConfigs = {
+                { "ProviderId",         "ID",         "",             "1",    "1",    "1",},//columnName - Type - IsColumn - IsInForm - IsPrimaryKey
+                { "Name",               "Nombre",               "",             "1",    "1",    "0",},
+                { "Address",            "Direccion",            "",             "1",    "1",    "0",},
+                { "ContactName",        "Contacto",             "",             "1",    "1",    "0",},
+                { "Cellphone",          "Celular",              "",             "1",    "1",    "0",},
+                { "BankAccounts",       "Bancos",    "",             "1",    "1",    "0",},
+                { "Description",        "Descripcion",          "",             "1",    "1",    "0",},
+                { "Whatsapp",           "Whatsapp",             "",             "1",    "1",    "0",},
+                { "Website",            "Sitio Web",            "",             "1",    "1",    "0",},
             };
 
         public static string[,] EmployeeColumnsConfigs = {
@@ -98,12 +109,11 @@ namespace SemaforoWeb.DTO.CatalogsDTO.Lib
                 CatalogFieldDTO catalogField = new CatalogFieldDTO();
                 catalogField.Name = prop.Name;
                 catalogField.Type = (Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType).ToString();
-                var x = columnsConfigs.GetLength(0);
                 for (int i = 0; i < columnsConfigs.GetLength(0); i++)
                 {
                     if (columnsConfigs[i, 0] == prop.Name)
                     {
-                        catalogField.ColumnName = columnsConfigs[i, 1];
+                        catalogField.ColumnName = columnsConfigs[i, 1]; //columnName - Type - IsColumn - IsInForm - IsPrimaryKey
                         catalogField.Type = columnsConfigs[i, 2] != "" ? columnsConfigs[i, 2] : catalogField.Type;
                         catalogField.IsColumn = (columnsConfigs[i, 3] == "1");
                         catalogField.IsInForm = (columnsConfigs[i, 4] == "1");

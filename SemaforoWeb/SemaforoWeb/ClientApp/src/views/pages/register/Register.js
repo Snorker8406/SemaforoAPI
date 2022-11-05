@@ -23,8 +23,8 @@ const Register = () => {
             <CCard className="mx-4">
               <CCardBody className="p-4">
                 <CForm>
-                  <h1>Register</h1>
-                  <p className="text-medium-emphasis">Create your account</p>
+                  <h1>Registrar Usuario</h1>
+                  <p className="text-medium-emphasis">Crear nueva cuenta</p>
                   <CInputGroup className="mb-3">
                     <CInputGroupText>
                       <CIcon icon={cilUser} />
@@ -45,7 +45,7 @@ const Register = () => {
                       autoComplete="new-password"
                     />
                   </CInputGroup>
-                  <CInputGroup className="mb-4">
+                  <CInputGroup className="mb-3">
                     <CInputGroupText>
                       <CIcon icon={cilLockLocked} />
                     </CInputGroupText>
@@ -54,6 +54,22 @@ const Register = () => {
                       placeholder="Repeat password"
                       autoComplete="new-password"
                     />
+                  </CInputGroup>
+                  <CInputGroup className="mb-3">
+                    <CInputGroupText>@</CInputGroupText>
+                    <CFormInput placeholder="Email" autoComplete="email" />
+                  </CInputGroup>
+                  <CInputGroup className="mb-3">
+                    <CInputGroupText>@</CInputGroupText>
+                    <CFormInput placeholder="Email" autoComplete="email" />
+                  </CInputGroup>
+                  <CInputGroup className="mb-3">
+                    <CInputGroupText>@</CInputGroupText>
+                    <CFormInput placeholder="Email" autoComplete="email" />
+                  </CInputGroup>
+                  <CInputGroup className="mb-5">
+                    <CInputGroupText>@</CInputGroupText>
+                    <CFormInput placeholder="Email" autoComplete="email" />
                   </CInputGroup>
                   <div className="d-grid">
                     <CButton color="success">Create Account</CButton>

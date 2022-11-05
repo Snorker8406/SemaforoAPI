@@ -21,18 +21,18 @@ const Login = () => {
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
         <CRow className="justify-content-center">
-          <CCol md={8}>
+          <CCol md={5}>
             <CCardGroup>
               <CCard className="p-4">
                 <CCardBody>
                   <CForm>
                     <h1>Login</h1>
-                    <p className="text-medium-emphasis">Sign In to your account</p>
+                    <p className="text-medium-emphasis">Accesa con tus Credenciales</p>
                     <CInputGroup className="mb-3">
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
-                      <CFormInput placeholder="Username" autoComplete="username" />
+                      <CFormInput placeholder="Usuario" autoComplete="username" />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupText>
@@ -40,7 +40,7 @@ const Login = () => {
                       </CInputGroupText>
                       <CFormInput
                         type="password"
-                        placeholder="Password"
+                        placeholder="Contraseña"
                         autoComplete="current-password"
                       />
                     </CInputGroup>
@@ -52,14 +52,14 @@ const Login = () => {
                       </CCol>
                       <CCol xs={6} className="text-right">
                         <CButton color="link" className="px-0">
-                          Forgot password?
+                          olvidaste tu contraseña?
                         </CButton>
                       </CCol>
                     </CRow>
                   </CForm>
                 </CCardBody>
               </CCard>
-              <CCard className="text-white bg-primary py-5" style={{ width: '44%' }}>
+              {/* <CCard className="text-white bg-primary py-5" style={{ width: '44%' }}>
                 <CCardBody className="text-center">
                   <div>
                     <h2>Sign up</h2>
@@ -74,7 +74,7 @@ const Login = () => {
                     </Link>
                   </div>
                 </CCardBody>
-              </CCard>
+              </CCard> */}
             </CCardGroup>
           </CCol>
         </CRow>

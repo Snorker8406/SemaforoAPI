@@ -1,38 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import API from '../../../API'
 import ItemsList from 'src/components/Catalogs/ItemsList'
 
-const fields = [
-  {
-    Header: 'ID',
-    accessor: 'clientId', // accessor is the "key" in the data
-  },
-  {
-    Header: 'Name',
-    accessor: 'name', // accessor is the "key" in the data
-  },
-  {
-    Header: 'Address',
-    accessor: 'address',
-  },
-  {
-    Header: 'User Id',
-    accessor: 'userId',
-  },
-  {
-    Header: 'Cellphone',
-    accessor: 'cellphone',
-  },
-  {
-    Header: 'Email',
-    accessor: 'email',
-  },
-  {
-    Header: 'Actions',
-    accessor: 'actions',
-  },
-]
 const ListOfClients = () => {
-  return <ItemsList APIurl="/api/Client/" IdField="clientId" />
+  return <ItemsList APIurl={API.clients.APIurl} IdField={API.clients.IdField} />
 }
 
 export default ListOfClients

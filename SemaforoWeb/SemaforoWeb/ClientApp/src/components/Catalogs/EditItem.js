@@ -28,7 +28,7 @@ const EditItem = (props) => {
   }
 
   const saveChanges = (e) => {
-    fetch('/api/Client/' + item[itemIdField], {
+    fetch(props.APIurl + item[itemIdField], {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -104,5 +104,6 @@ EditItem.propTypes = {
   itemIdField: PropTypes.string,
   catalogFields: PropTypes.object,
   onClose: PropTypes.func,
+  APIurl: PropTypes.string,
 }
 export default EditItem

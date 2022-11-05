@@ -14,6 +14,7 @@ import {
 import { cilPencil, cilTrash } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import EditItem from './EditItem'
+import Filter from './Filter'
 
 const ItemsList = (props) => {
   const { APIurl, IdField } = props
@@ -99,6 +100,7 @@ const ItemsList = (props) => {
 
   return (
     <>
+      {Filter()}
       <CTable {...getTableProps()} striped>
         <CTableHead>
           {headerGroups.map((headerGroup) => (
@@ -163,6 +165,7 @@ const ItemsList = (props) => {
         itemData={selectedItem}
         catalogFields={catalogFields.filter((f) => f.isInForm)}
         onClose={onCloseEdit}
+        APIurl={APIurl}
       />
     </>
   )

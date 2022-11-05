@@ -187,27 +187,10 @@ const _nav = [
     ],
   },
   {
-    component: CNavGroup,
-    name: 'Providers',
-    to: '/base/accordion',
+    component: CNavItem,
+    name: 'Proveedores',
+    to: '/suppliers',
     icon: <CIcon icon={cilFlightTakeoff} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'Manage Suppliers',
-        to: '/base/accordion',
-      },
-      {
-        component: CNavItem,
-        name: 'Debts to Pay',
-        to: '/base/accordion',
-      },
-      {
-        component: CNavItem,
-        name: 'Payments',
-        to: '/base/accordion',
-      },
-    ],
   },
   {
     component: CNavGroup,

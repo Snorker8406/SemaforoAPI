@@ -44,30 +44,6 @@ namespace SemaforoWeb.Controllers
             _authService = new AuthService(context, mapper, null);
         }
 
-        //[Route("Create")]
-        //[HttpPost]
-        //public async Task<IActionResult> CreateUser([FromBody] UserLoginDTO model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-        //        var result = await _userManager.CreateAsync(user, model.Password);
-        //        if (result.Succeeded)
-        //        {
-        //            return BuildToken(model);
-        //        }
-        //        else
-        //        {
-        //            return BadRequest("Username or password invalid");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //}
-
         [Route("Register")]
         [HttpPost]
         public async Task<IActionResult> RegisterUser([FromBody] ApplicationUserDTO model)

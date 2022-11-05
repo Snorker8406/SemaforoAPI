@@ -69,6 +69,10 @@ namespace SemaforoWeb.Profiles
             CreateMap<ApplicationUserBO, Employee>();
             CreateMap<ApplicationUserBO, EmployeeDTO>();
 
+            CreateMap<Provider, ProviderBO>();
+            CreateMap<ProviderBO, Provider>();
+            CreateMap<ProviderBO, ProviderDTO>();
+            CreateMap<ProviderDTO, ProviderBO>();
         }
     }
 }
