@@ -21,15 +21,16 @@ namespace SemaforoWeb.DTO.CatalogsDTO.Lib
                 { "LastNameMother",     "Apellido Materno",     "",             "1",    "1",    "0",}
             };
         public static string[,] ProviderColumnsConfigs = {
-                { "ProviderId",         "ID",         "",             "1",    "1",    "1",},//columnName - Type - IsColumn - IsInForm - IsPrimaryKey
-                { "Name",               "Nombre",               "",             "1",    "1",    "0",},
+                { "ProviderId",         "ID",                   "",             "1",    "1",    "1",},//columnName - Type - IsColumn - IsInForm - IsPrimaryKey
                 { "Address",            "Direccion",            "",             "1",    "1",    "0",},
+                { "Name",               "Nombre",               "",             "1",    "1",    "0",},
                 { "ContactName",        "Contacto",             "",             "1",    "1",    "0",},
+                { "Phone",              "Telefono",             "",             "1",    "1",    "0",},
                 { "Cellphone",          "Celular",              "",             "1",    "1",    "0",},
-                { "BankAccounts",       "Bancos",    "",             "1",    "1",    "0",},
-                { "Description",        "Descripcion",          "",             "1",    "1",    "0",},
+                { "BankAccounts",       "Bancos",               "",             "0",    "1",    "0",},
                 { "Whatsapp",           "Whatsapp",             "",             "1",    "1",    "0",},
-                { "Website",            "Sitio Web",            "",             "1",    "1",    "0",},
+                { "Description",        "Descripcion",          "",             "0",    "1",    "0",},
+                { "Website",            "Sitio Web",            "",             "0",    "1",    "0",},
             };
 
         public static string[,] EmployeeColumnsConfigs = {
@@ -113,7 +114,9 @@ namespace SemaforoWeb.DTO.CatalogsDTO.Lib
                 {
                     if (columnsConfigs[i, 0] == prop.Name)
                     {
-                        catalogField.ColumnName = columnsConfigs[i, 1]; //columnName - Type - IsColumn - IsInForm - IsPrimaryKey
+                        catalogField.Key = prop.Name.FirstCharToLowerCase(); //name of property in data
+                        catalogField.Label = columnsConfigs[i, 1];
+                        catalogField.ColumnName = columnsConfigs[i, 1];
                         catalogField.Type = columnsConfigs[i, 2] != "" ? columnsConfigs[i, 2] : catalogField.Type;
                         catalogField.IsColumn = (columnsConfigs[i, 3] == "1");
                         catalogField.IsInForm = (columnsConfigs[i, 4] == "1");

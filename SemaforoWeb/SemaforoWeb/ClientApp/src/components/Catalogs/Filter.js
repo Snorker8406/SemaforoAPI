@@ -8,7 +8,7 @@ import {
   CFormSelect,
   CInputGroup,
   CInputGroupText,
-} from '@coreui/react'
+} from '@coreui/react-pro'
 
 const Filter = () => {
   return (
@@ -20,12 +20,18 @@ const Filter = () => {
         <CFormInput id="specificSizeInputName" placeholder="Filtrar" />
       </CCol>
       <CCol sm={3}>
-        <CFormLabel className="visually-hidden" htmlFor="specificSizeInputGroupUsername">
+        <CFormLabel
+          className="visually-hidden"
+          htmlFor="specificSizeInputGroupUsername"
+        >
           Username
         </CFormLabel>
         <CInputGroup>
           <CInputGroupText>@</CInputGroupText>
-          <CFormInput id="specificSizeInputGroupUsername" placeholder="Username" />
+          <CFormInput
+            id="specificSizeInputGroupUsername"
+            placeholder="Username"
+          />
         </CInputGroup>
       </CCol>
       <CCol sm={3}>

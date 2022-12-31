@@ -12,6 +12,8 @@ namespace SemaforoWeb.DTO.CatalogsDTO
         public bool IsPrimaryKey { get; set; }
         public string Type { get; set; }
         public string Name { get; set; }
-        public string ColumnName { get; set; }
+        public string Key { get; set; }
+        public string ColumnName { get; set; } // quitar
+        public string Label { get; set; }
     }
 }
