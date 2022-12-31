@@ -1,6 +1,6 @@
 import React from 'react'
 import API from '../../API'
-import ItemsTable from '../../components/Catalogs/ItemsTable'
+import { ItemsTable } from '../../components/Catalogs/ItemsTable'
 import { CCol, CRow } from '@coreui/react-pro'
 
 const Supplier = () => {
@@ -8,7 +8,7 @@ const Supplier = () => {
     return (
       <ItemsTable
         APIurl={API.providers.APIurl}
-        IdField={API.providers.IdField}
+        idField={API.providers.idField}
       />
     )
   }

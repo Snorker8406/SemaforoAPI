@@ -1,11 +1,11 @@
 const API = {
   clients: {
     APIurl: '/api/Client/',
-    IdField: 'clientId',
+    idField: 'clientId',
   },
   providers: {
     APIurl: '/api/Provider/',
-    IdField: 'providerId',
+    idField: 'providerId',
   },
 }
 
