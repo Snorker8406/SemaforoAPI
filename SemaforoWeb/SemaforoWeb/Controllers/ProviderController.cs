@@ -56,16 +56,27 @@ namespace SemaforoWeb.Controllers
 
         // POST api/<ClientController>
         [HttpPost]
-        public async Task<ActionResult<Provider>> PostProvider(ProviderDTO clientDto)
+        public async Task<IActionResult> PostProvider(ProviderDTO providerDTO)
         {
-            Provider provider = new Provider();
-            provider = _mapper.Map<Provider>(clientDto);
-
-
-            _context.Providers.Add(provider);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetClients", new { id = provider.ProviderId }, provider);
+            ProviderBO provider = new ProviderBO();
+            provider = _mapper.Map<ProviderBO>(providerDTO);
+            try
+            {
+                int newId = await _providerService.saveProvider(_mapper.Map<ProviderBO>(providerDTO));
+                if (newId > 0)
+                {
+                    return Ok(newId);
+                }
+                else
+                {
+                    return BadRequest("Error at save new Provider");
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+                throw;
+            }
         }
 
         // PUT api/<ClientController>/5

@@ -49,6 +49,21 @@ namespace Semaforo.Logic.Services
                 throw;
             }
         }
+        public async Task<int> saveProvider(ProviderBO providerBO)
+        {
+            try
+            {
+                Provider provider = _mapper.Map<Provider>(providerBO);
+                Context.Add(provider);
+                await Context.SaveChangesAsync();
+                return provider.ProviderId;
+            }
+            catch (Exception e)
+            {
+                var x = e.Message;
+                throw;
+            }
+        }
 
     }
 }

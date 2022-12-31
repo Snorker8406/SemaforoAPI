@@ -24,6 +24,8 @@ export interface EditItemProps extends HTMLAttributes<HTMLDivElement> {
   catalogFields: dataColumn[]
   onClose: () => void
   APIurl: string
+  isNew: boolean
+  itemHasBeenUpdated: (updated: boolean) => void
 }
 
 export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
@@ -36,10 +38,13 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       catalogFields,
       onClose,
       APIurl,
+      isNew,
+      itemHasBeenUpdated,
     },
     ref,
   ) => {
     const [item, setItem] = useState<dataItem>({} as dataItem)
+    const [formTitle, setFormTitle] = useState('')
 
     type dataItemKey = keyof typeof item
 
@@ -47,13 +52,26 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       setItem(itemData)
     }, [itemData])
 
+    useEffect(() => {
+      if (isNew) {
+        setFormTitle('Agregando Nuevo Registro')
+      } else {
+        setFormTitle(
+          'Editando Registro ' +
+            item[itemIdField as dataItemKey] +
+            ' - ' +
+            item['name'],
+        )
+      }
+    }, [item])
+
     const toLower = (str: string) => {
       return str.charAt(0).toLowerCase() + str.slice(1)
     }
 
     const saveChanges = () => {
-      fetch(APIurl + item[itemIdField as dataItemKey], {
-        method: 'PUT',
+      fetch(APIurl + (isNew ? '' : item[itemIdField as dataItemKey]), {
+        method: isNew ? 'POST' : 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -63,6 +81,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
         .then((result) => {
           setItem(result)
           setVisible(false)
+          itemHasBeenUpdated(true)
         })
         .catch(() => console.log('error'))
     }
@@ -88,32 +107,31 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
             onClose={onCloseEdit}
           >
             <CModalHeader>
-              <CModalTitle>
-                Editing Item{' '}
-                {item['name'] + ' ' + item[itemIdField as dataItemKey]}
-              </CModalTitle>
+              <CModalTitle>{formTitle}</CModalTitle>
             </CModalHeader>
             <CModalBody>
               <CForm>
-                {catalogFields.map((f, i) => (
-                  // eslint-disable-next-line react/jsx-key
-                  <CRow key={'field_' + i} className="mb-3">
-                    <CFormLabel
-                      htmlFor={'input-' + toLower(f.name)}
-                      className="col-sm-2 col-form-label"
-                    >
-                      {f.columnName}
-                    </CFormLabel>
-                    <CCol sm={10}>
-                      <CFormInput
-                        id={'input-' + f.name}
-                        name={toLower(f.name)}
-                        value={item[toLower(f.name) as dataItemKey]}
-                        onChange={(e) => onChangeValue(e)}
-                      />
-                    </CCol>
-                  </CRow>
-                ))}
+                {catalogFields
+                  .filter((c) => !c.isPrimaryKey)
+                  .map((f, i) => (
+                    // eslint-disable-next-line react/jsx-key
+                    <CRow key={'field_' + i} className="mb-3">
+                      <CFormLabel
+                        htmlFor={'input-' + toLower(f.name)}
+                        className="col-sm-2 col-form-label"
+                      >
+                        {f.columnName}
+                      </CFormLabel>
+                      <CCol sm={10}>
+                        <CFormInput
+                          id={'input-' + f.name}
+                          name={toLower(f.name)}
+                          value={item[toLower(f.name) as dataItemKey]}
+                          onChange={(e) => onChangeValue(e)}
+                        />
+                      </CCol>
+                    </CRow>
+                  ))}
               </CForm>
             </CModalBody>
             <CModalFooter>
@@ -139,6 +157,8 @@ EditItem.propTypes = {
   catalogFields: PropTypes.any.isRequired,
   onClose: PropTypes.func.isRequired,
   APIurl: PropTypes.string.isRequired,
+  isNew: PropTypes.bool.isRequired,
+  itemHasBeenUpdated: PropTypes.func.isRequired,
 }
 
 EditItem.displayName = 'EditItem'

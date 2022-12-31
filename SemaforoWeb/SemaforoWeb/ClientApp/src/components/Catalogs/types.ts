@@ -10,4 +10,6 @@ export type dataColumn = {
   key: string
   name: string
   columnName?: string
+  isPrimaryKey: boolean
+  type: string
 }

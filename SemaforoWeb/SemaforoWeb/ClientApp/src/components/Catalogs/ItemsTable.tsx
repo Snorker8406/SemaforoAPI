@@ -1,7 +1,7 @@
 import React, { useState, useEffect, HTMLAttributes, forwardRef } from 'react'
 import { cilPencil, cilTrash } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
-import { CSmartTable, CCardBody, CCollapse } from '@coreui/react-pro'
+import { CSmartTable, CCardBody, CCollapse, CButton } from '@coreui/react-pro'
 import { EditItem } from './EditItem'
 import { Item } from '@coreui/react-pro/dist/components/table/CTable'
 import { dataItem, dataColumn } from './types'
@@ -19,6 +19,8 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
     const [catalogItems, setCatalogItems] = useState([])
     const [selectedItem, setSelectedItem] = useState<dataItem>({} as dataItem)
     const [showEdit, setShowEdit] = useState(false)
+    const [isNewItem, setIsNewItem] = useState(false)
+    const [isItemUpdated, setIsItemUpdated] = useState(false)
 
     useEffect(() => {
       fetch(APIurl, {
@@ -37,6 +39,7 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
     }, [])
 
     const onCloseEdit = () => {
+      if (!isItemUpdated) return
       fetch(APIurl, {
         method: 'GET',
         headers: {
@@ -47,6 +50,7 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
         .then((result) => {
           setCatalogColumns(result.columns)
           setCatalogItems(result.data)
+          setIsItemUpdated(false)
         })
         .catch((err) => console.log('error'))
     }
@@ -57,6 +61,8 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
         label: 'Acciones',
         key: 'actions',
         name: '',
+        isPrimaryKey: false,
+        type: '',
       })
       return columnsList
     }
@@ -71,6 +77,7 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
         .then((res) => res.json())
         .then((result) => {
           setSelectedItem(result)
+          setIsNewItem(false)
           setShowEdit(true)
         })
         .catch((err) => console.log('error'))
@@ -113,8 +120,29 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
       setDetails(newDetails)
     }
 
+    const onAddNewItem = () => {
+      const newItem = {} as any
+      catalogColumns.forEach((f) => {
+        if (!f.isPrimaryKey && f.isInForm) {
+          newItem[f.key] = f.type.indexOf('Int32') > 0 ? 0 : ''
+        }
+      })
+      setSelectedItem(newItem)
+      setShowEdit(true)
+      setIsNewItem(true)
+    }
+
     return (
       <>
+        <div className="d-grid justify-content-md-end">
+          <CButton
+            color="success"
+            shape="rounded-0"
+            onClick={() => onAddNewItem()}
+          >
+            Crear Nuevo
+          </CButton>
+        </div>
         <CSmartTable
           activePage={3}
           cleaner
@@ -150,6 +178,8 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
           catalogFields={catalogColumns.filter((f) => f.isInForm)}
           onClose={onCloseEdit}
           APIurl={APIurl}
+          isNew={isNewItem}
+          itemHasBeenUpdated={setIsItemUpdated}
         />
       </>
     )
