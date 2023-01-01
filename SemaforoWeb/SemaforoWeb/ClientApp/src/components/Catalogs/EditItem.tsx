@@ -98,53 +98,51 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
     }
 
     return (
-      <>
-        {item && (
-          <CModal
-            size="xl"
-            alignment="center"
-            visible={visible}
-            onClose={onCloseEdit}
-          >
-            <CModalHeader>
-              <CModalTitle>{formTitle}</CModalTitle>
-            </CModalHeader>
-            <CModalBody>
-              <CForm>
-                {catalogFields
-                  .filter((c) => !c.isPrimaryKey)
-                  .map((f, i) => (
-                    // eslint-disable-next-line react/jsx-key
-                    <CRow key={'field_' + i} className="mb-3">
-                      <CFormLabel
-                        htmlFor={'input-' + toLower(f.name)}
-                        className="col-sm-2 col-form-label"
-                      >
-                        {f.columnName}
-                      </CFormLabel>
-                      <CCol sm={10}>
-                        <CFormInput
-                          id={'input-' + f.name}
-                          name={toLower(f.name)}
-                          value={item[toLower(f.name) as dataItemKey]}
-                          onChange={(e) => onChangeValue(e)}
-                        />
-                      </CCol>
-                    </CRow>
-                  ))}
-              </CForm>
-            </CModalBody>
-            <CModalFooter>
-              <CButton color="secondary" onClick={() => setVisible(false)}>
-                Close
-              </CButton>
-              <CButton color="primary" onClick={() => saveChanges()}>
-                Guardar Cambios
-              </CButton>
-            </CModalFooter>
-          </CModal>
-        )}
-      </>
+      item && (
+        <CModal
+          size="xl"
+          alignment="center"
+          visible={visible}
+          onClose={onCloseEdit}
+        >
+          <CModalHeader>
+            <CModalTitle>{formTitle}</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CForm>
+              {catalogFields
+                .filter((c) => !c.isPrimaryKey)
+                .map((f, i) => (
+                  // eslint-disable-next-line react/jsx-key
+                  <CRow key={'field_' + i} className="mb-3">
+                    <CFormLabel
+                      htmlFor={'input-' + toLower(f.name)}
+                      className="col-sm-2 col-form-label"
+                    >
+                      {f.columnName}
+                    </CFormLabel>
+                    <CCol sm={10}>
+                      <CFormInput
+                        id={'input-' + f.name}
+                        name={toLower(f.name)}
+                        value={item[toLower(f.name) as dataItemKey]}
+                        onChange={(e) => onChangeValue(e)}
+                      />
+                    </CCol>
+                  </CRow>
+                ))}
+            </CForm>
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="secondary" onClick={() => setVisible(false)}>
+              Close
+            </CButton>
+            <CButton color="primary" onClick={() => saveChanges()}>
+              Guardar Cambios
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      )
     )
   },
 )

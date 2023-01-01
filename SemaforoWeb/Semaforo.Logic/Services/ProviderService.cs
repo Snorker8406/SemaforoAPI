@@ -65,5 +65,21 @@ namespace Semaforo.Logic.Services
             }
         }
 
+        public async Task<int> deleteProvider(int id)
+        {
+            try
+            {
+                var provider = await Context.Providers.FindAsync(id);
+                Context.Remove(provider);
+                await Context.SaveChangesAsync();
+                return id;
+            }
+            catch (Exception e)
+            {
+                var x = e.Message;
+                throw;
+            }
+        }
+
     }
 }

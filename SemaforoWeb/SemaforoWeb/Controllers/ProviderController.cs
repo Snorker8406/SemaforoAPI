@@ -106,5 +106,26 @@ namespace SemaforoWeb.Controllers
             }
 
         }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProvider(int id)
+        {
+            try
+            {
+                var deletedId = await _providerService.deleteProvider(id);
+                if (deletedId > 0)
+                {
+                    return Ok(deletedId);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+                throw;
+            }
+        }
     }
 }

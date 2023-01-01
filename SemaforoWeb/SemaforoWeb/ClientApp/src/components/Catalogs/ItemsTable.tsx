@@ -5,8 +5,8 @@ import { CSmartTable, CCardBody, CCollapse, CButton } from '@coreui/react-pro'
 import { EditItem } from './EditItem'
 import { Item } from '@coreui/react-pro/dist/components/table/CTable'
 import { dataItem, dataColumn } from './types'
-import PropTypes from 'prop-types'
-
+import PropTypes, { number } from 'prop-types'
+import { ConfirmationModal } from '../Utils/confirmationModal'
 export interface ItemsTableProps extends HTMLAttributes<HTMLDivElement> {
   APIurl: string
   idField: string
@@ -21,6 +21,9 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
     const [showEdit, setShowEdit] = useState(false)
     const [isNewItem, setIsNewItem] = useState(false)
     const [isItemUpdated, setIsItemUpdated] = useState(false)
+    const [showConfirmDelete, setShowConfirmDelete] = useState(false)
+    const [deleteConfirmation, setDeleteConfirmation] = useState(false)
+    const [deleteConfirmMessage, setDeleteConfirmMessage] = useState('')
 
     useEffect(() => {
       fetch(APIurl, {
@@ -67,29 +70,6 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
       return columnsList
     }
 
-    const editItem = (itemId: number) => {
-      fetch(APIurl + itemId, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((res) => res.json())
-        .then((result) => {
-          setSelectedItem(result)
-          setIsNewItem(false)
-          setShowEdit(true)
-        })
-        .catch((err) => console.log('error'))
-    }
-
-    const renderActions = (item: Item) => (
-      <td>
-        <CIcon icon={cilPencil} onClick={() => editItem(item.providerId)} />
-        <CIcon icon={cilTrash} />
-      </td>
-    )
-
     const renderDetails = (item: Item) => (
       <CCollapse visible={details.includes(item.providerId)}>
         <CCardBody>
@@ -131,6 +111,68 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
       setShowEdit(true)
       setIsNewItem(true)
     }
+
+    const onEditItem = (itemId: number) => {
+      fetch(APIurl + itemId, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          setSelectedItem(result)
+          setIsNewItem(false)
+          setShowEdit(true)
+        })
+        .catch((err) => console.log('error'))
+    }
+
+    const onDeleteItem = (itemIdField: string, registerName: string) => {
+      const itemToDelete = { itemIdField } as any
+      setSelectedItem(itemToDelete)
+      setDeleteConfirmMessage(registerName)
+      setShowConfirmDelete(true)
+    }
+
+    const deleteItem = (confirmed: boolean) => {
+      if (confirmed) {
+        fetch(APIurl + selectedItem.itemIdField, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+          .then((res) => res.json())
+          .then((result) => {
+            console.log(result)
+            fetch(APIurl, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            })
+              .then((res) => res.json())
+              .then((result) => {
+                setCatalogColumns(result.columns)
+                setCatalogItems(result.data)
+                setIsItemUpdated(false)
+              })
+              .catch((err) => console.log('error'))
+          })
+          .catch((err) => console.log('error'))
+      }
+    }
+
+    const renderActions = (item: Item) => (
+      <td>
+        <CIcon icon={cilPencil} onClick={() => onEditItem(item.providerId)} />
+        <CIcon
+          icon={cilTrash}
+          onClick={() => onDeleteItem(item.providerId, item.name)}
+        />
+      </td>
+    )
 
     return (
       <>
@@ -180,6 +222,13 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
           APIurl={APIurl}
           isNew={isNewItem}
           itemHasBeenUpdated={setIsItemUpdated}
+        />
+        <ConfirmationModal
+          visible={showConfirmDelete}
+          setVisible={setShowConfirmDelete}
+          userResponse={deleteItem}
+          title={'Confirma que desea borrar el registro?'}
+          message={deleteConfirmMessage}
         />
       </>
     )
