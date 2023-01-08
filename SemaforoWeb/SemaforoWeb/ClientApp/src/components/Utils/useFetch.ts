@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { dataItem } from '../Catalogs/types'
+import { dataItem } from '../../types'
 
 const useFetch = (APIurl: string, httpRequest?: string) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

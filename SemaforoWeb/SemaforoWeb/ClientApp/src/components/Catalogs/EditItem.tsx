@@ -14,8 +14,9 @@ import {
   CCol,
 } from '@coreui/react-pro'
 
-import { dataItem, dataColumn } from './types'
+import { dataItem, dataColumn } from '../../types'
 import useFetch from '../Utils/useFetch'
+import { useForm } from 'react-hook-form'
 
 export interface EditItemProps extends HTMLAttributes<HTMLDivElement> {
   visible: boolean
@@ -44,15 +45,16 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
     },
     ref,
   ) => {
-    const [item, setItem] = useState<dataItem>({} as dataItem)
     const [formTitle, setFormTitle] = useState('')
     const [saveResponse, saveItem] = useFetch(APIurl, 'POST')
+    const {
+      register,
+      handleSubmit,
+      reset,
+      formState: { errors },
+    } = useForm<any>()
 
-    type dataItemKey = keyof typeof item
-
-    useEffect(() => {
-      setItem(itemData)
-    }, [itemData])
+    type dataItemKey = keyof typeof itemData
 
     useEffect(() => {
       if (isNewItem) {
@@ -60,16 +62,16 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       } else {
         setFormTitle(
           'Editando Registro ' +
-            item[itemIdField as dataItemKey] +
+            itemData[itemIdField as dataItemKey] +
             ' - ' +
-            item['name'],
+            itemData['name'],
         )
       }
-    }, [item])
+      reset(itemData)
+    }, [itemData])
 
     useEffect(() => {
       if (!saveResponse) return
-      setItem(saveResponse)
       setVisible(false)
       itemHasBeenUpdated(true)
     }, [saveResponse])
@@ -78,16 +80,14 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       return str.charAt(0).toLowerCase() + str.slice(1)
     }
 
-    const saveChanges = () => {
+    const saveChanges = (formData: any) => {
+      formData[itemIdField as dataItemKey] =
+        itemData[itemIdField as dataItemKey]
       saveItem(
-        isNewItem ? '' : item[itemIdField as dataItemKey],
-        item,
+        isNewItem ? '' : itemData[itemIdField as dataItemKey],
+        formData,
         isNewItem ? 'POST' : 'PUT',
       )
-    }
-
-    const onChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setItem({ ...item, [e.target.name]: e.target.value })
     }
 
     const onCloseEdit = () => {
@@ -98,51 +98,51 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
     }
 
     return (
-      item && (
-        <CModal
-          size="xl"
-          alignment="center"
-          visible={visible}
-          onClose={onCloseEdit}
-        >
-          <CModalHeader>
-            <CModalTitle>{formTitle}</CModalTitle>
-          </CModalHeader>
+      <CModal
+        size="xl"
+        alignment="center"
+        visible={visible}
+        onClose={onCloseEdit}
+      >
+        <CModalHeader>
+          <CModalTitle>{formTitle}</CModalTitle>
+        </CModalHeader>
+        <CForm onSubmit={handleSubmit(saveChanges)}>
           <CModalBody>
-            <CForm>
-              {catalogFields
-                .filter((c) => !c.isPrimaryKey)
-                .map((f, i) => (
-                  // eslint-disable-next-line react/jsx-key
-                  <CRow key={'field_' + i} className="mb-3">
-                    <CFormLabel
-                      htmlFor={'input-' + toLower(f.name)}
-                      className="col-sm-2 col-form-label"
-                    >
-                      {f.columnName}
-                    </CFormLabel>
-                    <CCol sm={10}>
-                      <CFormInput
-                        id={'input-' + f.name}
-                        name={toLower(f.name)}
-                        value={item[toLower(f.name) as dataItemKey]}
-                        onChange={(e) => onChangeValue(e)}
-                      />
-                    </CCol>
-                  </CRow>
-                ))}
-            </CForm>
+            {catalogFields
+              .filter((c) => !c.isPrimaryKey)
+              .map((f, i) => (
+                // eslint-disable-next-line react/jsx-key
+                <CRow key={'field_' + i} className="mb-3">
+                  <CFormLabel
+                    htmlFor={'input-' + toLower(f.name)}
+                    className="col-sm-2 col-form-label"
+                  >
+                    {f.columnName}
+                  </CFormLabel>
+                  <CCol sm={10}>
+                    <CFormInput
+                      {...register(toLower(f.name), { required: true })}
+                      id={'input-' + f.name}
+                      defaultValue={itemData[toLower(f.name) as dataItemKey]}
+                    />
+                    {errors[toLower(f.name) as dataItemKey] && (
+                      <span>This field is required</span>
+                    )}
+                  </CCol>
+                </CRow>
+              ))}
           </CModalBody>
           <CModalFooter>
             <CButton color="secondary" onClick={() => setVisible(false)}>
               Close
             </CButton>
-            <CButton color="primary" onClick={() => saveChanges()}>
+            <CButton color="primary" type="submit">
               Guardar Cambios
             </CButton>
           </CModalFooter>
-        </CModal>
-      )
+        </CForm>
+      </CModal>
     )
   },
 )
