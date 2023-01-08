@@ -15,6 +15,7 @@ import {
 } from '@coreui/react-pro'
 
 import { dataItem, dataColumn } from './types'
+import useFetch from '../Utils/useFetch'
 
 export interface EditItemProps extends HTMLAttributes<HTMLDivElement> {
   visible: boolean
@@ -24,7 +25,7 @@ export interface EditItemProps extends HTMLAttributes<HTMLDivElement> {
   catalogFields: dataColumn[]
   onClose: () => void
   APIurl: string
-  isNew: boolean
+  isNewItem: boolean
   itemHasBeenUpdated: (updated: boolean) => void
 }
 
@@ -38,13 +39,14 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       catalogFields,
       onClose,
       APIurl,
-      isNew,
+      isNewItem,
       itemHasBeenUpdated,
     },
     ref,
   ) => {
     const [item, setItem] = useState<dataItem>({} as dataItem)
     const [formTitle, setFormTitle] = useState('')
+    const [saveResponse, saveItem] = useFetch(APIurl, 'POST')
 
     type dataItemKey = keyof typeof item
 
@@ -53,7 +55,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
     }, [itemData])
 
     useEffect(() => {
-      if (isNew) {
+      if (isNewItem) {
         setFormTitle('Agregando Nuevo Registro')
       } else {
         setFormTitle(
@@ -65,25 +67,23 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       }
     }, [item])
 
+    useEffect(() => {
+      if (!saveResponse) return
+      setItem(saveResponse)
+      setVisible(false)
+      itemHasBeenUpdated(true)
+    }, [saveResponse])
+
     const toLower = (str: string) => {
       return str.charAt(0).toLowerCase() + str.slice(1)
     }
 
     const saveChanges = () => {
-      fetch(APIurl + (isNew ? '' : item[itemIdField as dataItemKey]), {
-        method: isNew ? 'POST' : 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(item),
-      })
-        .then((res) => res.json())
-        .then((result) => {
-          setItem(result)
-          setVisible(false)
-          itemHasBeenUpdated(true)
-        })
-        .catch(() => console.log('error'))
+      saveItem(
+        isNewItem ? '' : item[itemIdField as dataItemKey],
+        item,
+        isNewItem ? 'POST' : 'PUT',
+      )
     }
 
     const onChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -155,7 +155,7 @@ EditItem.propTypes = {
   catalogFields: PropTypes.any.isRequired,
   onClose: PropTypes.func.isRequired,
   APIurl: PropTypes.string.isRequired,
-  isNew: PropTypes.bool.isRequired,
+  isNewItem: PropTypes.bool.isRequired,
   itemHasBeenUpdated: PropTypes.func.isRequired,
 }
 

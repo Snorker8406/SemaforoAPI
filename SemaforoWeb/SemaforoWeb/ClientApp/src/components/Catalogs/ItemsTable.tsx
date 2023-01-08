@@ -5,8 +5,10 @@ import { CSmartTable, CCardBody, CCollapse, CButton } from '@coreui/react-pro'
 import { EditItem } from './EditItem'
 import { Item } from '@coreui/react-pro/dist/components/table/CTable'
 import { dataItem, dataColumn } from './types'
-import PropTypes, { number } from 'prop-types'
+import PropTypes from 'prop-types'
 import { ConfirmationModal } from '../Utils/confirmationModal'
+import useFetch from '../Utils/useFetch'
+
 export interface ItemsTableProps extends HTMLAttributes<HTMLDivElement> {
   APIurl: string
   idField: string
@@ -22,41 +24,35 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
     const [isNewItem, setIsNewItem] = useState(false)
     const [isItemUpdated, setIsItemUpdated] = useState(false)
     const [showConfirmDelete, setShowConfirmDelete] = useState(false)
-    const [deleteConfirmation, setDeleteConfirmation] = useState(false)
     const [deleteConfirmMessage, setDeleteConfirmMessage] = useState('')
+    const [tableData, getTableData] = useFetch(APIurl, 'GET')
+    const [itemData, getItemData] = useFetch(APIurl, 'GET')
+    const [deletingResponse, deleteItem] = useFetch(APIurl, 'DELETE')
 
     useEffect(() => {
-      fetch(APIurl, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((res) => res.json())
-        .then((result) => {
-          setCatalogColumns(result.columns)
-          setCatalogItems(result.data)
-        })
-        .catch((err) => console.log('error'))
+      getTableData()
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const onCloseEdit = () => {
-      if (!isItemUpdated) return
-      fetch(APIurl, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((res) => res.json())
-        .then((result) => {
-          setCatalogColumns(result.columns)
-          setCatalogItems(result.data)
-          setIsItemUpdated(false)
-        })
-        .catch((err) => console.log('error'))
-    }
+    useEffect(() => {
+      if (!tableData) return
+      setCatalogColumns(tableData.columns)
+      setCatalogItems(tableData.data)
+      setIsItemUpdated(false)
+    }, [tableData])
+
+    useEffect(() => {
+      if (!itemData) return
+      setSelectedItem(itemData)
+      setIsNewItem(false)
+      setShowEdit(true)
+    }, [itemData])
+
+    useEffect(() => {
+      if (!deletingResponse) return
+      getTableData()
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [deletingResponse])
 
     const handleColumns = (columns: dataColumn[]) => {
       const columnsList = columns.filter((c: dataColumn) => c.isColumn)
@@ -68,6 +64,53 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
         type: '',
       })
       return columnsList
+    }
+
+    const handleDeleteItem = (confirmed: boolean) => {
+      if (confirmed) {
+        deleteItem(selectedItem.itemIdField)
+      }
+    }
+
+    const toggleDetails = (index: number) => {
+      const position = details.indexOf(index)
+      let newDetails = details.slice()
+      if (position !== -1) {
+        newDetails.splice(position, 1)
+      } else {
+        newDetails = [...details, index]
+      }
+      setDetails(newDetails)
+    }
+
+    const onAddNewItem = () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const newItem = {} as any
+      catalogColumns.forEach((f) => {
+        if (!f.isPrimaryKey && f.isInForm) {
+          newItem[f.key] = f.type.indexOf('Int32') > 0 ? 0 : ''
+        }
+      })
+      setSelectedItem(newItem)
+      setShowEdit(true)
+      setIsNewItem(true)
+    }
+
+    const onEditItem = (itemId: number) => {
+      getItemData(itemId)
+    }
+
+    const onDeleteItem = (itemIdField: string, registerName: string) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const itemToDelete = { itemIdField } as any
+      setSelectedItem(itemToDelete)
+      setDeleteConfirmMessage(registerName)
+      setShowConfirmDelete(true)
+    }
+
+    const onCloseEdit = () => {
+      if (!isItemUpdated) return
+      getTableData()
     }
 
     const renderDetails = (item: Item) => (
@@ -88,81 +131,6 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
         </CCardBody>
       </CCollapse>
     )
-
-    const toggleDetails = (index: number) => {
-      const position = details.indexOf(index)
-      let newDetails = details.slice()
-      if (position !== -1) {
-        newDetails.splice(position, 1)
-      } else {
-        newDetails = [...details, index]
-      }
-      setDetails(newDetails)
-    }
-
-    const onAddNewItem = () => {
-      const newItem = {} as any
-      catalogColumns.forEach((f) => {
-        if (!f.isPrimaryKey && f.isInForm) {
-          newItem[f.key] = f.type.indexOf('Int32') > 0 ? 0 : ''
-        }
-      })
-      setSelectedItem(newItem)
-      setShowEdit(true)
-      setIsNewItem(true)
-    }
-
-    const onEditItem = (itemId: number) => {
-      fetch(APIurl + itemId, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((res) => res.json())
-        .then((result) => {
-          setSelectedItem(result)
-          setIsNewItem(false)
-          setShowEdit(true)
-        })
-        .catch((err) => console.log('error'))
-    }
-
-    const onDeleteItem = (itemIdField: string, registerName: string) => {
-      const itemToDelete = { itemIdField } as any
-      setSelectedItem(itemToDelete)
-      setDeleteConfirmMessage(registerName)
-      setShowConfirmDelete(true)
-    }
-
-    const deleteItem = (confirmed: boolean) => {
-      if (confirmed) {
-        fetch(APIurl + selectedItem.itemIdField, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-          .then((res) => res.json())
-          .then((result) => {
-            console.log(result)
-            fetch(APIurl, {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            })
-              .then((res) => res.json())
-              .then((result) => {
-                setCatalogColumns(result.columns)
-                setCatalogItems(result.data)
-                setIsItemUpdated(false)
-              })
-              .catch((err) => console.log('error'))
-          })
-          .catch((err) => console.log('error'))
-      }
-    }
 
     const renderActions = (item: Item) => (
       <td>
@@ -220,13 +188,13 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
           catalogFields={catalogColumns.filter((f) => f.isInForm)}
           onClose={onCloseEdit}
           APIurl={APIurl}
-          isNew={isNewItem}
+          isNewItem={isNewItem}
           itemHasBeenUpdated={setIsItemUpdated}
         />
         <ConfirmationModal
           visible={showConfirmDelete}
           setVisible={setShowConfirmDelete}
-          userResponse={deleteItem}
+          userResponse={handleDeleteItem}
           title={'Confirma que desea borrar el registro?'}
           message={deleteConfirmMessage}
         />

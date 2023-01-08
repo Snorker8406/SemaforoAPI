@@ -1,4 +1,4 @@
-import React, { useState, useEffect, HTMLAttributes, forwardRef } from 'react'
+import React, { HTMLAttributes, forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import {
   CModal,
@@ -33,16 +33,18 @@ export const ConfirmationModal = forwardRef<
   }
 
   return (
-    <CModal visible={visible} onClose={onCancel}>
+    <CModal visible={visible} onClose={onClose}>
       <CModalHeader>
         <CModalTitle>{title}</CModalTitle>
       </CModalHeader>
-      <CModalBody>{message}</CModalBody>
+      <CModalBody>
+        <h2>{message}</h2>
+      </CModalBody>
       <CModalFooter>
         <CButton color="secondary" onClick={onCancel}>
           Cancelar
         </CButton>
-        <CButton color="primary" onClick={onOk}>
+        <CButton color="danger" onClick={onOk}>
           Aceptar
         </CButton>
       </CModalFooter>

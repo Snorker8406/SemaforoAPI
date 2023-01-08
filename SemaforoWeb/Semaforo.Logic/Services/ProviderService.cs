@@ -34,14 +34,15 @@ namespace Semaforo.Logic.Services
             return _mapper.Map<ProviderBO>(provider);
         }
 
-        public async Task<int> updateProvider(ProviderBO providerBO)
+        public async Task<ProviderBO> updateProvider(ProviderBO providerBO)
         {
             try
             {
                 Provider provider = _mapper.Map<Provider>(providerBO);
                 Context.Entry(provider).State = EntityState.Modified;
                 await Context.SaveChangesAsync();
-                return provider.ProviderId;
+                ProviderBO ProviderResponse = _mapper.Map<ProviderBO>(provider);
+                return ProviderResponse;
             }
             catch (Exception e)
             {
@@ -49,14 +50,15 @@ namespace Semaforo.Logic.Services
                 throw;
             }
         }
-        public async Task<int> saveProvider(ProviderBO providerBO)
+        public async Task<ProviderBO> saveProvider(ProviderBO providerBO)
         {
             try
             {
                 Provider provider = _mapper.Map<Provider>(providerBO);
                 Context.Add(provider);
                 await Context.SaveChangesAsync();
-                return provider.ProviderId;
+                ProviderBO ProviderResponse = _mapper.Map<ProviderBO>(provider);
+                return ProviderResponse;
             }
             catch (Exception e)
             {

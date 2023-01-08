@@ -62,10 +62,10 @@ namespace SemaforoWeb.Controllers
             provider = _mapper.Map<ProviderBO>(providerDTO);
             try
             {
-                int newId = await _providerService.saveProvider(_mapper.Map<ProviderBO>(providerDTO));
-                if (newId > 0)
+                ProviderBO providerResponse = await _providerService.saveProvider(_mapper.Map<ProviderBO>(providerDTO));
+                if (providerResponse.ProviderId > 0)
                 {
-                    return Ok(newId);
+                    return Ok(providerResponse);
                 }
                 else
                 {
@@ -89,10 +89,10 @@ namespace SemaforoWeb.Controllers
             }
             try
             {
-                int updatedId = await _providerService.updateProvider(_mapper.Map<ProviderBO>(providerDTO));
-                if (updatedId > 0)
+                ProviderBO providerResponse = await _providerService.updateProvider(_mapper.Map<ProviderBO>(providerDTO));
+                if (providerResponse.ProviderId > 0)
                 {
-                    return Ok(updatedId);
+                    return Ok(providerResponse);
                 }
                 else
                 {
