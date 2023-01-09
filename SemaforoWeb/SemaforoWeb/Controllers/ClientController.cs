@@ -46,7 +46,7 @@ namespace SemaforoWeb.Controllers
                 if (clients == null) {
                     return null;
                 }
-                return Catalog<ClientBO>.BuildCatalog(Catalog<ClientBO>.ClientColumnsConfigs, clients, _mapper);
+                return Catalog<ClientBO>.BuildCatalog("", clients, _mapper);
             }
             catch (Exception)
             {

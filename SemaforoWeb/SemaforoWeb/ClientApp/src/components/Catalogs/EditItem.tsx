@@ -115,18 +115,19 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
                 // eslint-disable-next-line react/jsx-key
                 <CRow key={'field_' + i} className="mb-3">
                   <CFormLabel
-                    htmlFor={'input-' + toLower(f.name)}
+                    htmlFor={'input-' + toLower(f.key)}
                     className="col-sm-2 col-form-label"
                   >
-                    {f.columnName}
+                    {f.key}
                   </CFormLabel>
                   <CCol sm={10}>
                     <CFormInput
-                      {...register(toLower(f.name), { required: true })}
-                      id={'input-' + f.name}
-                      defaultValue={itemData[toLower(f.name) as dataItemKey]}
+                      {...register(toLower(f.key), { required: true })}
+                      id={'input-' + f.key}
+                      defaultValue={itemData[toLower(f.key) as dataItemKey]}
+                      placeholder={f.label}
                     />
-                    {errors[toLower(f.name) as dataItemKey] && (
+                    {errors[toLower(f.key) as dataItemKey] && (
                       <span>This field is required</span>
                     )}
                   </CCol>

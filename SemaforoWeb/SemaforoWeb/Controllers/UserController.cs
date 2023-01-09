@@ -42,7 +42,7 @@ namespace SemaforoWeb.Controllers
                 {
                     return null;
                 }
-                return Catalog<ApplicationUserBO>.BuildCatalog(Catalog<ApplicationUserBO>.UserColumnsConfigs, users, _mapper);
+                return Catalog<ApplicationUserBO>.BuildCatalog("", users, _mapper);
             }
             catch (Exception)
             {

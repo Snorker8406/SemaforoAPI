@@ -42,7 +42,7 @@ namespace SemaforoWeb.Controllers
                 {
                     return null;
                 }
-                return Catalog<SchoolLevelBO>.BuildCatalog(Catalog<SchoolLevelBO>.SchoolLevelColumnsConfigs, schoolLevels, _mapper);
+                return Catalog<SchoolLevelBO>.BuildCatalog("", schoolLevels, _mapper);
             }
             catch (Exception)
             {

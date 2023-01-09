@@ -39,7 +39,8 @@ namespace SemaforoWeb.Controllers
                 {
                     return null;
                 }
-                return Catalog<ProviderBO>.BuildCatalog(Catalog<ProviderBO>.ProviderColumnsConfigs, providers, _mapper);
+                var result = Catalog<ProviderBO>.BuildCatalog("Providers", providers, _mapper);
+                return result;
             }
             catch (Exception)
             {

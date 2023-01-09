@@ -45,7 +45,7 @@ namespace SemaforoWeb.Controllers
                 {
                     return null;
                 }
-                return Catalog<BrandBO>.BuildCatalog(Catalog<BrandBO>.BrandColumnsConfigs, brands, _mapper);
+                return Catalog<BrandBO>.BuildCatalog("", brands, _mapper);
             }
             catch (Exception)
             {

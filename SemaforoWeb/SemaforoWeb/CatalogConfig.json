@@ -1,0 +1,112 @@
+{
+    "Providers": [
+        {
+            "key": "providerId",
+            "label": "ID",
+            "type": "int",
+            "isColumn": true,
+            "isInForm": true,
+            "isPrimaryKey": true
+        },
+        {
+            "key": "address",
+            "label": "Direccion",
+            "type": "int",
+            "isColumn": true,
+            "isInForm": true,
+            "isPrimaryKey": false,
+            "size": 12,
+            "validationPattern": "",
+            "required": true
+        },
+        {
+            "key": "name",
+            "label": "Nombre",
+            "type": "string",
+            "isColumn": true,
+            "isInForm": true,
+            "isPrimaryKey": false,
+            "size": 12,
+            "validationPattern": "",
+            "required": true
+        },
+        {
+            "key": "contactName",
+            "label": "Contacto",
+            "type": "string",
+            "isColumn": true,
+            "isInForm": true,
+            "isPrimaryKey": false,
+            "size": 12,
+            "validationPattern": "",
+            "required": true
+        },
+        {
+            "key": "phone",
+            "label": "Telefono",
+            "type": "string",
+            "isColumn": true,
+            "isInForm": true,
+            "isPrimaryKey": false,
+            "size": 12,
+            "validationPattern": "",
+            "required": true
+        },
+        {
+            "key": "cellphone",
+            "label": "Celular",
+            "type": "string",
+            "isColumn": true,
+            "isInForm": true,
+            "isPrimaryKey": false,
+            "size": 12,
+            "validationPattern": "",
+            "required": true
+        },
+        {
+            "key": "whatsapp",
+            "label": "Whatsapp",
+            "type": "string",
+            "isColumn": true,
+            "isInForm": true,
+            "isPrimaryKey": false,
+            "size": 12,
+            "validationPattern": "",
+            "required": true
+        },
+        {
+            "key": "description",
+            "label": "Descripcion",
+            "type": "string",
+            "isColumn": false,
+            "isInForm": true,
+            "isPrimaryKey": false,
+            "size": 12,
+            "validationPattern": "",
+            "required": true
+        },
+        {
+            "key": "website",
+            "label": "Sitio Web",
+            "type": "string",
+            "isColumn": false,
+            "isInForm": true,
+            "isPrimaryKey": false,
+            "size": 12,
+            "validationPattern": "",
+            "required": true
+        },
+        {
+            "key": "bankAccounts",
+            "label": "Bancos",
+            "type": "string",
+            "isColumn": false,
+            "isInForm": true,
+            "isPrimaryKey": false,
+            "size": 12,
+            "validationPattern": "",
+            "required": true
+        }
+    ]
+    
+}

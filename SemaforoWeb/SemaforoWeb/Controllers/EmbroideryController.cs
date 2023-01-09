@@ -42,7 +42,7 @@ namespace SemaforoWeb.Controllers
                 {
                     return null;
                 }
-                return Catalog<EmbroideryBO>.BuildCatalog(Catalog<EmbroideryBO>.EmbroideryColumnsConfigs, embroideries, _mapper);
+                return Catalog<EmbroideryBO>.BuildCatalog("", embroideries, _mapper);
             }
             catch (Exception)
             {

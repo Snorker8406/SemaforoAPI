@@ -9,7 +9,9 @@ export type dataColumn = {
   label: string
   key: string
   name: string
-  columnName?: string
   isPrimaryKey: boolean
   type: string
+  required?: boolean
+  validationPattern?: string
+  size?: number
 }

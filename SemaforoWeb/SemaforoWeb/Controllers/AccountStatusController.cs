@@ -44,7 +44,7 @@ namespace SemaforoWeb.Controllers
                 {
                     return null;
                 }
-                return Catalog<AccountStatusBO>.BuildCatalog(Catalog<AccountStatusBO>.AccountStatusColumnsConfigs, accountStatuses, _mapper);
+                return Catalog<AccountStatusBO>.BuildCatalog("", accountStatuses, _mapper);
             }
             catch (Exception)
             {
