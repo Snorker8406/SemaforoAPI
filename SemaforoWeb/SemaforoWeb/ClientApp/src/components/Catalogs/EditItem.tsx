@@ -118,7 +118,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
                     htmlFor={'input-' + toLower(f.key)}
                     className="col-sm-2 col-form-label"
                   >
-                    {f.key}
+                    {f.label}
                   </CFormLabel>
                   <CCol sm={10}>
                     <CFormInput

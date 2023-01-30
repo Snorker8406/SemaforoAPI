@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Semaforo.Logic.Models;
+using Semaforo.Logic;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -95,7 +96,7 @@ namespace SemaforoWeb
 
             var filePath = AppContext.BaseDirectory + "SemaforoAPI.xml";
             services.AddSwaggerGen(config => config.IncludeXmlComments(filePath));
-
+            CatalogsConfigs.ReadConfigFile();
 
         }
 

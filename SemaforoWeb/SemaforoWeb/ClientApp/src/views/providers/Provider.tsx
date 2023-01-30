@@ -3,8 +3,8 @@ import API from '../../API'
 import { ItemsTable } from '../../components/Catalogs/ItemsTable'
 import { CCol, CRow } from '@coreui/react-pro'
 
-const Supplier = () => {
-  const supplierTable = () => {
+const Provider = () => {
+  const ProviderTable = () => {
     return (
       <ItemsTable
         APIurl={API.providers.APIurl}
@@ -18,10 +18,10 @@ const Supplier = () => {
         <CCol xs={12}>
           <h1>Proveedores</h1>
         </CCol>
-        <CCol xs={12}>{supplierTable()}</CCol>
+        <CCol xs={12}>{ProviderTable()}</CCol>
       </CRow>
     </div>
   )
 }
 
-export default Supplier
+export default Provider

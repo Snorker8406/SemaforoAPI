@@ -10,7 +10,7 @@ export type route = {
 // examples
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Blank = React.lazy(() => import('./views/blank/Blank'))
-const Supplier = React.lazy(() => import('./views/suppliers/Supplier'))
+const Supplier = React.lazy(() => import('./views/providers/Provider'))
 
 /**
  * See {@link https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config GitHub}.

@@ -4,7 +4,7 @@ const API = {
     idField: 'clientId',
   },
   providers: {
-    APIurl: '/api/Provider/',
+    APIurl: '/api/Catalog/Provider/',
     idField: 'providerId',
   },
 }
