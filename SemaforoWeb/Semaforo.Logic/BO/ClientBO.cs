@@ -12,6 +12,8 @@ namespace  Semaforo.Logic.BO
         {
             Employees_Options = new Dictionary<int, string>();
             ClientStatuses_Options = new Dictionary<int, string>();
+            CreateDate = DateTime.UtcNow;
+            LastModify = DateTime.UtcNow;
         }
         public int ClientId { get; set; }
         public int EmployeeId { get; set; }

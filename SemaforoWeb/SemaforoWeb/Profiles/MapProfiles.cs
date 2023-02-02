@@ -23,7 +23,8 @@ namespace SemaforoWeb.Profiles
             CreateMap<Client, ClientBO>()
                 .ForMember(dest => dest.EmployeeName, opt => opt.MapFrom(src => src.Employee.Name))
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.LastName + " " + src.LastNameMother + " " + src.Name));
-            CreateMap<ClientBO, Client>();
+            CreateMap<ClientBO, Client>()
+                .ForMember(dest => dest.LastModify, opt => opt.MapFrom(src => DateTime.UtcNow));
             CreateMap<ClientBO, ClientDTO>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName));
