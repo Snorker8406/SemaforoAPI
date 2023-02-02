@@ -30,6 +30,11 @@ namespace SemaforoWeb.Profiles
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName));
             CreateMap<ClientDTO, ClientBO>();
 
+            CreateMap<ClientCategory, ClientCategoryBO>();
+            CreateMap<ClientCategoryBO, ClientCategory>();
+            CreateMap<ClientCategoryBO, ClientCategoryDTO>();
+            CreateMap<ClientCategoryDTO, ClientCategoryBO>();
+
             CreateMap<Brand, BrandBO>();
             CreateMap<BrandBO, Brand>();
             CreateMap<BrandBO, BrandDTO>();

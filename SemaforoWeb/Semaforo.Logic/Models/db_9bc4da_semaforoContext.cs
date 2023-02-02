@@ -25,6 +25,7 @@ namespace Semaforo.Logic.Models
         public virtual DbSet<Brand> Brands { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Client> Clients { get; set; }
+        public virtual DbSet<ClientCategory> ClientCategories { get; set; }
         public virtual DbSet<ClientStatus> ClientStatuses { get; set; }
         public virtual DbSet<Embroidery> Embroideries { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
@@ -294,6 +295,8 @@ namespace Semaforo.Logic.Models
                     .HasMaxLength(20)
                     .UseCollation("Modern_Spanish_CI_AS");
 
+                entity.Property(e => e.ClientCategoryId).HasColumnName("Client_Category_ID");
+
                 entity.Property(e => e.ClientStatusId).HasColumnName("Client_Status_ID");
 
                 entity.Property(e => e.Comments).UseCollation("Modern_Spanish_CI_AS");
@@ -344,12 +347,12 @@ namespace Semaforo.Logic.Models
 
                 entity.Property(e => e.ProfileImage).HasColumnName("Profile_Image");
 
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasMaxLength(10)
-                    .UseCollation("Modern_Spanish_CI_AS");
-
                 entity.Property(e => e.Student).HasDefaultValueSql("((0))");
+
+                entity.HasOne(d => d.ClientCategory)
+                    .WithMany(p => p.Clients)
+                    .HasForeignKey(d => d.ClientCategoryId)
+                    .HasConstraintName("FK_CLIENTS_CLIENT_CATEGORIES");
 
                 entity.HasOne(d => d.ClientStatus)
                     .WithMany(p => p.Clients)
@@ -362,6 +365,20 @@ namespace Semaforo.Logic.Models
                     .HasForeignKey(d => d.EmployeeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CLIENTS_EMPLOYEES");
+            });
+
+            modelBuilder.Entity<ClientCategory>(entity =>
+            {
+                entity.ToTable("CLIENT_CATEGORIES");
+
+                entity.Property(e => e.ClientCategoryId).HasColumnName("Client_Category_ID");
+
+                entity.Property(e => e.CategoryName)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("Category_Name");
+
+                entity.Property(e => e.Description).HasMaxLength(200);
             });
 
             modelBuilder.Entity<ClientStatus>(entity =>

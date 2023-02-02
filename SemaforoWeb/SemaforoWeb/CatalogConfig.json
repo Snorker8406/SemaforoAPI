@@ -166,14 +166,6 @@
                 "isPrimaryKey": true
             },
             {
-                "key": "status",
-                "label": "status",
-                "type": "string",
-                "isColumn": true,
-                "isInForm": true,
-                "isPrimaryKey": false
-            },
-            {
                 "key": "name",
                 "label": "Nombre",
                 "type": "string",
@@ -226,7 +218,7 @@
                 "dropdownEntity": "Employees",
                 "dropdownKey": "EmployeeId",
                 "dropdownOption": "Name",
-                "size": 6
+                "size": 4
             },
             {
                 "key": "ClientStatuses_Options",
@@ -238,7 +230,19 @@
                 "dropdownEntity": "ClientStatuses",
                 "dropdownKey": "ClientStatusId",
                 "dropdownOption": "Status",
-                "size": 6
+                "size": 4
+            },
+            {
+                "key": "ClientCategories_Options",
+                "label": "Status",
+                "type": "dropdown",
+                "isColumn": false,
+                "isInForm": true,
+                "isPrimaryKey": false,
+                "dropdownEntity": "ClientCategories",
+                "dropdownKey": "ClientCategoryId",
+                "dropdownOption": "CategoryName",
+                "size": 4
             }
         ],
         "label": "Clientes",

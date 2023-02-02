@@ -71,7 +71,6 @@ namespace SemaforoWeb.Controllers
             client.CreateDate = DateTime.Now;
             client.LastModify = DateTime.Now;
             client.LastModifiedBy = clientDto.LastModifiedBy;
-            client.Status = clientDto.Status;
             client.Name = clientDto.Name;
             client.LastName = clientDto.LastName;
             client.LastNameMother = clientDto.LastNameMother;

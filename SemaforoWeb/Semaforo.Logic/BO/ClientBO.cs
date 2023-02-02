@@ -18,10 +18,10 @@ namespace  Semaforo.Logic.BO
         public int ClientId { get; set; }
         public int EmployeeId { get; set; }
         public int ClientStatusId { get; set; }
+        public int? ClientCategoryId { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime LastModify { get; set; }
         public int LastModifiedBy { get; set; }
-        public string Status { get; set; }
         public string Name { get; set; }
         public string LastName { get; set; }
         public string LastNameMother { get; set; }
@@ -40,5 +40,6 @@ namespace  Semaforo.Logic.BO
         public string EmployeeName { get; set; }
         public Dictionary<int, string> Employees_Options { get; set; }
         public Dictionary<int, string> ClientStatuses_Options { get; set; }
+        public Dictionary<int, string> ClientCategories_Options { get; set; }
     }
 }

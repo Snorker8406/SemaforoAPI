@@ -16,10 +16,10 @@ namespace Semaforo.Logic.Models
         public int ClientId { get; set; }
         public int EmployeeId { get; set; }
         public int ClientStatusId { get; set; }
+        public int? ClientCategoryId { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime LastModify { get; set; }
         public int LastModifiedBy { get; set; }
-        public string Status { get; set; }
         public string Name { get; set; }
         public string LastName { get; set; }
         public string LastNameMother { get; set; }
@@ -36,6 +36,7 @@ namespace Semaforo.Logic.Models
         public byte[] ProfileImage { get; set; }
         public string Comments { get; set; }
 
+        public virtual ClientCategory ClientCategory { get; set; }
         public virtual ClientStatus ClientStatus { get; set; }
         public virtual Employee Employee { get; set; }
         public virtual ICollection<Account> Accounts { get; set; }

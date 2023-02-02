@@ -14,7 +14,7 @@ using Semaforo.Logic;
 using System;
 using System.Collections.Generic;
 using System.Text;
-
+//Scaffold-DbContext "Data Source=SQL5063.site4now.net;Initial Catalog=db_9bc4da_semaforo;User Id=db_9bc4da_semaforo_admin;Password=semaforo123" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force
 namespace SemaforoWeb
 {
     public class Startup
