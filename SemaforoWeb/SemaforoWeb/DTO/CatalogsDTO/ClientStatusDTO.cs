@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SemaforoWeb.DTO.CatalogsDTO.Catalogs
+namespace SemaforoWeb.DTO.CatalogsDTO
 {
     public class ClientStatusDTO
     {

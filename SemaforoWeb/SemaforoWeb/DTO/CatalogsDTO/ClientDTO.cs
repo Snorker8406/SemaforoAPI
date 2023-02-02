@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SemaforoWeb.DTO.CatalogsDTO.Catalogs
+namespace SemaforoWeb.DTO.CatalogsDTO
 {
     public class ClientDTO
     {
         public int ClientId { get; set; }
-        public int UserId { get; set; }
+        public int EmployeeId { get; set; }
         public int ClientStatusId { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime LastModify { get; set; }

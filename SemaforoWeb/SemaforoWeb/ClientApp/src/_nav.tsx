@@ -1,7 +1,7 @@
 import React from 'react'
 import { cilSpeedometer, cilFlightTakeoff } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
-import { CNavItem } from '@coreui/react-pro'
+import { CNavGroup, CNavGroupItems, CNavItem } from '@coreui/react-pro'
 import { ElementType } from 'react'
 
 export type Badge = {
@@ -29,17 +29,37 @@ const _nav = [
     },
     to: '/dashboard',
   },
+  // {
+  //   component: CNavItem,
+  //   name: 'Blank',
+  //   icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
+  //   to: '/blank',
+  // },
   {
-    component: CNavItem,
-    name: 'Blank',
+    component: CNavGroup,
+    name: 'Catalogos',
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
-    to: '/blank',
-  },
-  {
-    component: CNavItem,
-    name: 'Proveedores',
-    to: '/suppliers',
-    icon: <CIcon icon={cilFlightTakeoff} customClassName="nav-icon" />,
+    to: '/catalogs',
+    items: [
+      {
+        component: CNavItem,
+        name: 'Proveedores',
+        to: '/catalogs/providers',
+        icon: <CIcon icon={cilFlightTakeoff} customClassName="nav-icon" />,
+      },
+      {
+        component: CNavItem,
+        name: 'Clientes',
+        to: '/catalogs/clients',
+        icon: <CIcon icon={cilFlightTakeoff} customClassName="nav-icon" />,
+      },
+      {
+        component: CNavItem,
+        name: 'Marcas',
+        to: '/catalogs/brands',
+        icon: <CIcon icon={cilFlightTakeoff} customClassName="nav-icon" />,
+      },
+    ],
   },
 ]
 

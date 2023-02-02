@@ -44,7 +44,9 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
     useEffect(() => {
       if (!itemData) return
       setSelectedItem(itemData)
-      setIsNewItem(false)
+      if (itemData[idField] > 0) {
+        setIsNewItem(false)
+      }
       setShowEdit(true)
     }, [itemData])
 
@@ -86,14 +88,17 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
     const onAddNewItem = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const newItem = {} as any
+      let fillOptions = false;
       catalogColumns.forEach((f) => {
         if (!f.isPrimaryKey && f.isInForm) {
           newItem[f.key] = f.type.indexOf('Int32') > 0 ? 0 : ''
+          if (f.dropdownKey) fillOptions = true
         }
       })
       setSelectedItem(newItem)
       setShowEdit(true)
       setIsNewItem(true)
+      if (fillOptions) getItemData(-1)
     }
 
     const onEditItem = (itemId: number) => {
@@ -114,7 +119,7 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
     }
 
     const renderDetails = (item: Item) => (
-      <CCollapse visible={details.includes(item.providerId)}>
+      <CCollapse visible={details.includes(item[idField])}>
         <CCardBody>
           <h4>{item.name}</h4>
           <p className="text-muted">Direccion: {item.address}</p>
@@ -134,10 +139,10 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
 
     const renderActions = (item: Item) => (
       <td>
-        <CIcon icon={cilPencil} onClick={() => onEditItem(item.providerId)} />
+        <CIcon icon={cilPencil} onClick={() => onEditItem(item[idField])} />
         <CIcon
           icon={cilTrash}
-          onClick={() => onDeleteItem(item.providerId, item.name)}
+          onClick={() => onDeleteItem(item[idField], item.name)}
         />
       </td>
     )
@@ -167,7 +172,7 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
             actions: (item: Item) => renderActions(item),
             details: (item) => renderDetails(item),
           }}
-          onRowClick={(item) => toggleDetails(item.providerId)}
+          onRowClick={(item) => toggleDetails(item[idField])}
           selectable
           sorterValue={{ column: 'name', state: 'asc' }}
           tableFilter

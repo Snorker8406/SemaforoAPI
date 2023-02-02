@@ -28,7 +28,7 @@ namespace SemaforoWeb.Controllers
             _mapper = mapper;
             createCatalogServices();
         }
-        public void createCatalogServices()
+        private void createCatalogServices()
         {
             foreach (var entity in CatalogsConfigs.Entities)
             {
@@ -40,7 +40,7 @@ namespace SemaforoWeb.Controllers
                 object service = Activator.CreateInstance(constructedClass, _context, _mapper, null);
                 _services.Add(entity, service);
             }
-            
+
         }
 
         [HttpGet("{entity}")]
@@ -62,19 +62,20 @@ namespace SemaforoWeb.Controllers
             }
         }
 
-        // GET api/<ProviderController>/5
+        //GET api/<ProviderController>/5
         [HttpGet("{entity}/{id}")]
         public async Task<dynamic> Get(int id, string entity)
         {
             return await _services[entity].GetEntityById(id);
         }
 
+
         // POST api/<ClientController>
         [HttpPost("{entity}")]
         public async Task<IActionResult> PostItem(object dto, string entity)
-        {            
+        {
             try
-            {            
+            {
                 Type typeBO = Type.GetType("Semaforo.Logic.BO." + entity + "BO, Semaforo.Logic");
                 Type typeDTO = Type.GetType("SemaforoWeb.DTO.CatalogsDTO." + entity + "DTO, SemaforoWeb");
                 var itemDTO = JsonConvert.DeserializeObject(dto.ToString(), typeDTO);
@@ -96,7 +97,7 @@ namespace SemaforoWeb.Controllers
             }
         }
 
-        // PUT api/<ClientController>/5
+        //PUT api/<ClientController>/5
         [HttpPut("{entity}/{id}")]
         public async Task<IActionResult> PutItem(int id, object dto, string entity)
         {
@@ -110,7 +111,7 @@ namespace SemaforoWeb.Controllers
                 {
                     return BadRequest("information inconsistent");
                 }
-            
+
                 dynamic response = await _services[entity].updateEntity(itemBO);
                 if (typeBO.GetProperty(entity + "Id").GetValue(response) > 0)
                 {

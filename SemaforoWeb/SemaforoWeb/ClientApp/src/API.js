@@ -1,11 +1,15 @@
 const API = {
-  clients: {
-    APIurl: '/api/Client/',
-    idField: 'clientId',
-  },
   providers: {
     APIurl: '/api/Catalog/Provider/',
     idField: 'providerId',
+  },
+  clients: {
+    APIurl: '/api/Catalog/Client/',
+    idField: 'clientId',
+  },
+  brands: {
+    APIurl: '/api/Catalog/Brand/',
+    idField: 'brandId',
   },
 }
 

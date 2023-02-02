@@ -15,13 +15,28 @@ namespace SemaforoWeb.Profiles
     {
         public MapProfiles()
         {
-            CreateMap<Client, ClientBO>();
+            CreateMap<Provider, ProviderBO>();
+            CreateMap<ProviderBO, Provider>();
+            CreateMap<ProviderBO, ProviderDTO>();
+            CreateMap<ProviderDTO, ProviderBO>();
+
+            CreateMap<Client, ClientBO>()
+                .ForMember(dest => dest.EmployeeName, opt => opt.MapFrom(src => src.Employee.Name))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.LastName + " " + src.LastNameMother + " " + src.Name));
             CreateMap<ClientBO, Client>();
             CreateMap<ClientBO, ClientDTO>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName));
+            CreateMap<ClientDTO, ClientBO>();
+
+            CreateMap<Brand, BrandBO>();
+            CreateMap<BrandBO, Brand>();
+            CreateMap<BrandBO, BrandDTO>();
+            CreateMap<BrandDTO, BrandBO>();
 
             CreateMap<Employee, EmployeeBO>();
+            CreateMap<EmployeeBO, Employee>();
+            CreateMap<EmployeeDTO, EmployeeBO>();
             CreateMap<EmployeeBO, EmployeeDTO>();
 
             CreateMap<Product, ProductBO>();
@@ -69,10 +84,7 @@ namespace SemaforoWeb.Profiles
             CreateMap<ApplicationUserBO, Employee>();
             CreateMap<ApplicationUserBO, EmployeeDTO>();
 
-            CreateMap<Provider, ProviderBO>();
-            CreateMap<ProviderBO, Provider>();
-            CreateMap<ProviderBO, ProviderDTO>();
-            CreateMap<ProviderDTO, ProviderBO>();
+            
         }
     }
 }

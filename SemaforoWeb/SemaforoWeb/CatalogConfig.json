@@ -113,5 +113,136 @@
         "label": "Proveedores",
         "icon": "",
         "description": "Catalogo de Proveedores"
+    },
+    "Brand": {
+        "tableName": "Brands",
+        "columns": [
+            {
+                "key": "brandId",
+                "label": "ID",
+                "type": "int",
+                "isColumn": true,
+                "isInForm": true,
+                "isPrimaryKey": true
+            },
+            {
+                "key": "name",
+                "label": "Nombre",
+                "type": "int",
+                "isColumn": true,
+                "isInForm": true,
+                "isPrimaryKey": false
+            },
+            {
+                "key": "description",
+                "label": "Descripcion",
+                "type": "string",
+                "isColumn": true,
+                "isInForm": true,
+                "isPrimaryKey": false
+            },
+            {
+                "key": "supplierId",
+                "label": "Proveedor",
+                "type": "string",
+                "isColumn": false,
+                "isInForm": true,
+                "isPrimaryKey": false
+            }
+        ],
+        "label": "Marcas",
+        "icon": "",
+        "description": "Catalogo de MArcas"
+    },
+    "Client": {
+        "tableName": "Clients",
+        "columns": [
+            {
+                "key": "clientId",
+                "label": "ID",
+                "type": "int",
+                "isColumn": true,
+                "isInForm": true,
+                "isPrimaryKey": true
+            },
+            {
+                "key": "status",
+                "label": "status",
+                "type": "string",
+                "isColumn": true,
+                "isInForm": true,
+                "isPrimaryKey": false
+            },
+            {
+                "key": "name",
+                "label": "Nombre",
+                "type": "string",
+                "isColumn": false,
+                "isInForm": true,
+                "isPrimaryKey": false,
+                "size": 4
+            },
+            {
+                "key": "lastName",
+                "label": "Apellido Paterno",
+                "type": "string",
+                "isColumn": false,
+                "isInForm": true,
+                "isPrimaryKey": false,
+                "size": 4
+            },
+            {
+                "key": "lastNameMother",
+                "label": "Apellido Materno",
+                "type": "string",
+                "isColumn": false,
+                "isInForm": true,
+                "isPrimaryKey": false,
+                "size": 4
+            },
+            {
+                "key": "employeeName",
+                "label": "Empleado",
+                "type": "string",
+                "isColumn": true,
+                "isInForm": false,
+                "isPrimaryKey": false
+            },
+            {
+                "key": "fullName",
+                "label": "Nombre",
+                "type": "string",
+                "isColumn": true,
+                "isInForm": false,
+                "isPrimaryKey": false
+            },
+            {
+                "key": "Employees_Options",
+                "label": "Empleado",
+                "type": "dropdown",
+                "isColumn": false,
+                "isInForm": true,
+                "isPrimaryKey": false,
+                "dropdownEntity": "Employees",
+                "dropdownKey": "EmployeeId",
+                "dropdownOption": "Name",
+                "size": 6
+            },
+            {
+                "key": "ClientStatuses_Options",
+                "label": "Status",
+                "type": "dropdown",
+                "isColumn": false,
+                "isInForm": true,
+                "isPrimaryKey": false,
+                "dropdownEntity": "ClientStatuses",
+                "dropdownKey": "ClientStatusId",
+                "dropdownOption": "Status",
+                "size": 6
+            }
+        ],
+        "label": "Clientes",
+        "icon": "",
+        "description": "Catalogo de Clientes"
     }
 }

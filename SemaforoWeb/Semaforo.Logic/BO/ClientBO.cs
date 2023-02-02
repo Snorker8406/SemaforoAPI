@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Semaforo.Logic.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,8 +8,13 @@ namespace  Semaforo.Logic.BO
 {
     public class ClientBO
     {
+        public ClientBO()
+        {
+            Employees_Options = new Dictionary<int, string>();
+            ClientStatuses_Options = new Dictionary<int, string>();
+        }
         public int ClientId { get; set; }
-        public int UserId { get; set; }
+        public int EmployeeId { get; set; }
         public int ClientStatusId { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime LastModify { get; set; }
@@ -17,6 +23,7 @@ namespace  Semaforo.Logic.BO
         public string Name { get; set; }
         public string LastName { get; set; }
         public string LastNameMother { get; set; }
+        public string FullName { get; set; }
         public string Gender { get; set; }
         public int? AccountDaysLimit { get; set; }
         public decimal? AccountAmountLimit { get; set; }
@@ -28,10 +35,8 @@ namespace  Semaforo.Logic.BO
         public string Email { get; set; }
         public byte[] ProfileImage { get; set; }
         public string Comments { get; set; }
-
-        public static implicit operator List<object>(ClientBO v)
-        {
-            throw new NotImplementedException();
-        }
+        public string EmployeeName { get; set; }
+        public Dictionary<int, string> Employees_Options { get; set; }
+        public Dictionary<int, string> ClientStatuses_Options { get; set; }
     }
 }

@@ -10,7 +10,9 @@ export type route = {
 // examples
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Blank = React.lazy(() => import('./views/blank/Blank'))
-const Supplier = React.lazy(() => import('./views/providers/Provider'))
+const Provider = React.lazy(() => import('./views/providers/Provider'))
+const Client = React.lazy(() => import('./views/clients/Client'))
+const Brand = React.lazy(() => import('./views/brands/Brand'))
 
 /**
  * See {@link https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config GitHub}.
@@ -19,8 +21,10 @@ const routes = [
   { path: '/', name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/blank', name: 'Blank', component: Blank },
-  { path: '/suppliers', name: 'Supplier', component: Supplier },
-  { path: '/suppliers/register', name: 'Register', component: Supplier },
+  { path: '/catalogs', name: 'Catalogs', component: Provider },
+  { path: '/catalogs/providers', name: 'Provider', component: Provider },
+  { path: '/catalogs/clients', name: 'Client', component: Client },
+  { path: '/catalogs/brands', name: 'Brand', component: Brand },
 ]
 
 export default routes

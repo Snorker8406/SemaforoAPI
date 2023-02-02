@@ -12,6 +12,8 @@ import {
   CFormLabel,
   CFormInput,
   CCol,
+  CFormText,
+  CFormSelect,
 } from '@coreui/react-pro'
 
 import { dataItem, dataColumn } from '../../types'
@@ -109,30 +111,57 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
         </CModalHeader>
         <CForm onSubmit={handleSubmit(saveChanges)}>
           <CModalBody>
-            {catalogFields
-              .filter((c) => !c.isPrimaryKey)
-              .map((f, i) => (
-                // eslint-disable-next-line react/jsx-key
-                <CRow key={'field_' + i} className="mb-3">
-                  <CFormLabel
-                    htmlFor={'input-' + toLower(f.key)}
-                    className="col-sm-2 col-form-label"
-                  >
-                    {f.label}
-                  </CFormLabel>
-                  <CCol sm={10}>
-                    <CFormInput
-                      {...register(toLower(f.key), { required: true })}
-                      id={'input-' + f.key}
-                      defaultValue={itemData[toLower(f.key) as dataItemKey]}
-                      placeholder={f.label}
-                    />
+            <CRow className="mb-2">
+              {catalogFields
+                .filter((c) => !c.isPrimaryKey)
+                .map((f, i) => (
+                  <CCol key={'field_' + i} sm={f.size || 12} className="mb-2">
+                    <CFormLabel
+                      htmlFor={'input-' + toLower(f.key)}
+                      className="col-form-label"
+                    >
+                      {f.label}
+                    </CFormLabel>
+                    {f.type === 'dropdown' && (
+                      <CFormSelect
+                        {...register(toLower(f.dropdownKey || f.key), {
+                          required: true,
+                        })}
+                        aria-label={f.label}
+                        defaultValue={
+                          itemData[toLower(f.dropdownKey || '0') as dataItemKey]
+                        }
+                      >
+                        {Object.keys(
+                          itemData[toLower(f.key) as dataItemKey] || {},
+                        ).map((k) => (
+                          <option key={k} value={k}>
+                            {
+                              (itemData[toLower(f.key) as dataItemKey] || '')[
+                                k as never
+                              ]
+                            }
+                          </option>
+                        ))}
+                      </CFormSelect>
+                    )}
+                    {f.type !== 'dropdown' && (
+                      <CFormInput
+                        {...register(toLower(f.key), { required: true })}
+                        id={'input-' + f.key}
+                        size="sm"
+                        defaultValue={itemData[toLower(f.key) as dataItemKey]}
+                        placeholder={f.label}
+                      />
+                    )}
                     {errors[toLower(f.key) as dataItemKey] && (
-                      <span>This field is required</span>
+                      <CFormText component="span">
+                        This field is required.
+                      </CFormText>
                     )}
                   </CCol>
-                </CRow>
-              ))}
+                ))}
+            </CRow>
           </CModalBody>
           <CModalFooter>
             <CButton color="secondary" onClick={() => setVisible(false)}>
