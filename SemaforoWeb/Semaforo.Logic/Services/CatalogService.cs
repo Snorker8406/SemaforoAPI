@@ -33,9 +33,9 @@ namespace Semaforo.Logic.Services
                         var columnConfigs = columns.Where(c => c.key == field).FirstOrDefault();
                         if (columnConfigs != null)
                         {
-                            string ddEntity = columnConfigs.dropdownEntity;
-                            string ddKey = columnConfigs.dropdownKey;
-                            string ddOption = columnConfigs.dropdownOption;
+                            string ddEntity = columnConfigs.selectEntity;
+                            string ddKey = columnConfigs.selectKey;
+                            string ddOption = columnConfigs.selectOption;
                             var rows = Context.GetType().GetProperty(ddEntity).GetValue(Context);
                             IEnumerable<dynamic> options = (IEnumerable<dynamic>)rows;
                             Dictionary<int, string> dic = new Dictionary<int, string>();

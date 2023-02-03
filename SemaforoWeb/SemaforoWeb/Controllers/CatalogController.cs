@@ -48,6 +48,7 @@ namespace SemaforoWeb.Controllers
         {
             try
             {
+                CatalogsConfigs.ReadConfigFile(); // esta linea es solo para desarrollo
                 var items = await _services[entity].GetEntityList();
                 if (items == null)
                 {

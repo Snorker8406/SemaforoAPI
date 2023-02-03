@@ -92,7 +92,7 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
       catalogColumns.forEach((f) => {
         if (!f.isPrimaryKey && f.isInForm) {
           newItem[f.key] = f.type.indexOf('Int32') > 0 ? 0 : ''
-          if (f.dropdownKey) fillOptions = true
+          if (f.selectKey) fillOptions = true
         }
       })
       setSelectedItem(newItem)

@@ -14,6 +14,8 @@ import {
   CCol,
   CFormText,
   CFormSelect,
+  CFormCheck,
+  CFormTextarea,
 } from '@coreui/react-pro'
 
 import { dataItem, dataColumn } from '../../types'
@@ -99,6 +101,67 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       }
     }
 
+    const buildField = (f: dataColumn, itemData: dataItem, i: number) => {
+      switch (f.type) {
+        case 'select':
+          return (
+            <CFormSelect
+              {...register(toLower(f.selectKey || f.key), {
+                required: true,
+              })}
+              size="sm"
+              aria-label={f.label}
+              defaultValue={
+                itemData[toLower(f.selectKey || '0') as dataItemKey]
+              }
+            >
+              {Object.keys(itemData[toLower(f.key) as dataItemKey] || {}).map(
+                (k) => (
+                  <option key={k} value={k}>
+                    {
+                      (itemData[toLower(f.key) as dataItemKey] || '')[
+                        k as never
+                      ]
+                    }
+                  </option>
+                ),
+              )}
+            </CFormSelect>
+          )
+        case 'boolean':
+          return (
+            <CFormCheck
+              {...register(toLower(f.key))}
+              id={'cb-' + f.key}
+              defaultChecked={
+                itemData[toLower(f.key) as dataItemKey] === 'true'
+              }
+            />
+          )
+        case 'textarea':
+          return (
+            <CFormTextarea
+              {...register(toLower(f.key))}
+              id={'textarea-' + f.key}
+              rows={2}
+            />
+          )
+        default:
+          return (
+            <CFormInput
+              {...register(toLower(f.key), {
+                required: f.required || false,
+                pattern: new RegExp(f.validationPattern || ''),
+              })}
+              id={'input-' + f.key}
+              size="sm"
+              defaultValue={itemData[toLower(f.key) as dataItemKey]}
+              placeholder={f.label}
+            />
+          )
+      }
+    }
+
     return (
       <CModal
         size="xl"
@@ -122,41 +185,13 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
                     >
                       {f.label}
                     </CFormLabel>
-                    {f.type === 'dropdown' && (
-                      <CFormSelect
-                        {...register(toLower(f.dropdownKey || f.key), {
-                          required: true,
-                        })}
-                        aria-label={f.label}
-                        defaultValue={
-                          itemData[toLower(f.dropdownKey || '0') as dataItemKey]
-                        }
-                      >
-                        {Object.keys(
-                          itemData[toLower(f.key) as dataItemKey] || {},
-                        ).map((k) => (
-                          <option key={k} value={k}>
-                            {
-                              (itemData[toLower(f.key) as dataItemKey] || '')[
-                                k as never
-                              ]
-                            }
-                          </option>
-                        ))}
-                      </CFormSelect>
-                    )}
-                    {f.type !== 'dropdown' && (
-                      <CFormInput
-                        {...register(toLower(f.key), { required: true })}
-                        id={'input-' + f.key}
-                        size="sm"
-                        defaultValue={itemData[toLower(f.key) as dataItemKey]}
-                        placeholder={f.label}
-                      />
-                    )}
+                    {f && itemData && buildField(f, itemData, i)}
                     {errors[toLower(f.key) as dataItemKey] && (
                       <CFormText component="span">
-                        This field is required.
+                        {errors[toLower(f.key) as dataItemKey]?.type ===
+                          'required' && 'este campo es obligatorio'}
+                        {errors[toLower(f.key) as dataItemKey]?.type ===
+                          'pattern' && 'formato no valido'}
                       </CFormText>
                     )}
                   </CCol>

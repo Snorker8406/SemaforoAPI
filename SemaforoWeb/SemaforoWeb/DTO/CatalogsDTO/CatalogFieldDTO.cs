@@ -13,11 +13,12 @@ namespace SemaforoWeb.DTO.CatalogsDTO
         public bool IsPrimaryKey { get; set; }
         public bool IsColumn { get; set; }
         public bool IsInForm { get; set; }
-        public bool required { get; set; }
-        public string validationPattern { get; set; }
-        public int size { get; set; }
-        public string dropdownKey { get; set; }
-        public string dropdownOption { get; set; }
-        public string dropdownEntity { get; set; }
+        public bool Required { get; set; }
+        public string ValidationPattern { get; set; }
+        public int Size { get; set; }
+        public string SelectKey { get; set; }
+        public string SelectOption { get; set; }
+        public string SelectEntity { get; set; }
+        public string DefaultValue { get; set; }
     }
 }

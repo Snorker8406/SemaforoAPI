@@ -171,8 +171,7 @@
                 "type": "string",
                 "isColumn": false,
                 "isInForm": true,
-                "isPrimaryKey": false,
-                "size": 4
+                "size": 3
             },
             {
                 "key": "lastName",
@@ -180,8 +179,7 @@
                 "type": "string",
                 "isColumn": false,
                 "isInForm": true,
-                "isPrimaryKey": false,
-                "size": 4
+                "size": 3
             },
             {
                 "key": "lastNameMother",
@@ -189,60 +187,145 @@
                 "type": "string",
                 "isColumn": false,
                 "isInForm": true,
-                "isPrimaryKey": false,
-                "size": 4
+                "size": 3
             },
             {
                 "key": "employeeName",
                 "label": "Empleado",
                 "type": "string",
-                "isColumn": true,
-                "isInForm": false,
-                "isPrimaryKey": false
+                "isColumn": false,
+                "isInForm": false
             },
             {
                 "key": "fullName",
                 "label": "Nombre",
                 "type": "string",
                 "isColumn": true,
-                "isInForm": false,
-                "isPrimaryKey": false
+                "isInForm": false
+            },
+            {
+                "key": "gender",
+                "label": "Genero",
+                "type": "string",
+                "isColumn": false,
+                "isInForm": false
+            },{
+                "key": "cellphone",
+                "label": "Celular",
+                "type": "string",
+                "isColumn": true,
+                "isInForm": true,
+                "size": 2
+            },
+            {
+                "key": "whatsapp",
+                "label": "Whatsapp",
+                "type": "boolean",
+                "isColumn": false,
+                "isInForm": true,
+                "size": 1
+            },
+            {
+                "key": "address",
+                "label": "Direccion",
+                "type": "string",
+                "isColumn": true,
+                "isInForm": true,
+                "size": 12,
+                "required": true
+            },
+            
+            {
+                "key": "accountDaysLimit",
+                "label": "Dias Limite",
+                "type": "number",
+                "isColumn": false,
+                "isInForm": true,
+                "size": 2,
+                "defaultValue": 30
+            },
+            {
+                "key": "accountAmountLimit",
+                "label": "Monto Limite",
+                "type": "money",
+                "isColumn": false,
+                "isInForm": true,
+                "size": 2,
+                "defaultValue": 1000
+            },
+            {
+                "key": "facebookName",
+                "label": "Facebook",
+                "type": "string",
+                "isColumn": true,
+                "isInForm": true,
+                "size": 2
+            },
+            {
+                "key": "facebook",
+                "label": "Facebook Link",
+                "type": "string",
+                "isColumn": false,
+                "isInForm": true,
+                "size": 3
+            },
+            {
+                "key": "email",
+                "label": "Email",
+                "type": "string",
+                "isColumn": true,
+                "isInForm": true,
+                "size": 3,
+                "validationPattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$"
+            },
+            {
+                "key": "profileImage",
+                "label": "Perfil",
+                "type": "image",
+                "isColumn": false,
+                "isInForm": true,
+                "size": 2
             },
             {
                 "key": "Employees_Options",
                 "label": "Empleado",
-                "type": "dropdown",
+                "type": "select",
                 "isColumn": false,
                 "isInForm": true,
-                "isPrimaryKey": false,
-                "dropdownEntity": "Employees",
-                "dropdownKey": "EmployeeId",
-                "dropdownOption": "Name",
-                "size": 4
+                "selectEntity": "Employees",
+                "selectKey": "EmployeeId",
+                "selectOption": "Name",
+                "size": 3
             },
             {
                 "key": "ClientStatuses_Options",
                 "label": "Status",
-                "type": "dropdown",
+                "type": "select",
                 "isColumn": false,
                 "isInForm": true,
-                "isPrimaryKey": false,
-                "dropdownEntity": "ClientStatuses",
-                "dropdownKey": "ClientStatusId",
-                "dropdownOption": "Status",
-                "size": 4
+                "selectEntity": "ClientStatuses",
+                "selectKey": "ClientStatusId",
+                "selectOption": "Status",
+                "size": 2
             },
             {
                 "key": "ClientCategories_Options",
-                "label": "Status",
-                "type": "dropdown",
+                "label": "Categoria",
+                "type": "select",
                 "isColumn": false,
                 "isInForm": true,
-                "isPrimaryKey": false,
-                "dropdownEntity": "ClientCategories",
-                "dropdownKey": "ClientCategoryId",
-                "dropdownOption": "CategoryName",
-                "size": 4
+                "selectEntity": "ClientCategories",
+                "selectKey": "ClientCategoryId",
+                "selectOption": "CategoryName",
+                "size": 2
+            },
+            {
+                "key": "comments",
+                "label": "Comentarios",
+                "type": "textarea",
+                "isColumn": false,
+                "isInForm": true,
+                "size": 12
             }
         ],
         "label": "Clientes",

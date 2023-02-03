@@ -347,11 +347,10 @@ namespace Semaforo.Logic.Models
 
                 entity.Property(e => e.ProfileImage).HasColumnName("Profile_Image");
 
-                entity.Property(e => e.Student).HasDefaultValueSql("((0))");
-
                 entity.HasOne(d => d.ClientCategory)
                     .WithMany(p => p.Clients)
                     .HasForeignKey(d => d.ClientCategoryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CLIENTS_CLIENT_CATEGORIES");
 
                 entity.HasOne(d => d.ClientStatus)
