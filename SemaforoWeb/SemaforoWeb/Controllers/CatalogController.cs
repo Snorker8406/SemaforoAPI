@@ -11,6 +11,10 @@ using System;
 using System.Collections.Generic;
 using Semaforo.Logic;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
+using System.Linq;
+using System.IO;
+using System.Reflection;
 
 namespace SemaforoWeb.Controllers
 {
@@ -100,19 +104,22 @@ namespace SemaforoWeb.Controllers
 
         //PUT api/<ClientController>/5
         [HttpPut("{entity}/{id}")]
-        public async Task<IActionResult> PutItem(int id, object dto, string entity)
+        public async Task<IActionResult> PutItem(int id, [FromForm] string dto, string entity, [FromForm(Name = "imageProfile")] IFormFile imageProfile )
         {
             try
             {
                 Type typeBO = Type.GetType("Semaforo.Logic.BO." + entity + "BO, Semaforo.Logic");
                 Type typeDTO = Type.GetType("SemaforoWeb.DTO.CatalogsDTO." + entity + "DTO, SemaforoWeb");
                 var itemDTO = JsonConvert.DeserializeObject(dto.ToString(), typeDTO);
+                if (imageProfile != null)
+                {
+                    typeDTO.GetProperty("ProfileImage").SetValue(itemDTO, imageProfile);
+                }
                 var itemBO = _mapper.Map(itemDTO, typeDTO, typeBO);
                 if (id != (int)typeBO.GetProperty(entity + "Id").GetValue(itemBO))
                 {
                     return BadRequest("information inconsistent");
                 }
-
                 dynamic response = await _services[entity].updateEntity(itemBO);
                 if (typeBO.GetProperty(entity + "Id").GetValue(response) > 0)
                 {

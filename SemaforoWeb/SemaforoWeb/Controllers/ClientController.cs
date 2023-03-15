@@ -82,7 +82,7 @@ namespace SemaforoWeb.Controllers
             client.Whatsapp = clientDto.Whatsapp;
             client.Facebook = clientDto.Facebook;
             client.Email = clientDto.Email;
-            client.ProfileImage = clientDto.ProfileImage;
+            //client.ProfileImage = clientDto.ProfileImage;
             client.Comments = clientDto.Comments;
 
 

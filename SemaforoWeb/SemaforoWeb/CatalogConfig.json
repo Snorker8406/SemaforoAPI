@@ -279,14 +279,6 @@
                 "validationPattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$"
             },
             {
-                "key": "profileImage",
-                "label": "Perfil",
-                "type": "image",
-                "isColumn": false,
-                "isInForm": true,
-                "size": 2
-            },
-            {
                 "key": "Employees_Options",
                 "label": "Empleado",
                 "type": "select",
@@ -320,12 +312,20 @@
                 "size": 2
             },
             {
+                "key": "profileImage",
+                "label": "Perfil",
+                "type": "image",
+                "isColumn": false,
+                "isInForm": true,
+                "size": 5
+            },
+            {
                 "key": "comments",
                 "label": "Comentarios",
                 "type": "textarea",
                 "isColumn": false,
                 "isInForm": true,
-                "size": 12
+                "size": 6
             }
         ],
         "label": "Clientes",

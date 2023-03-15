@@ -21,6 +21,7 @@ import {
 import { dataItem, dataColumn } from '../../types'
 import useFetch from '../Utils/useFetch'
 import { useForm } from 'react-hook-form'
+import { FileUpload } from './FileUploader'
 
 export interface EditItemProps extends HTMLAttributes<HTMLDivElement> {
   visible: boolean
@@ -87,9 +88,15 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
     const saveChanges = (formData: any) => {
       formData[itemIdField as dataItemKey] =
         itemData[itemIdField as dataItemKey]
+      debugger
+      // formData.profileImage = formData.profileImage[0]
+      const formData1 = new FormData()
+      formData1.append('imageProfile', formData.profileImage[0])
+      formData.profileImage = ''
+      formData1.append('dto', JSON.stringify({ ...formData }))
       saveItem(
         isNewItem ? '' : itemData[itemIdField as dataItemKey],
-        formData,
+        formData1,
         isNewItem ? 'POST' : 'PUT',
       )
     }
@@ -146,6 +153,8 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
               rows={2}
             />
           )
+        case 'image':
+          return <FileUpload itemData={itemData} f={f} register={register} />
         default:
           return (
             <CFormInput

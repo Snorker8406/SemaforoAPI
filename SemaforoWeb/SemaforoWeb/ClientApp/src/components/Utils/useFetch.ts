@@ -7,7 +7,7 @@ const useFetch = (APIurl: string, httpRequest?: string) => {
 
   const triggerFetch = async (
     item?: string,
-    payload?: dataItem,
+    payload?: FormData,
     tHttpRequest?: string,
     tAPIurl?: string,
   ) => {
@@ -24,7 +24,8 @@ const useFetch = (APIurl: string, httpRequest?: string) => {
         headers: { 'Content-Type': 'application/json' },
       }
       if (http === 'POST' || (item && http === 'PUT')) {
-        options.body = JSON.stringify(payload ? payload : '')
+        options.body = payload ? payload : ''
+        options.headers = { enctype: 'multipart/form-data' }
       }
 
       const fetchData = async () => {

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Semaforo.Logic.BO;
 using Semaforo.Logic.Models;
 using SemaforoWeb.DTO;
@@ -6,6 +7,7 @@ using SemaforoWeb.DTO.CatalogsDTO;
 using SemaforoWeb.DTO.CatalogsDTO.Catalogs;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,6 +15,13 @@ namespace SemaforoWeb.Profiles
 {
     public class MapProfiles : Profile
     {
+        private byte[] mapFile(IFormFile file) {
+            using (var stream = new MemoryStream())
+            {
+                file.CopyTo(stream);
+                return stream.ToArray();
+            }
+        }
         public MapProfiles()
         {
             CreateMap<Provider, ProviderBO>();
@@ -26,9 +35,9 @@ namespace SemaforoWeb.Profiles
             CreateMap<ClientBO, Client>()
                 .ForMember(dest => dest.LastModify, opt => opt.MapFrom(src => DateTime.UtcNow));
             CreateMap<ClientBO, ClientDTO>()
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName));
-            CreateMap<ClientDTO, ClientBO>();
+                .ForMember(dest => dest.ProfileImage, opt => opt.MapFrom(src => src.ProfileImage.Length > 0? src.ProfileImage : null ));
+            CreateMap<ClientDTO, ClientBO>()
+                .ForMember(dest => dest.ProfileImage, opt => opt.MapFrom(src => mapFile(src.ProfileImage)));
 
             CreateMap<ClientCategory, ClientCategoryBO>();
             CreateMap<ClientCategoryBO, ClientCategory>();
