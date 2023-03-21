@@ -15,7 +15,7 @@ namespace Semaforo.Logic.Models
         public int ProductPictureId { get; set; }
         public int ProductId { get; set; }
         public byte[] Picture { get; set; }
-        public DateTime? CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }
 
         public virtual Product Product { get; set; }
         public virtual ICollection<Product> Products { get; set; }

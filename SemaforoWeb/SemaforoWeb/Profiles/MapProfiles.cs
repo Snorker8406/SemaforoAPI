@@ -16,6 +16,7 @@ namespace SemaforoWeb.Profiles
     public class MapProfiles : Profile
     {
         private byte[] mapFile(IFormFile file) {
+            if (file == null) return null;
             using (var stream = new MemoryStream())
             {
                 file.CopyTo(stream);
@@ -35,9 +36,9 @@ namespace SemaforoWeb.Profiles
             CreateMap<ClientBO, Client>()
                 .ForMember(dest => dest.LastModify, opt => opt.MapFrom(src => DateTime.UtcNow));
             CreateMap<ClientBO, ClientDTO>()
-                .ForMember(dest => dest.ProfileImage, opt => opt.MapFrom(src => src.ProfileImage.Length > 0? src.ProfileImage : null ));
+                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.ProfileImage.Length > 0? src.ProfileImage : null ));
             CreateMap<ClientDTO, ClientBO>()
-                .ForMember(dest => dest.ProfileImage, opt => opt.MapFrom(src => mapFile(src.ProfileImage)));
+                .ForMember(dest => dest.ProfileImage, opt => opt.MapFrom(src => mapFile(src.Image)));
 
             CreateMap<ClientCategory, ClientCategoryBO>();
             CreateMap<ClientCategoryBO, ClientCategory>();

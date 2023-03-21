@@ -10,6 +10,7 @@ namespace Semaforo.Logic.Models
         public Account()
         {
             AccountPayments = new HashSet<AccountPayment>();
+            Files = new HashSet<File>();
         }
 
         public int AccountId { get; set; }
@@ -33,5 +34,6 @@ namespace Semaforo.Logic.Models
         public virtual Sale Sale { get; set; }
         public virtual Site Site { get; set; }
         public virtual ICollection<AccountPayment> AccountPayments { get; set; }
+        public virtual ICollection<File> Files { get; set; }
     }
 }

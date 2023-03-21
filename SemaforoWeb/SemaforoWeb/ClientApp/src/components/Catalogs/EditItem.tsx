@@ -85,18 +85,21 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       return str.charAt(0).toLowerCase() + str.slice(1)
     }
 
-    const saveChanges = (formData: any) => {
-      formData[itemIdField as dataItemKey] =
-        itemData[itemIdField as dataItemKey]
-      debugger
-      // formData.profileImage = formData.profileImage[0]
-      const formData1 = new FormData()
-      formData1.append('imageProfile', formData.profileImage[0])
-      formData.profileImage = ''
-      formData1.append('dto', JSON.stringify({ ...formData }))
+    const saveChanges = (data: any) => {
+      const formData = new FormData()
+      if (data.image) {
+        formData.append('image', data.image[0])
+        data.image = ''
+      }
+      if (data.images) {
+        for (const img of data.images) {
+          formData.append('images', img)
+        }
+      }
+      formData.append('dto', JSON.stringify({ ...data }))
       saveItem(
         isNewItem ? '' : itemData[itemIdField as dataItemKey],
-        formData1,
+        formData,
         isNewItem ? 'POST' : 'PUT',
       )
     }

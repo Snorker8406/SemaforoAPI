@@ -10,6 +10,7 @@ namespace Semaforo.Logic.Models
         public Client()
         {
             Accounts = new HashSet<Account>();
+            Files = new HashSet<File>();
             Sales = new HashSet<Sale>();
         }
 
@@ -39,6 +40,7 @@ namespace Semaforo.Logic.Models
         public virtual ClientStatus ClientStatus { get; set; }
         public virtual Employee Employee { get; set; }
         public virtual ICollection<Account> Accounts { get; set; }
+        public virtual ICollection<File> Files { get; set; }
         public virtual ICollection<Sale> Sales { get; set; }
     }
 }

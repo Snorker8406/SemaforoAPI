@@ -10,6 +10,7 @@ namespace Semaforo.Logic.Models
         public School()
         {
             Embroideries = new HashSet<Embroidery>();
+            Files = new HashSet<File>();
             ProductSchools = new HashSet<ProductSchool>();
         }
 
@@ -28,6 +29,7 @@ namespace Semaforo.Logic.Models
 
         public virtual SchoolLevel SchoolLevel { get; set; }
         public virtual ICollection<Embroidery> Embroideries { get; set; }
+        public virtual ICollection<File> Files { get; set; }
         public virtual ICollection<ProductSchool> ProductSchools { get; set; }
     }
 }

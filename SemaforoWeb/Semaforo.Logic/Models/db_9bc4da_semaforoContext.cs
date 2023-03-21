@@ -31,6 +31,7 @@ namespace Semaforo.Logic.Models
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<EmployeeSalary> EmployeeSalaries { get; set; }
         public virtual DbSet<EmployeeSchedule> EmployeeSchedules { get; set; }
+        public virtual DbSet<File> Files { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductCategory> ProductCategories { get; set; }
         public virtual DbSet<ProductCombo> ProductCombos { get; set; }
@@ -40,6 +41,8 @@ namespace Semaforo.Logic.Models
         public virtual DbSet<ProductProvider> ProductProviders { get; set; }
         public virtual DbSet<ProductSchool> ProductSchools { get; set; }
         public virtual DbSet<Provider> Providers { get; set; }
+        public virtual DbSet<ProviderAccount> ProviderAccounts { get; set; }
+        public virtual DbSet<ProviderAccountPayment> ProviderAccountPayments { get; set; }
         public virtual DbSet<Sale> Sales { get; set; }
         public virtual DbSet<SalesDetail> SalesDetails { get; set; }
         public virtual DbSet<SalesType> SalesTypes { get; set; }
@@ -94,7 +97,8 @@ namespace Semaforo.Logic.Models
 
                 entity.Property(e => e.OpeningDate)
                     .HasColumnType("datetime")
-                    .HasColumnName("Opening_Date");
+                    .HasColumnName("Opening_Date")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.SaleId).HasColumnName("Sale_ID");
 
@@ -159,11 +163,10 @@ namespace Semaforo.Logic.Models
 
                 entity.Property(e => e.PaymentDate)
                     .HasColumnType("datetime")
-                    .HasColumnName("Payment_Date");
+                    .HasColumnName("Payment_Date")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.SiteId).HasColumnName("Site_ID");
-
-                entity.Property(e => e.UserId).HasColumnName("User_ID");
 
                 entity.HasOne(d => d.Account)
                     .WithMany(p => p.AccountPayments)
@@ -261,7 +264,8 @@ namespace Semaforo.Logic.Models
 
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
-                    .HasColumnName("Create_Date");
+                    .HasColumnName("Create_Date")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.Description)
                     .HasMaxLength(250)
@@ -461,11 +465,14 @@ namespace Semaforo.Logic.Models
                     .HasMaxLength(10)
                     .UseCollation("Modern_Spanish_CI_AS");
 
-                entity.Property(e => e.Comments).UseCollation("Modern_Spanish_CI_AS");
+                entity.Property(e => e.Comments)
+                    .HasMaxLength(500)
+                    .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
-                    .HasColumnName("Create_Date");
+                    .HasColumnName("Create_Date")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.Email).HasMaxLength(100);
 
@@ -570,6 +577,77 @@ namespace Semaforo.Logic.Models
                     .HasConstraintName("FK_EMPLOYEE_SCHEDULE_EMPLOYEES");
             });
 
+            modelBuilder.Entity<File>(entity =>
+            {
+                entity.ToTable("FILES");
+
+                entity.Property(e => e.FileId).HasColumnName("File_ID");
+
+                entity.Property(e => e.AccountId).HasColumnName("Account_ID");
+
+                entity.Property(e => e.Archive).IsRequired();
+
+                entity.Property(e => e.ClientId).HasColumnName("Client_ID");
+
+                entity.Property(e => e.Comments).HasMaxLength(500);
+
+                entity.Property(e => e.CreateDate)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .HasColumnName("Create_Date")
+                    .HasDefaultValueSql("(getdate())")
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.EmployeeId).HasColumnName("Employee_ID");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.ProviderAccountId).HasColumnName("Provider_Account_ID");
+
+                entity.Property(e => e.ProviderAccountPaymentId).HasColumnName("Provider_Account_Payment_ID");
+
+                entity.Property(e => e.ProviderId).HasColumnName("Provider_ID");
+
+                entity.Property(e => e.SchoolId).HasColumnName("School_ID");
+
+                entity.HasOne(d => d.Account)
+                    .WithMany(p => p.Files)
+                    .HasForeignKey(d => d.AccountId)
+                    .HasConstraintName("FK_FILES_ACCOUNTS");
+
+                entity.HasOne(d => d.Client)
+                    .WithMany(p => p.Files)
+                    .HasForeignKey(d => d.ClientId)
+                    .HasConstraintName("FK_FILES_CLIENTS");
+
+                entity.HasOne(d => d.Employee)
+                    .WithMany(p => p.Files)
+                    .HasForeignKey(d => d.EmployeeId)
+                    .HasConstraintName("FK_FILES_EMPLOYEES");
+
+                entity.HasOne(d => d.ProviderAccount)
+                    .WithMany(p => p.Files)
+                    .HasForeignKey(d => d.ProviderAccountId)
+                    .HasConstraintName("FK_FILES_PROVIDER_ACCOUNT");
+
+                entity.HasOne(d => d.ProviderAccountPayment)
+                    .WithMany(p => p.Files)
+                    .HasForeignKey(d => d.ProviderAccountPaymentId)
+                    .HasConstraintName("FK_FILES_PROVIDER_ACCOUNT_PAYMENTS");
+
+                entity.HasOne(d => d.Provider)
+                    .WithMany(p => p.Files)
+                    .HasForeignKey(d => d.ProviderId)
+                    .HasConstraintName("FK_FILES_PROVIDERS");
+
+                entity.HasOne(d => d.School)
+                    .WithMany(p => p.Files)
+                    .HasForeignKey(d => d.SchoolId)
+                    .HasConstraintName("FK_FILES_SCHOOLS");
+            });
+
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.ToTable("PRODUCTS");
@@ -586,7 +664,8 @@ namespace Semaforo.Logic.Models
 
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
-                    .HasColumnName("Create_Date");
+                    .HasColumnName("Create_Date")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.Description)
                     .HasMaxLength(250)
@@ -688,7 +767,8 @@ namespace Semaforo.Logic.Models
 
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("date")
-                    .HasColumnName("Create_Date");
+                    .HasColumnName("Create_Date")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.Picture).HasColumnType("image");
 
@@ -809,6 +889,77 @@ namespace Semaforo.Logic.Models
                 entity.Property(e => e.Website).HasMaxLength(250);
 
                 entity.Property(e => e.Whatsapp).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ProviderAccount>(entity =>
+            {
+                entity.ToTable("PROVIDER_ACCOUNT");
+
+                entity.Property(e => e.ProviderAccountId).HasColumnName("Provider_Account_ID");
+
+                entity.Property(e => e.Amount).HasColumnType("money");
+
+                entity.Property(e => e.Balance).HasColumnType("money");
+
+                entity.Property(e => e.EmployeeId).HasColumnName("Employee_ID");
+
+                entity.Property(e => e.Name).HasMaxLength(150);
+
+                entity.Property(e => e.Notes).HasMaxLength(1000);
+
+                entity.Property(e => e.OpeningDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("Opening_Date")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ProviderId).HasColumnName("Provider_ID");
+
+                entity.Property(e => e.SettlementDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("Settlement_Date");
+
+                entity.HasOne(d => d.Employee)
+                    .WithMany(p => p.ProviderAccounts)
+                    .HasForeignKey(d => d.EmployeeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PROVIDER_ACCOUNT_EMPLOYEES");
+
+                entity.HasOne(d => d.Provider)
+                    .WithMany(p => p.ProviderAccounts)
+                    .HasForeignKey(d => d.ProviderId)
+                    .HasConstraintName("FK_PROVIDER_ACCOUNT_PROVIDERS");
+            });
+
+            modelBuilder.Entity<ProviderAccountPayment>(entity =>
+            {
+                entity.ToTable("PROVIDER_ACCOUNT_PAYMENTS");
+
+                entity.Property(e => e.ProviderAccountPaymentId).HasColumnName("Provider_Account_Payment_ID");
+
+                entity.Property(e => e.Amount).HasColumnType("money");
+
+                entity.Property(e => e.EmployeeId).HasColumnName("Employee_ID");
+
+                entity.Property(e => e.Notes).HasMaxLength(500);
+
+                entity.Property(e => e.PaymentDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("Payment_Date")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ProviderAccountId).HasColumnName("Provider_Account_ID");
+
+                entity.HasOne(d => d.Employee)
+                    .WithMany(p => p.ProviderAccountPayments)
+                    .HasForeignKey(d => d.EmployeeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PROVIDER_ACCOUNT_PAYMENTS_EMPLOYEES");
+
+                entity.HasOne(d => d.ProviderAccount)
+                    .WithMany(p => p.ProviderAccountPayments)
+                    .HasForeignKey(d => d.ProviderAccountId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PROVIDER_ACCOUNT_PAYMENTS_PROVIDER_ACCOUNT");
             });
 
             modelBuilder.Entity<Sale>(entity =>
@@ -1055,7 +1206,8 @@ namespace Semaforo.Logic.Models
 
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
-                    .HasColumnName("Create_Date");
+                    .HasColumnName("Create_Date")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.PriceSpecial)
                     .HasColumnType("money")

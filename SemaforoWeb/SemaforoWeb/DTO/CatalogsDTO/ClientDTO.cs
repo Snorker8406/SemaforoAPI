@@ -26,7 +26,7 @@ namespace SemaforoWeb.DTO.CatalogsDTO
         public bool Whatsapp { get; set; }
         public string Facebook { get; set; }
         public string Email { get; set; }
-        public IFormFile ProfileImage { get; set; }
+        public IFormFile Image { get; set; }
         public string Comments { get; set; }
     }
 }

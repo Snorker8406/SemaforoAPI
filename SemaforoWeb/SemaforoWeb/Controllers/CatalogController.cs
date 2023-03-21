@@ -104,16 +104,30 @@ namespace SemaforoWeb.Controllers
 
         //PUT api/<ClientController>/5
         [HttpPut("{entity}/{id}")]
-        public async Task<IActionResult> PutItem(int id, [FromForm] string dto, string entity, [FromForm(Name = "imageProfile")] IFormFile imageProfile )
+        public async Task<IActionResult> PutItem(
+            int id,
+            string entity,
+            [FromForm] string dto,
+            [FromForm(Name = "image")] IFormFile image,
+            [FromForm(Name = "images")] List<IFormFile> images,
+            [FromForm(Name = "files")] List<IFormFile> files)
         {
             try
             {
                 Type typeBO = Type.GetType("Semaforo.Logic.BO." + entity + "BO, Semaforo.Logic");
                 Type typeDTO = Type.GetType("SemaforoWeb.DTO.CatalogsDTO." + entity + "DTO, SemaforoWeb");
                 var itemDTO = JsonConvert.DeserializeObject(dto.ToString(), typeDTO);
-                if (imageProfile != null)
+                if (image != null)
                 {
-                    typeDTO.GetProperty("ProfileImage").SetValue(itemDTO, imageProfile);
+                    typeDTO.GetProperty("Image").SetValue(itemDTO, image);
+                }
+                if (images.Count > 0)
+                {
+                    typeDTO.GetProperty("Images").SetValue(itemDTO, images);
+                }
+                if (files.Count > 0)
+                {
+                    typeDTO.GetProperty("Files").SetValue(itemDTO, files);
                 }
                 var itemBO = _mapper.Map(itemDTO, typeDTO, typeBO);
                 if (id != (int)typeBO.GetProperty(entity + "Id").GetValue(itemBO))

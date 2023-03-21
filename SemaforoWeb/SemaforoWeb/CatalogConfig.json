@@ -312,7 +312,7 @@
                 "size": 2
             },
             {
-                "key": "profileImage",
+                "key": "image",
                 "label": "Perfil",
                 "type": "image",
                 "isColumn": false,

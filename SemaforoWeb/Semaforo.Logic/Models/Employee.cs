@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -16,6 +15,9 @@ namespace Semaforo.Logic.Models
             Clients = new HashSet<Client>();
             EmployeeSalaries = new HashSet<EmployeeSalary>();
             EmployeeSchedules = new HashSet<EmployeeSchedule>();
+            Files = new HashSet<File>();
+            ProviderAccountPayments = new HashSet<ProviderAccountPayment>();
+            ProviderAccounts = new HashSet<ProviderAccount>();
             Sales = new HashSet<Sale>();
         }
 
@@ -26,7 +28,7 @@ namespace Semaforo.Logic.Models
         public string SecondLastName { get; set; }
         public DateTime? Birthdate { get; set; }
         public string Gender { get; set; }
-        public DateTime? CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public byte[] Photo { get; set; }
@@ -49,6 +51,9 @@ namespace Semaforo.Logic.Models
         public virtual ICollection<Client> Clients { get; set; }
         public virtual ICollection<EmployeeSalary> EmployeeSalaries { get; set; }
         public virtual ICollection<EmployeeSchedule> EmployeeSchedules { get; set; }
+        public virtual ICollection<File> Files { get; set; }
+        public virtual ICollection<ProviderAccountPayment> ProviderAccountPayments { get; set; }
+        public virtual ICollection<ProviderAccount> ProviderAccounts { get; set; }
         public virtual ICollection<Sale> Sales { get; set; }
     }
 }

@@ -7,6 +7,12 @@ namespace Semaforo.Logic.Models
 {
     public partial class Provider
     {
+        public Provider()
+        {
+            Files = new HashSet<File>();
+            ProviderAccounts = new HashSet<ProviderAccount>();
+        }
+
         public int ProviderId { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
@@ -18,5 +24,8 @@ namespace Semaforo.Logic.Models
         public string Whatsapp { get; set; }
         public string Website { get; set; }
         public byte[] Image { get; set; }
+
+        public virtual ICollection<File> Files { get; set; }
+        public virtual ICollection<ProviderAccount> ProviderAccounts { get; set; }
     }
 }
