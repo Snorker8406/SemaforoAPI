@@ -14,6 +14,7 @@ export type dataColumn = {
   required?: boolean
   validationPattern?: string
   size?: number
+  rows?: number
   selectEntity?: string
   selectKey?: string
   selectOption?: string

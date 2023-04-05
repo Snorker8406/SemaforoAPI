@@ -16,6 +16,7 @@ namespace SemaforoWeb.DTO.CatalogsDTO
         public bool Required { get; set; }
         public string ValidationPattern { get; set; }
         public int Size { get; set; }
+        public int Rows { get; set; }
         public string SelectKey { get; set; }
         public string SelectOption { get; set; }
         public string SelectEntity { get; set; }

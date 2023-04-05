@@ -81,18 +81,28 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       itemHasBeenUpdated(true)
     }, [saveResponse])
 
+    const [files, setFiles] = useState([])
+    const [images, setImages] = useState([])
+
     const toLower = (str: string) => {
       return str.charAt(0).toLowerCase() + str.slice(1)
     }
 
+    const onFileAdded = ({ meta, file }: never, status: string) => {
+      if (status === 'done') {
+        setImages([...images, file])
+      }
+      console.log(status, meta, file)
+    }
+
     const saveChanges = (data: any) => {
       const formData = new FormData()
-      if (data.image) {
-        formData.append('image', data.image[0])
+      if (images.length > 0) {
+        formData.append('image', images[0])
         data.image = ''
       }
-      if (data.images) {
-        for (const img of data.images) {
+      if (images.length > 1) {
+        for (const img of images) {
           formData.append('images', img)
         }
       }
@@ -153,11 +163,20 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
             <CFormTextarea
               {...register(toLower(f.key))}
               id={'textarea-' + f.key}
-              rows={2}
+              rows={f.rows}
             />
           )
         case 'image':
-          return <FileUpload itemData={itemData} f={f} register={register} />
+        case 'images':
+        case 'files':
+          return (
+            <FileUpload
+              itemData={itemData}
+              f={f}
+              register={register}
+              handleChangeStatus={onFileAdded}
+            />
+          )
         default:
           return (
             <CFormInput

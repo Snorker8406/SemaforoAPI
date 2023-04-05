@@ -152,182 +152,184 @@
         ],
         "label": "Marcas",
         "icon": "",
-        "description": "Catalogo de MArcas"
+        "description": "Catalogo de Marcas"
     },
     "Client": {
         "tableName": "Clients",
-        "columns": [
-            {
-                "key": "clientId",
-                "label": "ID",
-                "type": "int",
-                "isColumn": true,
-                "isInForm": true,
-                "isPrimaryKey": true
-            },
-            {
-                "key": "name",
-                "label": "Nombre",
-                "type": "string",
-                "isColumn": false,
-                "isInForm": true,
-                "size": 3
-            },
-            {
-                "key": "lastName",
-                "label": "Apellido Paterno",
-                "type": "string",
-                "isColumn": false,
-                "isInForm": true,
-                "size": 3
-            },
-            {
-                "key": "lastNameMother",
-                "label": "Apellido Materno",
-                "type": "string",
-                "isColumn": false,
-                "isInForm": true,
-                "size": 3
-            },
-            {
-                "key": "employeeName",
-                "label": "Empleado",
-                "type": "string",
-                "isColumn": false,
-                "isInForm": false
-            },
-            {
-                "key": "fullName",
-                "label": "Nombre",
-                "type": "string",
-                "isColumn": true,
-                "isInForm": false
-            },
-            {
-                "key": "gender",
-                "label": "Genero",
-                "type": "string",
-                "isColumn": false,
-                "isInForm": false
-            },{
-                "key": "cellphone",
-                "label": "Celular",
-                "type": "string",
-                "isColumn": true,
-                "isInForm": true,
-                "size": 2
-            },
-            {
-                "key": "whatsapp",
-                "label": "Whatsapp",
-                "type": "boolean",
-                "isColumn": false,
-                "isInForm": true,
-                "size": 1
-            },
-            {
-                "key": "address",
-                "label": "Direccion",
-                "type": "string",
-                "isColumn": true,
-                "isInForm": true,
-                "size": 12,
-                "required": true
-            },
-            
-            {
-                "key": "accountDaysLimit",
-                "label": "Dias Limite",
-                "type": "number",
-                "isColumn": false,
-                "isInForm": true,
-                "size": 2,
-                "defaultValue": 30
-            },
-            {
-                "key": "accountAmountLimit",
-                "label": "Monto Limite",
-                "type": "money",
-                "isColumn": false,
-                "isInForm": true,
-                "size": 2,
-                "defaultValue": 1000
-            },
-            {
-                "key": "facebookName",
-                "label": "Facebook",
-                "type": "string",
-                "isColumn": true,
-                "isInForm": true,
-                "size": 2
-            },
-            {
-                "key": "facebook",
-                "label": "Facebook Link",
-                "type": "string",
-                "isColumn": false,
-                "isInForm": true,
-                "size": 3
-            },
-            {
-                "key": "email",
-                "label": "Email",
-                "type": "string",
-                "isColumn": true,
-                "isInForm": true,
-                "size": 3,
-                "validationPattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$"
-            },
-            {
-                "key": "Employees_Options",
-                "label": "Empleado",
-                "type": "select",
-                "isColumn": false,
-                "isInForm": true,
-                "selectEntity": "Employees",
-                "selectKey": "EmployeeId",
-                "selectOption": "Name",
-                "size": 3
-            },
-            {
-                "key": "ClientStatuses_Options",
-                "label": "Status",
-                "type": "select",
-                "isColumn": false,
-                "isInForm": true,
-                "selectEntity": "ClientStatuses",
-                "selectKey": "ClientStatusId",
-                "selectOption": "Status",
-                "size": 2
-            },
-            {
-                "key": "ClientCategories_Options",
-                "label": "Categoria",
-                "type": "select",
-                "isColumn": false,
-                "isInForm": true,
-                "selectEntity": "ClientCategories",
-                "selectKey": "ClientCategoryId",
-                "selectOption": "CategoryName",
-                "size": 2
-            },
-            {
-                "key": "image",
-                "label": "Perfil",
-                "type": "image",
-                "isColumn": false,
-                "isInForm": true,
-                "size": 5
-            },
-            {
-                "key": "comments",
-                "label": "Comentarios",
-                "type": "textarea",
-                "isColumn": false,
-                "isInForm": true,
-                "size": 6
-            }
-        ],
+      "columns": [
+        {
+          "key": "clientId",
+          "label": "ID",
+          "type": "int",
+          "isColumn": true,
+          "isInForm": true,
+          "isPrimaryKey": true
+        },
+        {
+          "key": "name",
+          "label": "Nombre",
+          "type": "string",
+          "isColumn": false,
+          "isInForm": true,
+          "size": 3
+        },
+        {
+          "key": "lastName",
+          "label": "Apellido Paterno",
+          "type": "string",
+          "isColumn": false,
+          "isInForm": true,
+          "size": 3
+        },
+        {
+          "key": "lastNameMother",
+          "label": "Apellido Materno",
+          "type": "string",
+          "isColumn": false,
+          "isInForm": true,
+          "size": 3
+        },
+        {
+          "key": "employeeName",
+          "label": "Empleado",
+          "type": "string",
+          "isColumn": false,
+          "isInForm": false
+        },
+        {
+          "key": "fullName",
+          "label": "Nombre",
+          "type": "string",
+          "isColumn": true,
+          "isInForm": false
+        },
+        {
+          "key": "gender",
+          "label": "Genero",
+          "type": "string",
+          "isColumn": false,
+          "isInForm": false
+        },
+        {
+          "key": "cellphone",
+          "label": "Celular",
+          "type": "string",
+          "isColumn": true,
+          "isInForm": true,
+          "size": 2
+        },
+        {
+          "key": "whatsapp",
+          "label": "Whatsapp",
+          "type": "boolean",
+          "isColumn": false,
+          "isInForm": true,
+          "size": 1
+        },
+        {
+          "key": "address",
+          "label": "Direccion",
+          "type": "string",
+          "isColumn": true,
+          "isInForm": true,
+          "size": 12,
+          "required": true
+        },
+
+        {
+          "key": "accountDaysLimit",
+          "label": "Dias Limite",
+          "type": "number",
+          "isColumn": false,
+          "isInForm": true,
+          "size": 2,
+          "defaultValue": 30
+        },
+        {
+          "key": "accountAmountLimit",
+          "label": "Monto Limite",
+          "type": "money",
+          "isColumn": false,
+          "isInForm": true,
+          "size": 2,
+          "defaultValue": 1000
+        },
+        {
+          "key": "facebookName",
+          "label": "Facebook",
+          "type": "string",
+          "isColumn": true,
+          "isInForm": true,
+          "size": 2
+        },
+        {
+          "key": "facebook",
+          "label": "Facebook Link",
+          "type": "string",
+          "isColumn": false,
+          "isInForm": true,
+          "size": 3
+        },
+        {
+          "key": "email",
+          "label": "Email",
+          "type": "string",
+          "isColumn": true,
+          "isInForm": true,
+          "size": 3,
+          "validationPattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$"
+        },
+        {
+          "key": "Employees_Options",
+          "label": "Empleado",
+          "type": "select",
+          "isColumn": false,
+          "isInForm": true,
+          "selectEntity": "Employees",
+          "selectKey": "EmployeeId",
+          "selectOption": "Name",
+          "size": 4
+        },
+        {
+          "key": "ClientStatuses_Options",
+          "label": "Status",
+          "type": "select",
+          "isColumn": false,
+          "isInForm": true,
+          "selectEntity": "ClientStatuses",
+          "selectKey": "ClientStatusId",
+          "selectOption": "Status",
+          "size": 4
+        },
+        {
+          "key": "ClientCategories_Options",
+          "label": "Categoria",
+          "type": "select",
+          "isColumn": false,
+          "isInForm": true,
+          "selectEntity": "ClientCategories",
+          "selectKey": "ClientCategoryId",
+          "selectOption": "CategoryName",
+          "size": 4
+        },
+        {
+          "key": "ProfileImage",
+          "label": "Perfil",
+          "type": "image",
+          "isColumn": false,
+          "isInForm": true,
+          "size": 6
+        },
+        {
+          "key": "comments",
+          "label": "Comentarios",
+          "type": "textarea",
+          "isColumn": false,
+          "isInForm": true,
+          "size": 6,
+          "rows": 4
+        }
+      ],
         "label": "Clientes",
         "icon": "",
         "description": "Catalogo de Clientes"
