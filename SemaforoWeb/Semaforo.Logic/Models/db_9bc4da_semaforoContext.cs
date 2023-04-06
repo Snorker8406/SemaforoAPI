@@ -307,7 +307,8 @@ namespace Semaforo.Logic.Models
 
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
-                    .HasColumnName("Create_Date");
+                    .HasColumnName("Create_Date")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.Email)
                     .HasMaxLength(100)
@@ -592,13 +593,13 @@ namespace Semaforo.Logic.Models
                 entity.Property(e => e.Comments).HasMaxLength(500);
 
                 entity.Property(e => e.CreateDate)
-                    .IsRequired()
-                    .HasMaxLength(10)
+                    .HasColumnType("datetime")
                     .HasColumnName("Create_Date")
-                    .HasDefaultValueSql("(getdate())")
-                    .IsFixedLength(true);
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.EmployeeId).HasColumnName("Employee_ID");
+
+                entity.Property(e => e.Extension).HasMaxLength(10);
 
                 entity.Property(e => e.Name)
                     .IsRequired()

@@ -17,8 +17,9 @@ namespace Semaforo.Logic.Models
         public int? ProviderAccountPaymentId { get; set; }
         public string Comments { get; set; }
         public string Name { get; set; }
+        public string Extension { get; set; }
         public byte[] Archive { get; set; }
-        public string CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }
 
         public virtual Account Account { get; set; }
         public virtual Client Client { get; set; }
