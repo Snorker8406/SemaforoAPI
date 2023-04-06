@@ -44,7 +44,7 @@ namespace Semaforo.Logic.Models
         public bool Active { get; set; }
         public string Comments { get; set; }
 
-        public virtual AspNetUser AppUser { get; set; }
+        public virtual ApplicationUser AppUser { get; set; }
         public virtual ICollection<AccountPayment> AccountPayments { get; set; }
         public virtual ICollection<Account> Accounts { get; set; }
         public virtual ICollection<Attendance> Attendances { get; set; }
