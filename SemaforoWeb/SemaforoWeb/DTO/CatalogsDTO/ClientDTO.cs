@@ -27,6 +27,7 @@ namespace SemaforoWeb.DTO.CatalogsDTO
         public string Facebook { get; set; }
         public string Email { get; set; }
         public IFormFile Image { get; set; }
+        public List<FileDTO> Files { get; set; }
         public string Comments { get; set; }
     }
 }

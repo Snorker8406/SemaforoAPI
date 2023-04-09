@@ -1,5 +1,5 @@
 import React, { forwardRef, HTMLAttributes } from 'react'
-import PropTypes from 'prop-types'
+import PropTypes, { any } from 'prop-types'
 import { dataColumn, dataItem } from '../../types'
 import 'react-dropzone-uploader/dist/styles.css'
 import Dropzone from 'react-dropzone-uploader'
@@ -8,13 +8,17 @@ export interface FileUploadProps extends HTMLAttributes<HTMLDivElement> {
   itemData: dataItem
   f: dataColumn
   register: any
-  handleChangeStatus: any
+  onChangeStatus: any
 }
 
 export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
-  ({ itemData, f, register, handleChangeStatus }, ref) => {
+  ({ itemData, f, register, onChangeStatus }, ref) => {
     const toLower = (str: string) => {
       return str.charAt(0).toLowerCase() + str.slice(1)
+    }
+
+    const handleChangeStatus = ({ meta, file }: never, status: string) => {
+      onChangeStatus({ meta, file }, status, f.type)
     }
 
     const renderImageUploader = () => {
@@ -44,7 +48,7 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
           key={'file-' + f.key}
           onChangeStatus={handleChangeStatus}
           styles={{
-            dropzone: { minHeight: 100, maxHeight: 150 },
+            dropzone: { minHeight: 111, maxHeight: 400 },
             dropzoneReject: { borderColor: 'red', backgroundColor: '#DAA' },
             inputLabel: (files, extra) =>
               extra.reject ? { color: 'red' } : {},
@@ -63,7 +67,7 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
           key={'file-' + f.key}
           onChangeStatus={handleChangeStatus}
           styles={{
-            dropzone: { minHeight: 100, maxHeight: 150 },
+            dropzone: { minHeight: 111, maxHeight: 400 },
             dropzoneReject: { borderColor: 'red', backgroundColor: '#DAA' },
             inputLabel: (files, extra) =>
               extra.reject ? { color: 'red' } : {},
@@ -89,7 +93,7 @@ FileUpload.propTypes = {
   itemData: PropTypes.any.isRequired,
   f: PropTypes.any.isRequired,
   register: PropTypes.func.isRequired,
-  handleChangeStatus: PropTypes.func.isRequired,
+  onChangeStatus: PropTypes.func.isRequired,
 }
 
 FileUpload.displayName = 'FileUpload'

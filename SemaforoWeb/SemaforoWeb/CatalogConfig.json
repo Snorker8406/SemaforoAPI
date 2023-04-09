@@ -328,6 +328,14 @@
           "isInForm": true,
           "size": 6,
           "rows": 4
+        },
+        {
+          "key": "Files",
+          "label": "Archivos",
+          "type": "files",
+          "isColumn": false,
+          "isInForm": true,
+          "size": 12
         }
       ],
         "label": "Clientes",

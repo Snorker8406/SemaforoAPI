@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -57,6 +58,29 @@ namespace Semaforo.Logic.Services
             }
             return bo;
         }
+
+        private void HandleFiles(T bo)
+        {
+            try
+            {
+                var props = typeof(BO).GetProperties().Select(p => p.Name).Where(p => p.IndexOf("Files") > -1);
+
+                if (props.Count() > 0)
+                {
+                    foreach (var field in props)
+                    {
+                        List<File> files = _mapper.Map<List<File>>(bo.GetType().GetProperty("Files").GetValue(bo, null));
+                        foreach (var file in files) {
+                            Context.Set<File>().Add(file);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         public CatalogService(db_9bc4da_semaforoContext context, IMapper mapper, ApplicationUserBO currentUser)
         {
             Context = context;
@@ -92,6 +116,7 @@ namespace Semaforo.Logic.Services
             try
             {
                 T entity = _mapper.Map<T>(BO);
+                HandleFiles(entity);
                 Context.Entry(entity).State = EntityState.Modified;
                 await Context.SaveChangesAsync();
                 BO response = _mapper.Map<BO>(entity);

@@ -127,7 +127,15 @@ namespace SemaforoWeb.Controllers
                 }
                 if (files.Count > 0)
                 {
-                    typeDTO.GetProperty("Files").SetValue(itemDTO, files);
+                    List<FileDTO> filesDTO = new List<FileDTO>();
+                    foreach (var file in files)
+                    {
+                        FileDTO fileDTO = new FileDTO();
+                        fileDTO.GetType().GetProperty(entity + "Id").SetValue(fileDTO, id);
+                        _mapper.Map(file, fileDTO);
+                        filesDTO.Add(fileDTO);
+                    }
+                    typeDTO.GetProperty("Files").SetValue(itemDTO, filesDTO);
                 }
                 var itemBO = _mapper.Map(itemDTO, typeDTO, typeBO);
                 if (id != (int)typeBO.GetProperty(entity + "Id").GetValue(itemBO))

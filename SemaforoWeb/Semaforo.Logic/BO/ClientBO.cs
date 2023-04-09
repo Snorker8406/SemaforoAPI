@@ -35,6 +35,7 @@ namespace  Semaforo.Logic.BO
         public string Facebook { get; set; }
         public string Email { get; set; }
         public byte[] ProfileImage { get; set; }
+        public List<FileBO> Files { get; set; }
         public string Comments { get; set; }
         public string EmployeeName { get; set; }
         public Dictionary<int, string> Employees_Options { get; set; }

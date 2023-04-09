@@ -6,10 +6,6 @@ using SemaforoWeb.DTO;
 using SemaforoWeb.DTO.CatalogsDTO;
 using SemaforoWeb.DTO.CatalogsDTO.Catalogs;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SemaforoWeb.Profiles
 {
@@ -17,7 +13,7 @@ namespace SemaforoWeb.Profiles
     {
         private byte[] mapFile(IFormFile file) {
             if (file == null) return null;
-            using (var stream = new MemoryStream())
+            using (var stream = new System.IO.MemoryStream())
             {
                 file.CopyTo(stream);
                 return stream.ToArray();
@@ -38,7 +34,8 @@ namespace SemaforoWeb.Profiles
             CreateMap<ClientBO, ClientDTO>()
                 .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.ProfileImage.Length > 0? src.ProfileImage : null ));
             CreateMap<ClientDTO, ClientBO>()
-                .ForMember(dest => dest.ProfileImage, opt => opt.MapFrom(src => mapFile(src.Image)));
+                .ForMember(dest => dest.ProfileImage, opt => opt.MapFrom(src => mapFile(src.Image)))
+                .ForMember(dest => dest.Files, opt => opt.MapFrom(src => src.Files));
 
             CreateMap<ClientCategory, ClientCategoryBO>();
             CreateMap<ClientCategoryBO, ClientCategory>();
@@ -101,6 +98,16 @@ namespace SemaforoWeb.Profiles
             CreateMap<ApplicationUserBO, EmployeeDTO>();
 
             
+            CreateMap<FileBO, File>();
+            CreateMap<File, FileBO>();
+            CreateMap<FileBO, FileDTO>();
+            CreateMap<FileDTO, FileBO>();
+            CreateMap<IFormFile, FileDTO>()
+                .ForMember(dest => dest.Archive, opt => opt.MapFrom(src => mapFile(src)))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FileName));
+                //.ForMember(dest => dest.Extension, opt => opt.MapFrom(src => src.ContentType));
+
+
         }
     }
 }

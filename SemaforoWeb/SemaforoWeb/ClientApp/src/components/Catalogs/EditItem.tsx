@@ -88,11 +88,19 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       return str.charAt(0).toLowerCase() + str.slice(1)
     }
 
-    const onFileAdded = ({ meta, file }: never, status: string) => {
+    const onFileAdded = (
+      { meta, file }: never,
+      status: string,
+      fieldType: string,
+    ) => {
       if (status === 'done') {
-        setImages([...images, file])
+        if (fieldType === 'files') {
+          setFiles([...files, file])
+        } else if (fieldType === 'image' || fieldType === 'images') {
+          setImages([...images, file])
+        }
       }
-      console.log(status, meta, file)
+      // console.log(status, meta, file)
     }
 
     const saveChanges = (data: any) => {
@@ -104,6 +112,11 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       if (images.length > 1) {
         for (const img of images) {
           formData.append('images', img)
+        }
+      }
+      if (files.length > 0) {
+        for (const file of files) {
+          formData.append('files', file)
         }
       }
       formData.append('dto', JSON.stringify({ ...data }))
@@ -174,7 +187,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
               itemData={itemData}
               f={f}
               register={register}
-              handleChangeStatus={onFileAdded}
+              onChangeStatus={onFileAdded}
             />
           )
         default:
