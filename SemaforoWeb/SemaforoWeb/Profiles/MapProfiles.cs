@@ -6,6 +6,7 @@ using SemaforoWeb.DTO;
 using SemaforoWeb.DTO.CatalogsDTO;
 using SemaforoWeb.DTO.CatalogsDTO.Catalogs;
 using System;
+using System.Data;
 
 namespace SemaforoWeb.Profiles
 {
@@ -100,7 +101,7 @@ namespace SemaforoWeb.Profiles
             
             CreateMap<FileBO, File>();
             CreateMap<File, FileBO>()
-                .ForMember(dest => dest.Archive, opt => opt.Ignore());
+                .ForMember(dest => dest.Archive, opt => opt.MapFrom(src => src.Archive.Length > 5242880 ? null : src.Archive));
             CreateMap<FileBO, FileDTO>();
             CreateMap<FileDTO, FileBO>();
             CreateMap<IFormFile, FileDTO>()

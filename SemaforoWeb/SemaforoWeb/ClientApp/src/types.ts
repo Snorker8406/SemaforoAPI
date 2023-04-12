@@ -1,7 +1,9 @@
 export type dataItem = {
   itemIdField: string | undefined
   name: string
-  value: string
+  // value: string
+  files?: fileDTO[] | any
+  profileImage: string
 }
 export type dataColumn = {
   isColumn?: boolean
@@ -18,4 +20,12 @@ export type dataColumn = {
   selectEntity?: string
   selectKey?: string
   selectOption?: string
+}
+
+export type fileDTO = {
+  fileId: number
+  fileName: string
+  fieldType: string
+  contentType: string
+  archive: string
 }

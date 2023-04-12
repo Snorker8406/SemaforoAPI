@@ -18,7 +18,7 @@ import {
   CFormTextarea,
 } from '@coreui/react-pro'
 
-import { dataItem, dataColumn } from '../../types'
+import { dataItem, dataColumn, fileDTO } from '../../types'
 import useFetch from '../Utils/useFetch'
 import { useForm } from 'react-hook-form'
 import { FileUpload } from './FileUploader'
@@ -51,7 +51,11 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
     ref,
   ) => {
     const [formTitle, setFormTitle] = useState('')
+    const [files, setFiles] = useState([])
+    const [images, setImages] = useState([])
     const [saveResponse, saveItem] = useFetch(APIurl, 'POST')
+    const [existingFiles, setExistingFiles] = useState([] as File[])
+    const [existingImage, setExistingImage] = useState([] as File[])
     const {
       register,
       handleSubmit,
@@ -71,6 +75,40 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
             ' - ' +
             itemData['name'],
         )
+        if (itemData['files']) {
+          // this is to convert files into valid bolb
+          const convertFiles = async (dtoFiles: fileDTO[]) => {
+            const convertedFiles = [] as File[]
+            for (let i = 0; i < dtoFiles.length; i++) {
+              const base64Response = await fetch(
+                `data:${dtoFiles[i].contentType},${dtoFiles[i].archive}`,
+              )
+              const buf = await base64Response.arrayBuffer()
+              const file = new File([buf], dtoFiles[i].fileName, {
+                type: dtoFiles[i].contentType,
+              })
+              convertedFiles.push(file)
+            }
+            setExistingFiles([...existingFiles, ...convertedFiles])
+          }
+          convertFiles(itemData['files'])
+        }
+        if (itemData['profileImage']) {
+          // this is to convert files into valid bolb
+          const convertImage = async (dtoImage: string) => {
+            const convertedFiles = [] as File[]
+            const base64Response = await fetch(
+              `data:image/jpeg;base64,${dtoImage}`,
+            )
+            const buf = await base64Response.arrayBuffer()
+            const file = new File([buf], 'profileImage.jpg', {
+              type: 'image/jpeg',
+            })
+            convertedFiles.push(file)
+            setExistingImage([...existingImage, ...convertedFiles])
+          }
+          convertImage(itemData['profileImage'])
+        }
       }
       reset(itemData)
     }, [itemData])
@@ -80,9 +118,6 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       setVisible(false)
       itemHasBeenUpdated(true)
     }, [saveResponse])
-
-    const [files, setFiles] = useState([])
-    const [images, setImages] = useState([])
 
     const toLower = (str: string) => {
       return str.charAt(0).toLowerCase() + str.slice(1)
@@ -125,11 +160,19 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
         formData,
         isNewItem ? 'POST' : 'PUT',
       )
+      setFiles([])
+      setImages([])
+      setExistingFiles([])
+      setExistingImage([])
     }
 
     const onCloseEdit = () => {
       setVisible(false)
       if (onClose) {
+        setFiles([])
+        setImages([])
+        setExistingFiles([])
+        setExistingImage([])
         onClose()
       }
     }
@@ -180,6 +223,15 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
             />
           )
         case 'image':
+          return (
+            <FileUpload
+              itemData={itemData}
+              f={f}
+              register={register}
+              onChangeStatus={onFileAdded}
+              existingFiles={existingImage}
+            />
+          )
         case 'images':
         case 'files':
           return (
@@ -188,6 +240,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
               f={f}
               register={register}
               onChangeStatus={onFileAdded}
+              existingFiles={existingFiles}
             />
           )
         default:

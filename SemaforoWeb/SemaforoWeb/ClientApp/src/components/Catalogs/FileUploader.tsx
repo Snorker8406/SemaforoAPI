@@ -1,21 +1,29 @@
-import React, { forwardRef, HTMLAttributes } from 'react'
+import React, { forwardRef, HTMLAttributes, useState } from 'react'
 import PropTypes, { any } from 'prop-types'
 import { dataColumn, dataItem } from '../../types'
 import 'react-dropzone-uploader/dist/styles.css'
 import Dropzone from 'react-dropzone-uploader'
+import { useEffect } from 'react'
 
 export interface FileUploadProps extends HTMLAttributes<HTMLDivElement> {
   itemData: dataItem
   f: dataColumn
   register: any
   onChangeStatus: any
+  existingFiles: File[]
 }
 
 export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
-  ({ itemData, f, register, onChangeStatus }, ref) => {
+  ({ itemData, f, register, onChangeStatus, existingFiles }, ref) => {
     const toLower = (str: string) => {
       return str.charAt(0).toLowerCase() + str.slice(1)
     }
+
+    const [initialFiles, setInitialFiles] = useState([] as File[])
+
+    useEffect(() => {
+      setInitialFiles([...initialFiles, ...existingFiles])
+    }, [existingFiles])
 
     const handleChangeStatus = ({ meta, file }: never, status: string) => {
       onChangeStatus({ meta, file }, status, f.type)
@@ -37,6 +45,7 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
             extra.reject ? 'Solo archivos de Imagen' : f.label
           }
           maxFiles={1}
+          initialFiles={initialFiles}
         />
       )
     }
@@ -57,6 +66,7 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
           inputContent={(files, extra) =>
             extra.reject ? 'Solo archivos de Imagen' : f.label
           }
+          initialFiles={initialFiles}
         />
       )
     }
@@ -75,6 +85,7 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
           inputContent={(files, extra) =>
             extra.reject ? 'Archivo Invalido' : f.label
           }
+          initialFiles={initialFiles}
         />
       )
     }
