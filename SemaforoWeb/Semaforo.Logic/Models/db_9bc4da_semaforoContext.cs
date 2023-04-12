@@ -592,6 +592,11 @@ namespace Semaforo.Logic.Models
 
                 entity.Property(e => e.Comments).HasMaxLength(500);
 
+                entity.Property(e => e.ContentType)
+                    .IsRequired()
+                    .HasMaxLength(250)
+                    .HasColumnName("Content_Type");
+
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
                     .HasColumnName("Create_Date")
@@ -599,11 +604,15 @@ namespace Semaforo.Logic.Models
 
                 entity.Property(e => e.EmployeeId).HasColumnName("Employee_ID");
 
-                entity.Property(e => e.Extension).HasMaxLength(10);
-
-                entity.Property(e => e.Name)
+                entity.Property(e => e.FieldType)
                     .IsRequired()
-                    .HasMaxLength(250);
+                    .HasMaxLength(50)
+                    .HasColumnName("Field_Type");
+
+                entity.Property(e => e.FileName)
+                    .IsRequired()
+                    .HasMaxLength(250)
+                    .HasColumnName("File_Name");
 
                 entity.Property(e => e.ProviderAccountId).HasColumnName("Provider_Account_ID");
 
@@ -612,6 +621,10 @@ namespace Semaforo.Logic.Models
                 entity.Property(e => e.ProviderId).HasColumnName("Provider_ID");
 
                 entity.Property(e => e.SchoolId).HasColumnName("School_ID");
+
+                entity.Property(e => e.Size)
+                    .IsRequired()
+                    .HasMaxLength(100);
 
                 entity.HasOne(d => d.Account)
                     .WithMany(p => p.Files)

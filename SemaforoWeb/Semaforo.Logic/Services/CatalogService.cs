@@ -71,7 +71,10 @@ namespace Semaforo.Logic.Services
                     {
                         List<File> files = _mapper.Map<List<File>>(bo.GetType().GetProperty("Files").GetValue(bo, null));
                         foreach (var file in files) {
-                            Context.Set<File>().Add(file);
+                            if (file.FileId == 0)
+                                Context.Set<File>().Add(file);
+                            else
+                                Context.Entry(file).State = EntityState.Modified;
                         }
                     }
                 }
@@ -104,7 +107,7 @@ namespace Semaforo.Logic.Services
         {
             BO bo = (BO)Activator.CreateInstance(typeof(BO), null);
             if (id > 0) {
-                var entity = await Context.Set<T>().FindAsync(id);
+                var entity = await Context.Set<T>().FindAsync(id); // todo: mejorar el lazy loading, aqui jala tambien los archivos completos
                 bo = _mapper.Map<BO>(entity);
             }
             AddOptions(bo);

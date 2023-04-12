@@ -16,8 +16,10 @@ namespace Semaforo.Logic.Models
         public int? ProviderAccountId { get; set; }
         public int? ProviderAccountPaymentId { get; set; }
         public string Comments { get; set; }
-        public string Name { get; set; }
-        public string Extension { get; set; }
+        public string FileName { get; set; }
+        public string ContentType { get; set; }
+        public string FieldType { get; set; }
+        public string Size { get; set; }
         public byte[] Archive { get; set; }
         public DateTime CreateDate { get; set; }
 

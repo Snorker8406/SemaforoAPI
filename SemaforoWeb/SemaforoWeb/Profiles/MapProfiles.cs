@@ -32,7 +32,7 @@ namespace SemaforoWeb.Profiles
             CreateMap<ClientBO, Client>()
                 .ForMember(dest => dest.LastModify, opt => opt.MapFrom(src => DateTime.UtcNow));
             CreateMap<ClientBO, ClientDTO>()
-                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.ProfileImage.Length > 0? src.ProfileImage : null ));
+                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.ProfileImage.Length > 0 ? src.ProfileImage : null));
             CreateMap<ClientDTO, ClientBO>()
                 .ForMember(dest => dest.ProfileImage, opt => opt.MapFrom(src => mapFile(src.Image)))
                 .ForMember(dest => dest.Files, opt => opt.MapFrom(src => src.Files));
@@ -99,13 +99,14 @@ namespace SemaforoWeb.Profiles
 
             
             CreateMap<FileBO, File>();
-            CreateMap<File, FileBO>();
+            CreateMap<File, FileBO>()
+                .ForMember(dest => dest.Archive, opt => opt.Ignore());
             CreateMap<FileBO, FileDTO>();
             CreateMap<FileDTO, FileBO>();
             CreateMap<IFormFile, FileDTO>()
                 .ForMember(dest => dest.Archive, opt => opt.MapFrom(src => mapFile(src)))
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FileName));
-                //.ForMember(dest => dest.Extension, opt => opt.MapFrom(src => src.ContentType));
+                .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Length))
+                .ForMember(dest => dest.FieldType, opt => opt.MapFrom(src => src.Name));
 
 
         }
