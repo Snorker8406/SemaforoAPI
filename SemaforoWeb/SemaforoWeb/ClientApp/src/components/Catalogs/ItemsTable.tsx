@@ -88,7 +88,7 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
     const onAddNewItem = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const newItem = {} as any
-      let fillOptions = false;
+      let fillOptions = false
       catalogColumns.forEach((f) => {
         if (!f.isPrimaryKey && f.isInForm) {
           newItem[f.key] = f.type.indexOf('Int32') > 0 ? 0 : ''

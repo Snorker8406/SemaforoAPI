@@ -1,6 +1,7 @@
 {
   "name": "@coreui/coreui-pro-react-admin-template-starter-ts",
   "version": "4.3.0",
+  "proxy": "http://semaforodev-001-site1.htempurl.com",
   "description": "CoreUI PRO React Admin Template Typescript Starter",
   "homepage": ".",
   "bugs": {

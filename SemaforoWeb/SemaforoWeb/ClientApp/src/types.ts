@@ -3,6 +3,7 @@ export type dataItem = {
   name: string
   // value: string
   files?: fileDTO[] | any
+  images?: fileDTO[] | any
   profileImage: string
 }
 export type dataColumn = {

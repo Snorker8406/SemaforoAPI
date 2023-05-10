@@ -1,5 +1,5 @@
 import React, { useState, useEffect, HTMLAttributes, forwardRef } from 'react'
-import PropTypes from 'prop-types'
+import PropTypes, { string } from 'prop-types'
 import {
   CModal,
   CModalHeader,
@@ -53,6 +53,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
     const [formTitle, setFormTitle] = useState('')
     const [files, setFiles] = useState([])
     const [images, setImages] = useState([])
+    const [removedFileNames, setRemovedFileNames] = useState([] as string[])
     const [saveResponse, saveItem] = useFetch(APIurl, 'POST')
     const [existingFiles, setExistingFiles] = useState([] as File[])
     const [existingImage, setExistingImage] = useState([] as File[])
@@ -123,16 +124,33 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       return str.charAt(0).toLowerCase() + str.slice(1)
     }
 
-    const onFileAdded = (
+    const onFileStatusChanged = (
       { meta, file }: never,
       status: string,
       fieldType: string,
     ) => {
       if (status === 'done') {
         if (fieldType === 'files') {
+          if (
+            itemData['files'].find((f: never) => f['fileName'] === file['name'])
+          )
+            return
           setFiles([...files, file])
         } else if (fieldType === 'image' || fieldType === 'images') {
+          if (
+            itemData['images'].find(
+              (f: never) => f['fileName'] === file['name'],
+            )
+          )
+            return
           setImages([...images, file])
+        }
+      }
+      if (status === 'removed') {
+        if (fieldType === 'files') {
+          setRemovedFileNames([...removedFileNames, file['name']])
+        } else if (fieldType === 'image' || fieldType === 'images') {
+          console.log('image deleted')
         }
       }
       // console.log(status, meta, file)
@@ -154,6 +172,11 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
           formData.append('files', file)
         }
       }
+      if (removedFileNames.length > 0) {
+        for (const name of removedFileNames) {
+          formData.append('removedFiles', name)
+        }
+      }
       formData.append('dto', JSON.stringify({ ...data }))
       saveItem(
         isNewItem ? '' : itemData[itemIdField as dataItemKey],
@@ -164,6 +187,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       setImages([])
       setExistingFiles([])
       setExistingImage([])
+      setRemovedFileNames([])
     }
 
     const onCloseEdit = () => {
@@ -173,6 +197,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
         setImages([])
         setExistingFiles([])
         setExistingImage([])
+        setRemovedFileNames([])
         onClose()
       }
     }
@@ -228,7 +253,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
               itemData={itemData}
               f={f}
               register={register}
-              onChangeStatus={onFileAdded}
+              onChangeStatus={onFileStatusChanged}
               existingFiles={existingImage}
             />
           )
@@ -239,7 +264,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
               itemData={itemData}
               f={f}
               register={register}
-              onChangeStatus={onFileAdded}
+              onChangeStatus={onFileStatusChanged}
               existingFiles={existingFiles}
             />
           )

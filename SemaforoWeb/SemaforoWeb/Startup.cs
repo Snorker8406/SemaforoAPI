@@ -32,7 +32,7 @@ namespace SemaforoWeb
 
             services.AddControllersWithViews();
 
-            services.AddDbContext<db_9bc4da_semaforoContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("SemaforoContext")));
+            services.AddDbContext<db_9bc4da_semaforoContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SemaforoContext")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                  .AddEntityFrameworkStores<db_9bc4da_semaforoContext>()

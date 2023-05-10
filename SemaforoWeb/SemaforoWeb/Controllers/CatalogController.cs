@@ -34,31 +34,31 @@ namespace SemaforoWeb.Controllers
         }
         private void createCatalogServices()
         {
-            foreach (var entity in CatalogsConfigs.Entities)
+            foreach (var entityName in CatalogsConfigs.Entities)
             {
-                Type typeModel = Type.GetType("Semaforo.Logic.Models." + entity + ", Semaforo.Logic");
-                Type typeBO = Type.GetType("Semaforo.Logic.BO." + entity + "BO, Semaforo.Logic");
+                Type typeModel = Type.GetType("Semaforo.Logic.Models." + entityName + ", Semaforo.Logic");
+                Type typeBO = Type.GetType("Semaforo.Logic.BO." + entityName + "BO, Semaforo.Logic");
                 Type[] types = { typeModel, typeBO };
                 Type genericClass = typeof(CatalogService<,>);
                 Type constructedClass = genericClass.MakeGenericType(types);
                 object service = Activator.CreateInstance(constructedClass, _context, _mapper, null);
-                _services.Add(entity, service);
+                _services.Add(entityName, service);
             }
 
         }
 
-        [HttpGet("{entity}")]
-        public async Task<ActionResult<CatalogDTO<dynamic>>> GetItems(string entity)
+        [HttpGet("{entityName}")]
+        public async Task<ActionResult<CatalogDTO<dynamic>>> GetItems(string entityName)
         {
             try
             {
                 CatalogsConfigs.ReadConfigFile(); // esta linea es solo para desarrollo
-                var items = await _services[entity].GetEntityList();
+                var items = await _services[entityName].GetEntityList();
                 if (items == null)
                 {
                     return null;
                 }
-                var result = Catalog<dynamic>.BuildCatalog(entity, items, _mapper);
+                var result = Catalog<dynamic>.BuildCatalog(entityName, items, _mapper);
                 return result;
             }
             catch (Exception)
@@ -68,31 +68,31 @@ namespace SemaforoWeb.Controllers
         }
 
         //GET api/<ProviderController>/5
-        [HttpGet("{entity}/{id}")]
-        public async Task<dynamic> Get(int id, string entity)
+        [HttpGet("{entityName}/{id}")]
+        public async Task<dynamic> Get(int id, string entityName)
         {
-            return await _services[entity].GetEntityById(id);
+            return await _services[entityName].GetEntityById(id, entityName);
         }
 
 
         // POST api/<ClientController>
-        [HttpPost("{entity}")]
-        public async Task<IActionResult> PostItem(object dto, string entity)
+        [HttpPost("{entityName}")]
+        public async Task<IActionResult> PostItem(object dto, string entityName)
         {
             try
             {
-                Type typeBO = Type.GetType("Semaforo.Logic.BO." + entity + "BO, Semaforo.Logic");
-                Type typeDTO = Type.GetType("SemaforoWeb.DTO.CatalogsDTO." + entity + "DTO, SemaforoWeb");
+                Type typeBO = Type.GetType("Semaforo.Logic.BO." + entityName + "BO, Semaforo.Logic");
+                Type typeDTO = Type.GetType("SemaforoWeb.DTO.CatalogsDTO." + entityName + "DTO, SemaforoWeb");
                 var itemDTO = JsonConvert.DeserializeObject(dto.ToString(), typeDTO);
                 var itemBO = _mapper.Map(itemDTO, typeDTO, typeBO);
-                dynamic response = await _services[entity].saveEntity(itemBO);
-                if (typeBO.GetProperty(entity + "Id").GetValue(response) > 0)
+                dynamic response = await _services[entityName].saveEntity(itemBO);
+                if (typeBO.GetProperty(entityName + "Id").GetValue(response) > 0)
                 {
                     return Ok(response);
                 }
                 else
                 {
-                    return BadRequest("Error at save new " + entity);
+                    return BadRequest("Error at save new " + entityName);
                 }
             }
             catch (Exception e)
@@ -103,47 +103,52 @@ namespace SemaforoWeb.Controllers
         }
 
         //PUT api/<ClientController>/5
-        [HttpPut("{entity}/{id}")]
+        [HttpPut("{entityName}/{id}")]
         public async Task<IActionResult> PutItem(
             int id,
-            string entity,
+            string entityName,
             [FromForm] string dto,
             [FromForm(Name = "image")] IFormFile image,
             [FromForm(Name = "images")] List<IFormFile> images,
-            [FromForm(Name = "files")] List<IFormFile> files)
+            [FromForm(Name = "files")] List<IFormFile> files,
+            [FromForm(Name = "removedFiles")] List<string> removedFiles)
         {
             try
             {
-                Type typeBO = Type.GetType("Semaforo.Logic.BO." + entity + "BO, Semaforo.Logic");
-                Type typeDTO = Type.GetType("SemaforoWeb.DTO.CatalogsDTO." + entity + "DTO, SemaforoWeb");
+                Type typeBO = Type.GetType("Semaforo.Logic.BO." + entityName + "BO, Semaforo.Logic");
+                Type typeDTO = Type.GetType("SemaforoWeb.DTO.CatalogsDTO." + entityName + "DTO, SemaforoWeb");
                 var itemDTO = JsonConvert.DeserializeObject(dto.ToString(), typeDTO);
                 if (image != null)
                 {
                     typeDTO.GetProperty("Image").SetValue(itemDTO, image);
                 }
-                if (images.Count > 0)
+                if (images.Any())
                 {
                     typeDTO.GetProperty("Images").SetValue(itemDTO, images);
                 }
-                if (files.Count > 0)
+                if (files.Any())
                 {
                     List<FileDTO> filesDTO = new List<FileDTO>();
                     foreach (var file in files)
                     {
                         FileDTO fileDTO = new FileDTO();
-                        fileDTO.GetType().GetProperty(entity + "Id").SetValue(fileDTO, id);
+                        fileDTO.GetType().GetProperty(entityName + "Id").SetValue(fileDTO, id);
                         _mapper.Map(file, fileDTO);
                         filesDTO.Add(fileDTO);
                     }
                     typeDTO.GetProperty("Files").SetValue(itemDTO, filesDTO);
                 }
+                if (removedFiles.Any())
+                {
+
+                }
                 var itemBO = _mapper.Map(itemDTO, typeDTO, typeBO);
-                if (id != (int)typeBO.GetProperty(entity + "Id").GetValue(itemBO))
+                if (id != (int)typeBO.GetProperty(entityName + "Id").GetValue(itemBO))
                 {
                     return BadRequest("information inconsistent");
                 }
-                dynamic response = await _services[entity].updateEntity(itemBO);
-                if (typeBO.GetProperty(entity + "Id").GetValue(response) > 0)
+                dynamic response = await _services[entityName].updateEntity(itemBO, removedFiles, entityName);
+                if (typeBO.GetProperty(entityName + "Id").GetValue(response) > 0)
                 {
                     return Ok(response);
                 }
@@ -159,12 +164,12 @@ namespace SemaforoWeb.Controllers
             }
 
         }
-        [HttpDelete("{entity}/{id}")]
-        public async Task<IActionResult> DeleteItem(int id, string entity)
+        [HttpDelete("{entityName}/{id}")]
+        public async Task<IActionResult> DeleteItem(int id, string entityName)
         {
             try
             {
-                var deletedId = await _services[entity].deleteEntity(id);
+                var deletedId = await _services[entityName].deleteEntity(id);
                 if (deletedId > 0)
                 {
                     return Ok(deletedId);

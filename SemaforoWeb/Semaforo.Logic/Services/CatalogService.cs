@@ -9,6 +9,7 @@ using Semaforo.Logic.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Semaforo.Logic.Services
@@ -58,18 +59,21 @@ namespace Semaforo.Logic.Services
             }
             return bo;
         }
-
-        private void HandleFiles(T bo)
+        private bool WhereEquals<T>(T obj, string propertyName, int value)
+        {
+            return typeof(T).GetProperty(propertyName)?.GetValue(obj)?.Equals(value) ?? false;
+        }
+        private void HandleFiles(T bo, List<string> removedFiles, string entityName)
         {
             try
             {
                 var props = typeof(BO).GetProperties().Select(p => p.Name).Where(p => p.IndexOf("Files") > -1);
 
-                if (props.Count() > 0)
+                if (props.Any())
                 {
                     foreach (var field in props)
                     {
-                        List<File> files = _mapper.Map<List<File>>(bo.GetType().GetProperty("Files").GetValue(bo, null));
+                        List<File> files = _mapper.Map<List<File>>(bo.GetType().GetProperty(field).GetValue(bo, null));
                         foreach (var file in files) {
                             if (file.FileId == 0)
                                 Context.Set<File>().Add(file);
@@ -78,8 +82,15 @@ namespace Semaforo.Logic.Services
                         }
                     }
                 }
+                if (removedFiles.Any()) {
+                    var entityIdPropName = typeof(BO).GetProperties().Select(p => p.Name).Where(p => p.IndexOf(entityName + "Id") > -1).FirstOrDefault();
+                    int entityIdValue = (int)bo.GetType().GetProperty(entityIdPropName).GetValue(bo, null);
+                    string entityIdSQL = entityIdPropName.Substring(0, entityIdPropName.IndexOf("Id")) + "_ID";
+                    //List<File> filesToRemove = Context.Files.Where(obj => WhereEquals<File>(obj, entityIdPropName, entityIdValue)).ToList();
+                    var filesToRemove = Context.Files.FromSqlRaw($"SELECT * FROM dbo.FILES WHERE {0} = {1} AND File_Name IN (SELECT * FROM STRING_SPLIT({2})) ", entityIdSQL, entityIdValue, "");
+                }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 throw;
             }
@@ -90,9 +101,9 @@ namespace Semaforo.Logic.Services
             CurrentUser = currentUser;
             _mapper = mapper;
         }
-        public async Task<List<BO>> GetEntityList()
+        public async Task<List<BO>> GetEntityList(bool includeFiles = false)
         {
-            var entities = await Context.Set<T>().ToListAsync();
+            List<T> entities = await Context.Set<T>().ToListAsync();
             List<BO> BOS = new List<BO>();
 
             foreach (var entity in entities)
@@ -103,23 +114,27 @@ namespace Semaforo.Logic.Services
             return BOS;
         }
 
-        public async Task<BO> GetEntityById(int id)
+        public async Task<BO> GetEntityById(int id, string entityName)
         {
             BO bo = (BO)Activator.CreateInstance(typeof(BO), null);
             if (id > 0) {
-                var entity = await Context.Set<T>().FindAsync(id); // todo: mejorar el lazy loading, aqui jala tambien los archivos completos
+                var parameterExpression = Expression.Parameter(typeof(T), "object");
+                var propertyOrFieldExpression = Expression.PropertyOrField(parameterExpression, entityName + "Id");
+                var equalityExpression = Expression.Equal(propertyOrFieldExpression, Expression.Constant(id, typeof(int)));
+                var lambdaExpression = Expression.Lambda<Func<T, bool>>(equalityExpression, parameterExpression);
+                var entity = await Context.Set<T>().Include<T>("Files").FirstOrDefaultAsync<T>(lambdaExpression); // todo: mejorar el lazy loading, aqui jala tambien los archivos completos
                 bo = _mapper.Map<BO>(entity);
             }
             AddOptions(bo);
             return bo;
         }
 
-        public async Task<BO> updateEntity(object BO)
+        public async Task<BO> updateEntity(object BO, List<string> removedFiles, string entityName)
         {
             try
             {
                 T entity = _mapper.Map<T>(BO);
-                HandleFiles(entity);
+                HandleFiles(entity, removedFiles, entityName);
                 Context.Entry(entity).State = EntityState.Modified;
                 await Context.SaveChangesAsync();
                 BO response = _mapper.Map<BO>(entity);
