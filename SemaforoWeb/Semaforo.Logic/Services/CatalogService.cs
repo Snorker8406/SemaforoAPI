@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Semaforo.Logic.BO;
@@ -86,8 +84,8 @@ namespace Semaforo.Logic.Services
                     var entityIdPropName = typeof(BO).GetProperties().Select(p => p.Name).Where(p => p.IndexOf(entityName + "Id") > -1).FirstOrDefault();
                     int entityIdValue = (int)bo.GetType().GetProperty(entityIdPropName).GetValue(bo, null);
                     string entityIdSQL = entityIdPropName.Substring(0, entityIdPropName.IndexOf("Id")) + "_ID";
-                    //List<File> filesToRemove = Context.Files.Where(obj => WhereEquals<File>(obj, entityIdPropName, entityIdValue)).ToList();
-                    var filesToRemove = Context.Files.FromSqlRaw($"SELECT * FROM dbo.FILES WHERE {0} = {1} AND File_Name IN (SELECT * FROM STRING_SPLIT({2})) ", entityIdSQL, entityIdValue, "");
+                    var filesToRemove = Context.Files.FromSqlRaw($"SELECT * FROM dbo.FILES WHERE {entityIdSQL} = {entityIdValue} AND File_Name IN (SELECT * FROM STRING_SPLIT('{string.Join(",", removedFiles)}', ','))");
+                    Context.Files.RemoveRange(filesToRemove);
                 }
             }
             catch (Exception e)

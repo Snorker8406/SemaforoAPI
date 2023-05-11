@@ -26,7 +26,7 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
     }, [existingFiles])
 
     const handleChangeStatus = ({ meta, file }: never, status: string) => {
-      onChangeStatus({ meta, file }, status, f.type)
+      onChangeStatus({ meta, file }, status, f.type, f.key)
     }
 
     const renderImageUploader = () => {

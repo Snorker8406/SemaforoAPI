@@ -53,6 +53,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
     const [formTitle, setFormTitle] = useState('')
     const [files, setFiles] = useState([])
     const [images, setImages] = useState([])
+    const [image, setImage] = useState([])
     const [removedFileNames, setRemovedFileNames] = useState([] as string[])
     const [saveResponse, saveItem] = useFetch(APIurl, 'POST')
     const [existingFiles, setExistingFiles] = useState([] as File[])
@@ -94,6 +95,8 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
           }
           convertFiles(itemData['files'])
         }
+
+        // TODO: cambiar que dependa del nombre profile image
         if (itemData['profileImage']) {
           // this is to convert files into valid bolb
           const convertImage = async (dtoImage: string) => {
@@ -108,6 +111,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
             convertedFiles.push(file)
             setExistingImage([...existingImage, ...convertedFiles])
           }
+
           convertImage(itemData['profileImage'])
         }
       }
@@ -128,29 +132,41 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       { meta, file }: never,
       status: string,
       fieldType: string,
+      fieldKey: string,
     ) => {
       if (status === 'done') {
-        if (fieldType === 'files') {
-          if (
-            itemData['files'].find((f: never) => f['fileName'] === file['name'])
-          )
-            return
-          setFiles([...files, file])
-        } else if (fieldType === 'image' || fieldType === 'images') {
-          if (
-            itemData['images'].find(
-              (f: never) => f['fileName'] === file['name'],
+        switch (fieldType) {
+          case 'files':
+            if (
+              itemData['files'].find(
+                (f: never) => f['fileName'] === file['name'],
+              )
             )
-          )
-            return
-          setImages([...images, file])
+              break
+            setFiles([...files, file])
+            break
+          case 'images':
+            if (
+              itemData['images']?.find(
+                (f: never) => f['fileName'] === file['name'],
+              )
+            )
+              break
+            setImages([...images, file])
+            break
+          case 'image':
+            setImage([file]) // por el momento solo recibe un item
+            break
+          default:
+            break
         }
       }
+
       if (status === 'removed') {
-        if (fieldType === 'files') {
+        if (fieldType === 'image') {
+          setImage([])
+        } else if (fieldType === 'files' || fieldType === 'images') {
           setRemovedFileNames([...removedFileNames, file['name']])
-        } else if (fieldType === 'image' || fieldType === 'images') {
-          console.log('image deleted')
         }
       }
       // console.log(status, meta, file)
@@ -158,11 +174,11 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
 
     const saveChanges = (data: any) => {
       const formData = new FormData()
-      if (images.length > 0) {
-        formData.append('image', images[0])
+      if (image.length > 0) {
+        formData.append('image', image[0])
         data.image = ''
       }
-      if (images.length > 1) {
+      if (images.length > 0) {
         for (const img of images) {
           formData.append('images', img)
         }
@@ -185,6 +201,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       )
       setFiles([])
       setImages([])
+      setImage([])
       setExistingFiles([])
       setExistingImage([])
       setRemovedFileNames([])
@@ -195,6 +212,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       if (onClose) {
         setFiles([])
         setImages([])
+        setImage([])
         setExistingFiles([])
         setExistingImage([])
         setRemovedFileNames([])
