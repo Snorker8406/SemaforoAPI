@@ -74,6 +74,15 @@ namespace SemaforoWeb.Controllers
             return await _services[entityName].GetEntityById(id, entityName);
         }
 
+        //GET api/<ProviderController>/5/DownloadFile/1
+        [HttpGet("{entityName}/{id}/DownloadFile/{fileId}")]
+        public async Task<IActionResult> DownloadFile(int id, string entityName, int fileId)
+        {
+            FileBO fileBo = await _services[entityName].DownloadFile(id, entityName, fileId);
+            var content = new MemoryStream(fileBo.Archive);
+            return File(content, fileBo.ContentType, fileBo.FileName);
+        }
+
 
         // POST api/<ClientController>
         [HttpPost("{entityName}")]

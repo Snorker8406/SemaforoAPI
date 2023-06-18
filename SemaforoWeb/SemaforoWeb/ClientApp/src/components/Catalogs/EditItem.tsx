@@ -273,6 +273,8 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
               register={register}
               onChangeStatus={onFileStatusChanged}
               existingFiles={existingImage}
+              APIurl={APIurl}
+              itemIdField={itemIdField}
             />
           )
         case 'images':
@@ -284,6 +286,9 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
               register={register}
               onChangeStatus={onFileStatusChanged}
               existingFiles={existingFiles}
+              className={'all-type-files'}
+              APIurl={APIurl}
+              itemIdField={itemIdField}
             />
           )
         default:

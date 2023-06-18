@@ -99,7 +99,7 @@ namespace Semaforo.Logic.Services
             CurrentUser = currentUser;
             _mapper = mapper;
         }
-        public async Task<List<BO>> GetEntityList(bool includeFiles = false)
+        public async Task<List<BO>> GetEntityList()
         {
             List<T> entities = await Context.Set<T>().ToListAsync();
             List<BO> BOS = new List<BO>();
@@ -125,6 +125,30 @@ namespace Semaforo.Logic.Services
             }
             AddOptions(bo);
             return bo;
+        }
+
+        public async Task<FileBO> DownloadFile(int id, string entityName, int fileId)
+        {
+            try
+            {
+                if (id > 0 && fileId > 0)
+                {
+                    var fileEntity = await Context.Files.FindAsync(fileId);
+                    if ((int)fileEntity.GetType().GetProperty(entityName + "Id").GetValue(fileEntity, null) == id)
+                    {
+                        FileBO fileBO = _mapper.Map<FileBO>(fileEntity);
+                        return fileBO;
+                    }
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                var x = e.Message;
+                return null;
+                throw;
+            }
+          
         }
 
         public async Task<BO> updateEntity(object BO, List<string> removedFiles, string entityName)

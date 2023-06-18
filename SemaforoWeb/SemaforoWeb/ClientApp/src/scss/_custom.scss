@@ -1,1 +1,23 @@
 // Here you can add other styles
+.dzu-dropzone {
+    overflow: hidden !important;
+    border: 2px dotted $semaforo-strong !important;
+    .file-row-container {
+        .file-row {
+            &:hover {
+                background-color: $semaforo-light;
+            }
+            .file-icon-type {
+                float: right;
+            }
+            .icon {
+                color: $semaforo-orange;
+            }
+        }
+    }
+}
+.all-type-files {
+    padding-bottom: 1em;
+    padding-top: 1em;
+}
+
