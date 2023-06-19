@@ -822,6 +822,10 @@ namespace Semaforo.Logic.Models
                     .ValueGeneratedNever()
                     .HasColumnName("Price_ID");
 
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("Create_Date");
+
                 entity.Property(e => e.Price).HasColumnType("money");
 
                 entity.Property(e => e.ProductId).HasColumnName("Product_ID");
