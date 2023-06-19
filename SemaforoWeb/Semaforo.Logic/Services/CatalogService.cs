@@ -120,7 +120,7 @@ namespace Semaforo.Logic.Services
                 var propertyOrFieldExpression = Expression.PropertyOrField(parameterExpression, entityName + "Id");
                 var equalityExpression = Expression.Equal(propertyOrFieldExpression, Expression.Constant(id, typeof(int)));
                 var lambdaExpression = Expression.Lambda<Func<T, bool>>(equalityExpression, parameterExpression);
-                var entity = await Context.Set<T>().Include<T>("Files").FirstOrDefaultAsync<T>(lambdaExpression); // todo: mejorar el lazy loading, aqui jala tambien los archivos completos
+                var entity = await Context.Set<T>().Include<T>("Files").FirstOrDefaultAsync<T>(lambdaExpression);
                 bo = _mapper.Map<BO>(entity);
             }
             AddOptions(bo);
@@ -133,7 +133,7 @@ namespace Semaforo.Logic.Services
             {
                 if (id > 0 && fileId > 0)
                 {
-                    var fileEntity = await Context.Files.FindAsync(fileId);
+                    var fileEntity = await Context.Files.Include("Archive").FirstOrDefaultAsync(f => f.FileId == fileId);
                     if ((int)fileEntity.GetType().GetProperty(entityName + "Id").GetValue(fileEntity, null) == id)
                     {
                         FileBO fileBO = _mapper.Map<FileBO>(fileEntity);

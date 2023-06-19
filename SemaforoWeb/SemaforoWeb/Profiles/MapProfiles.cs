@@ -98,10 +98,11 @@ namespace SemaforoWeb.Profiles
             CreateMap<ApplicationUserBO, Employee>();
             CreateMap<ApplicationUserBO, EmployeeDTO>();
 
-            
-            CreateMap<FileBO, File>();
+            CreateMap<ArchiveBO, Archive>();
+            CreateMap<FileBO, File>()
+                .ForMember(dest => dest.Archive, opt => opt.MapFrom(src => new Archive { Data = src.Archive }));
             CreateMap<File, FileBO>()
-                .ForMember(dest => dest.Archive, opt => opt.MapFrom(src => src.Archive.Length > 5242880 ? null : src.Archive));
+                .ForMember(dest => dest.Archive, opt => opt.MapFrom(src => src.Archive.Data.Length > 5242880 ? null : src.Archive.Data));
             CreateMap<FileBO, FileDTO>();
             CreateMap<FileDTO, FileBO>();
             CreateMap<IFormFile, FileDTO>()

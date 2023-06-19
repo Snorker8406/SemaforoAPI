@@ -21,6 +21,7 @@ namespace Semaforo.Logic.Models
         public virtual DbSet<AccountPayment> AccountPayments { get; set; }
         public virtual DbSet<AccountStatus> AccountStatuses { get; set; }
         public virtual DbSet<AccountType> AccountTypes { get; set; }
+        public virtual DbSet<Archive> Archives { get; set; }
         public virtual DbSet<Attendance> Attendances { get; set; }
         public virtual DbSet<Brand> Brands { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
@@ -211,6 +212,15 @@ namespace Semaforo.Logic.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .UseCollation("Modern_Spanish_CI_AS");
+            });
+
+            modelBuilder.Entity<Archive>(entity =>
+            {
+                entity.ToTable("ARCHIVES");
+
+                entity.Property(e => e.ArchiveId).HasColumnName("Archive_ID");
+
+                entity.Property(e => e.Data).IsRequired();
             });
 
 
@@ -586,7 +596,7 @@ namespace Semaforo.Logic.Models
 
                 entity.Property(e => e.AccountId).HasColumnName("Account_ID");
 
-                entity.Property(e => e.Archive).IsRequired();
+                entity.Property(e => e.ArchiveId).HasColumnName("Archive_ID");
 
                 entity.Property(e => e.ClientId).HasColumnName("Client_ID");
 
@@ -630,6 +640,12 @@ namespace Semaforo.Logic.Models
                     .WithMany(p => p.Files)
                     .HasForeignKey(d => d.AccountId)
                     .HasConstraintName("FK_FILES_ACCOUNTS");
+
+                entity.HasOne(d => d.Archive)
+                    .WithMany(p => p.Files)
+                    .HasForeignKey(d => d.ArchiveId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_FILES_ARCHIVES");
 
                 entity.HasOne(d => d.Client)
                     .WithMany(p => p.Files)
