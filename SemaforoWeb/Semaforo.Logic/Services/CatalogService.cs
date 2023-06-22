@@ -75,8 +75,8 @@ namespace Semaforo.Logic.Services
                         foreach (var file in files) {
                             if (file.FileId == 0)
                                 Context.Set<File>().Add(file);
-                            else
-                                Context.Entry(file).State = EntityState.Modified;
+                            //else
+                            //    Context.Entry(file).State = EntityState.Modified;
                         }
                     }
                 }
@@ -85,7 +85,16 @@ namespace Semaforo.Logic.Services
                     int entityIdValue = (int)bo.GetType().GetProperty(entityIdPropName).GetValue(bo, null);
                     string entityIdSQL = entityIdPropName.Substring(0, entityIdPropName.IndexOf("Id")) + "_ID";
                     var filesToRemove = Context.Files.FromSqlRaw($"SELECT * FROM dbo.FILES WHERE {entityIdSQL} = {entityIdValue} AND File_Name IN (SELECT * FROM STRING_SPLIT('{string.Join(",", removedFiles)}', ','))");
+                    var archivesToRemove = Context.Archives.FromSqlRaw($"SELECT * FROM dbo.ARCHIVES WHERE( Archive_ID in ( SELECT Archive_ID FROM dbo.FILES WHERE {entityIdSQL} = {entityIdValue} AND File_Name IN (SELECT * FROM STRING_SPLIT('{string.Join(",", removedFiles)}', ','))))");
+                    List<int> archiveIds = archivesToRemove.Select(ar => ar.ArchiveId).ToList();
                     Context.Files.RemoveRange(filesToRemove);
+                    Context.SaveChanges();
+                    foreach (var id in archiveIds)
+                    {
+                        var archive = Context.Archives.Find(id);
+                        Context.Archives.Remove(archive);
+                    }
+                    Context.SaveChanges();
                 }
             }
             catch (Exception e)

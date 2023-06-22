@@ -51,10 +51,8 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
     ref,
   ) => {
     const [formTitle, setFormTitle] = useState('')
-    const [files, setFiles] = useState([])
     const [images, setImages] = useState([])
     const [image, setImage] = useState([])
-    const [removedFileNames, setRemovedFileNames] = useState([] as string[])
     const [saveResponse, saveItem] = useFetch(APIurl, 'POST')
     const [existingFiles, setExistingFiles] = useState([] as File[])
     const [existingImage, setExistingImage] = useState([] as File[])
@@ -64,6 +62,9 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       reset,
       formState: { errors },
     } = useForm<any>()
+
+    let files: File[] = []
+    let removedFileNames: string[] = []
 
     type dataItemKey = keyof typeof itemData
 
@@ -143,7 +144,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
               )
             )
               break
-            setFiles([...files, file])
+            files.push(file)
             break
           case 'images':
             if (
@@ -166,7 +167,11 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
         if (fieldType === 'image') {
           setImage([])
         } else if (fieldType === 'files' || fieldType === 'images') {
-          setRemovedFileNames([...removedFileNames, file['name']])
+          if (!files.find((f) => f.name === file['name'])) {
+            removedFileNames.push(file['name'])
+          } else {
+            files = files.filter((f) => f.name !== file['name'])
+          }
         }
       }
       // console.log(status, meta, file)
@@ -199,23 +204,23 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
         formData,
         isNewItem ? 'POST' : 'PUT',
       )
-      setFiles([])
+      files = []
+      removedFileNames = []
       setImages([])
       setImage([])
       setExistingFiles([])
       setExistingImage([])
-      setRemovedFileNames([])
     }
 
     const onCloseEdit = () => {
       setVisible(false)
       if (onClose) {
-        setFiles([])
+        files = []
+        removedFileNames = []
         setImages([])
         setImage([])
         setExistingFiles([])
         setExistingImage([])
-        setRemovedFileNames([])
         onClose()
       }
     }

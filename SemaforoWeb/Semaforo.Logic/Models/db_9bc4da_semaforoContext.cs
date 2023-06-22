@@ -644,7 +644,6 @@ namespace Semaforo.Logic.Models
                 entity.HasOne(d => d.Archive)
                     .WithMany(p => p.Files)
                     .HasForeignKey(d => d.ArchiveId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_FILES_ARCHIVES");
 
                 entity.HasOne(d => d.Client)
