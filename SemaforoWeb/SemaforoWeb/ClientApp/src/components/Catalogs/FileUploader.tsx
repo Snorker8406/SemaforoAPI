@@ -1,4 +1,4 @@
-import React, { forwardRef, HTMLAttributes, useState } from 'react'
+import React, { forwardRef, HTMLAttributes, Suspense, useState } from 'react'
 import PropTypes, { any } from 'prop-types'
 import { dataColumn, dataItem, fileDTO } from '../../types'
 import 'react-dropzone-uploader/dist/styles.css'
@@ -6,9 +6,9 @@ import Dropzone from 'react-dropzone-uploader'
 import { useEffect } from 'react'
 import CIcon from '@coreui/icons-react'
 import * as icon from '@coreui/icons'
-import useFetch from '../Utils/useFetch'
+import { SpinnerLoading } from '../Utils/spinnerLoading'
 
-export interface FileUploadProps extends HTMLAttributes<HTMLDivElement> {
+export interface FileUploaderProps extends HTMLAttributes<HTMLDivElement> {
   itemData: dataItem
   f: dataColumn
   register: any
@@ -17,9 +17,10 @@ export interface FileUploadProps extends HTMLAttributes<HTMLDivElement> {
   className?: string
   APIurl: string
   itemIdField: string
+  rows?: number
 }
 
-export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
+export const FileUploader = forwardRef<HTMLDivElement, FileUploaderProps>(
   (
     {
       itemData,
@@ -30,6 +31,7 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
       className,
       APIurl,
       itemIdField,
+      rows,
     },
     ref,
   ) => {
@@ -38,6 +40,7 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
     }
 
     const [initialFiles, setInitialFiles] = useState([] as File[])
+    // const [isDownloading, setIsDownloading] = useState(false)
 
     useEffect(() => {
       setInitialFiles([...initialFiles, ...existingFiles])
@@ -47,10 +50,17 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
       onChangeStatus({ meta, file }, status, f.type, f.key)
     }
 
-    const downloadFile = (fileName: string) => {
+    const getFileInfo = (fileName: string) => {
+      if (!itemData.files) return null
       const fileInfo = itemData.files.find(
         (f: fileDTO) => f.fileName === fileName,
       )
+      return fileInfo
+    }
+
+    const downloadFile = (fileName: string) => {
+      // setIsDownloading(true)
+      const fileInfo = getFileInfo(fileName)
       const entityId = fileInfo[itemIdField]
       const fileId = fileInfo.fileId
       fetch(APIurl + entityId + '/DownloadFile/' + fileId)
@@ -64,6 +74,7 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
           a.download = fileName
           a.click()
           window.URL.revokeObjectURL(url)
+          // setIsDownloading(false)
         })
     }
 
@@ -78,6 +89,55 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
         default:
           return icon.cilFile
       }
+    }
+    const previewImage = (props: any) => {
+      const {
+        className,
+        imageClassName,
+        style,
+        imageStyle,
+        fileWithMeta: { cancel, remove, restart },
+        meta: {
+          name = '',
+          percent = 0,
+          size = 0,
+          previewUrl,
+          status,
+          duration,
+          validationError,
+          type,
+        },
+        isUpload,
+        canCancel,
+        canRemove,
+        canRestart,
+        extra: { minSizeBytes },
+      } = props
+      const title = `${name || '?'}, ${size}`
+      return (
+        <div>
+          {previewUrl && (
+            <img
+              className={imageClassName}
+              style={imageStyle}
+              src={previewUrl}
+              alt={title}
+              title={title}
+            />
+          )}
+          {status !== 'preparing' &&
+            status !== 'getting_upload_params' &&
+            status !== 'uploading' &&
+            canRemove && (
+              <CIcon
+                className="remove-file"
+                onClick={remove}
+                icon={icon.cilTrash}
+                size="lg"
+              />
+            )}
+        </div>
+      )
     }
 
     const previewFiles = (props: any) => {
@@ -119,15 +179,21 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
             </div>
             <div className="col-md-1">
               <CIcon
+                className={getFileInfo(name) ? 'download-icon' : 'add-icon'}
                 onClick={() => downloadFile(name)}
-                icon={icon.cilCloudDownload}
+                icon={getFileInfo(name) ? icon.cilCloudDownload : icon.cilPlus}
                 color="success"
                 size="lg"
               />
             </div>
             {canRemove && (
               <div className="col-md-1">
-                <CIcon onClick={remove} icon={icon.cilTrash} size="lg" />
+                <CIcon
+                  className="remove-file"
+                  onClick={remove}
+                  icon={icon.cilTrash}
+                  size="lg"
+                />
               </div>
             )}
           </div>
@@ -141,7 +207,9 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
           key={'file-' + f.key}
           onChangeStatus={handleChangeStatus}
           styles={{
-            dropzone: { minHeight: 111, maxHeight: 400 },
+            previewImage: {
+              height: f.rows ? f.rows * 24 + 14 + 'px' : '100px',
+            },
             dropzoneReject: { borderColor: 'red', backgroundColor: '#DAA' },
             inputLabel: (files, extra) =>
               extra.reject ? { color: 'red' } : {},
@@ -152,6 +220,10 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
           }
           maxFiles={1}
           initialFiles={initialFiles}
+          PreviewComponent={previewImage}
+          addClassNames={{
+            dropzone: className,
+          }}
         />
       )
     }
@@ -163,7 +235,7 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
           key={'file-' + f.key}
           onChangeStatus={handleChangeStatus}
           styles={{
-            dropzone: { minHeight: 111, maxHeight: 400 },
+            dropzone: { minHeight: 100, maxHeight: 400 },
             dropzoneReject: { borderColor: 'red', backgroundColor: '#DAA' },
             inputLabel: (files, extra) =>
               extra.reject ? { color: 'red' } : {},
@@ -178,25 +250,33 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
     }
     const renderFilesUploader = () => {
       return (
-        <Dropzone
-          {...register(toLower(f.key))}
-          key={'file-' + f.key}
-          onChangeStatus={handleChangeStatus}
-          styles={{
-            dropzone: { minHeight: 111, maxHeight: 400 },
-            dropzoneReject: { borderColor: 'red', backgroundColor: '#DAA' },
-            inputLabel: (files, extra) =>
-              extra.reject ? { color: 'red' } : {},
-          }}
-          inputContent={(files, extra) =>
-            extra.reject ? 'Archivo Invalido' : f.label
-          }
-          initialFiles={initialFiles}
-          PreviewComponent={previewFiles}
-          addClassNames={{
-            dropzone: className,
-          }}
-        />
+        <Suspense fallback={<SpinnerLoading visible={true} type="loading" />}>
+          <Dropzone
+            {...register(toLower(f.key))}
+            key={'file-' + f.key}
+            onChangeStatus={handleChangeStatus}
+            styles={{
+              dropzone: { minHeight: 100, maxHeight: 400 },
+              dropzoneReject: { borderColor: 'red', backgroundColor: '#DAA' },
+              inputLabel: (files, extra) =>
+                extra.reject ? { color: 'red' } : {},
+            }}
+            inputContent={(files, extra) =>
+              extra.reject ? 'Archivo Invalido' : f.label
+            }
+            initialFiles={initialFiles}
+            PreviewComponent={previewFiles}
+            addClassNames={{
+              dropzone: className,
+            }}
+          />
+          {/* <SpinnerLoading
+            color="primary"
+            visible={isDownloading}
+            type="loading"
+            setVisible={setIsDownloading}
+          /> */}
+        </Suspense>
       )
     }
     switch (f.type) {
@@ -210,7 +290,7 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
   },
 )
 
-FileUpload.propTypes = {
+FileUploader.propTypes = {
   itemData: PropTypes.any.isRequired,
   f: PropTypes.any.isRequired,
   register: PropTypes.func.isRequired,
@@ -218,6 +298,7 @@ FileUpload.propTypes = {
   className: PropTypes.string,
   APIurl: PropTypes.string.isRequired,
   itemIdField: PropTypes.string.isRequired,
+  rows: PropTypes.number,
 }
 
-FileUpload.displayName = 'FileUpload'
+FileUploader.displayName = 'FileUploader'

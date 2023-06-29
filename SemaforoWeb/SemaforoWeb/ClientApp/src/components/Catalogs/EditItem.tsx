@@ -1,4 +1,4 @@
-import React, { useState, useEffect, HTMLAttributes, forwardRef } from 'react'
+import React, { useState, useEffect, HTMLAttributes, forwardRef, Suspense } from 'react'
 import PropTypes, { string } from 'prop-types'
 import {
   CModal,
@@ -21,7 +21,8 @@ import {
 import { dataItem, dataColumn, fileDTO } from '../../types'
 import useFetch from '../Utils/useFetch'
 import { useForm } from 'react-hook-form'
-import { FileUpload } from './FileUploader'
+import { FileUploader } from './FileUploader'
+import { SpinnerLoading } from '../Utils/spinnerLoading'
 
 export interface EditItemProps extends HTMLAttributes<HTMLDivElement> {
   visible: boolean
@@ -56,6 +57,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
     const [saveResponse, saveItem] = useFetch(APIurl, 'POST')
     const [existingFiles, setExistingFiles] = useState([] as File[])
     const [existingImage, setExistingImage] = useState([] as File[])
+    // const [isSaving, setIsSaving] = useState(false)
     const {
       register,
       handleSubmit,
@@ -139,6 +141,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
         switch (fieldType) {
           case 'files':
             if (
+              itemData['files'] &&
               itemData['files'].find(
                 (f: never) => f['fileName'] === file['name'],
               )
@@ -148,6 +151,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
             break
           case 'images':
             if (
+              itemData['images'] &&
               itemData['images']?.find(
                 (f: never) => f['fileName'] === file['name'],
               )
@@ -177,7 +181,8 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       // console.log(status, meta, file)
     }
 
-    const saveChanges = (data: any) => {
+    const saveChanges = async (data: any) => {
+      // setIsSaving(true)
       const formData = new FormData()
       if (image.length > 0) {
         formData.append('image', image[0])
@@ -199,7 +204,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
         }
       }
       formData.append('dto', JSON.stringify({ ...data }))
-      saveItem(
+      await saveItem(
         isNewItem ? '' : itemData[itemIdField as dataItemKey],
         formData,
         isNewItem ? 'POST' : 'PUT',
@@ -210,6 +215,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       setImage([])
       setExistingFiles([])
       setExistingImage([])
+      // setIsSaving(false)
     }
 
     const onCloseEdit = () => {
@@ -272,7 +278,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
           )
         case 'image':
           return (
-            <FileUpload
+            <FileUploader
               itemData={itemData}
               f={f}
               register={register}
@@ -280,21 +286,27 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
               existingFiles={existingImage}
               APIurl={APIurl}
               itemIdField={itemIdField}
+              className={'sigle-image'}
             />
           )
         case 'images':
         case 'files':
           return (
-            <FileUpload
-              itemData={itemData}
-              f={f}
-              register={register}
-              onChangeStatus={onFileStatusChanged}
-              existingFiles={existingFiles}
-              className={'all-type-files'}
-              APIurl={APIurl}
-              itemIdField={itemIdField}
-            />
+            <Suspense
+              fallback={<SpinnerLoading visible={true} type="loading" />}
+            >
+              <FileUploader
+                itemData={itemData}
+                f={f}
+                register={register}
+                onChangeStatus={onFileStatusChanged}
+                existingFiles={existingFiles}
+                className={'all-type-files'}
+                APIurl={APIurl}
+                itemIdField={itemIdField}
+                rows={f.rows}
+              />
+            </Suspense>
           )
         default:
           return (
@@ -357,6 +369,12 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
             </CButton>
           </CModalFooter>
         </CForm>
+        {/* <SpinnerLoading
+          color="primary"
+          visible={isSaving}
+          type="saving"
+          setVisible={setIsSaving}
+        /> */}
       </CModal>
     )
   },

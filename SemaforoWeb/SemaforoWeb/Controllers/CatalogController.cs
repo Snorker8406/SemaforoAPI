@@ -86,15 +86,41 @@ namespace SemaforoWeb.Controllers
 
         // POST api/<ClientController>
         [HttpPost("{entityName}")]
-        public async Task<IActionResult> PostItem(object dto, string entityName)
+        public async Task<IActionResult> PostItem(
+            string entityName,
+            [FromForm] string dto,
+            [FromForm(Name = "image")] IFormFile image,
+            [FromForm(Name = "images")] List<IFormFile> images,
+            [FromForm(Name = "files")] List<IFormFile> files)
         {
             try
             {
                 Type typeBO = Type.GetType("Semaforo.Logic.BO." + entityName + "BO, Semaforo.Logic");
                 Type typeDTO = Type.GetType("SemaforoWeb.DTO.CatalogsDTO." + entityName + "DTO, SemaforoWeb");
                 var itemDTO = JsonConvert.DeserializeObject(dto.ToString(), typeDTO);
+                if (image != null)
+                {
+                    typeDTO.GetProperty("Image").SetValue(itemDTO, image);
+                }
+                if (images.Any())
+                {
+                    typeDTO.GetProperty("Images").SetValue(itemDTO, images);
+                }
+                if (files.Any())
+                {
+                    List<FileDTO> filesDTO = new List<FileDTO>();
+                    foreach (var file in files)
+                    {
+                        FileDTO fileDTO = new FileDTO();
+                        fileDTO.GetType().GetProperty(entityName + "Id").SetValue(fileDTO, 0);
+                        _mapper.Map(file, fileDTO);
+                        filesDTO.Add(fileDTO);
+                    }
+                    typeDTO.GetProperty("Files").SetValue(itemDTO, filesDTO);
+                }
                 var itemBO = _mapper.Map(itemDTO, typeDTO, typeBO);
-                dynamic response = await _services[entityName].saveEntity(itemBO);
+                dynamic response = await _services[entityName].saveEntity(itemBO, entityName);// aqui se puede mejorar la logica a una sola llamada
+
                 if (typeBO.GetProperty(entityName + "Id").GetValue(response) > 0)
                 {
                     return Ok(response);
@@ -146,10 +172,6 @@ namespace SemaforoWeb.Controllers
                         filesDTO.Add(fileDTO);
                     }
                     typeDTO.GetProperty("Files").SetValue(itemDTO, filesDTO);
-                }
-                if (removedFiles.Any())
-                {
-
                 }
                 var itemBO = _mapper.Map(itemDTO, typeDTO, typeBO);
                 if (id != (int)typeBO.GetProperty(entityName + "Id").GetValue(itemBO))

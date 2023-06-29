@@ -318,7 +318,8 @@
           "type": "image",
           "isColumn": false,
           "isInForm": true,
-          "size": 6
+          "size": 2,
+          "rows": 4
         },
         {
           "key": "comments",
@@ -326,7 +327,7 @@
           "type": "textarea",
           "isColumn": false,
           "isInForm": true,
-          "size": 6,
+          "size": 10,
           "rows": 4
         },
         {

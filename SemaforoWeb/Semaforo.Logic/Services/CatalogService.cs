@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Semaforo.Logic.Services
 {
@@ -65,19 +66,13 @@ namespace Semaforo.Logic.Services
         {
             try
             {
-                var props = typeof(BO).GetProperties().Select(p => p.Name).Where(p => p.IndexOf("Files") > -1);
-
-                if (props.Any())
+                if (typeof(BO).GetProperty("Files") != null)
                 {
-                    foreach (var field in props)
+                    List<File> files = _mapper.Map<List<File>>(bo.GetType().GetProperty("Files").GetValue(bo, null));
+                    foreach (var file in files)
                     {
-                        List<File> files = _mapper.Map<List<File>>(bo.GetType().GetProperty(field).GetValue(bo, null));
-                        foreach (var file in files) {
-                            if (file.FileId == 0)
-                                Context.Set<File>().Add(file);
-                            //else
-                            //    Context.Entry(file).State = EntityState.Modified;
-                        }
+                        if (file.FileId == 0)
+                            Context.Set<File>().Add(file);
                     }
                 }
                 if (removedFiles.Any()) {
@@ -129,7 +124,10 @@ namespace Semaforo.Logic.Services
                 var propertyOrFieldExpression = Expression.PropertyOrField(parameterExpression, entityName + "Id");
                 var equalityExpression = Expression.Equal(propertyOrFieldExpression, Expression.Constant(id, typeof(int)));
                 var lambdaExpression = Expression.Lambda<Func<T, bool>>(equalityExpression, parameterExpression);
-                var entity = await Context.Set<T>().Include<T>("Files").FirstOrDefaultAsync<T>(lambdaExpression);
+                T entity;
+                if (typeof(BO).GetProperty("Files") != null)
+                    entity = await Context.Set<T>().Include<T>("Files").FirstOrDefaultAsync<T>(lambdaExpression);
+                else entity = await Context.Set<T>().FirstOrDefaultAsync<T>(lambdaExpression);
                 bo = _mapper.Map<BO>(entity);
             }
             AddOptions(bo);
@@ -177,12 +175,13 @@ namespace Semaforo.Logic.Services
                 throw;
             }
         }
-        public async Task<BO> saveEntity(object BO)
+        public async Task<BO> saveEntity(object BO, string entityName)
         {
             try
             {
                 T entity = _mapper.Map<T>(BO);
                 Context.Set<T>().Add(entity);
+                HandleFiles(entity, new List<string>(), entityName);
                 await Context.SaveChangesAsync();
                 BO response = _mapper.Map<BO>(entity);
                 return response;
