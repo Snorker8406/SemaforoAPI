@@ -1,9 +1,10 @@
-import { useState } from 'react'
-import { dataItem } from '../../types'
+import { useContext, useState } from 'react'
+import { LoaderContext } from './loaderContext'
 
 const useFetch = (APIurl: string, httpRequest?: string) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [data, setData] = useState<any>(null)
+  const { setShowLoader } = useContext(LoaderContext)
 
   const triggerFetch = async (
     item?: string,
@@ -12,6 +13,7 @@ const useFetch = (APIurl: string, httpRequest?: string) => {
     tAPIurl?: string,
   ) => {
     try {
+      setShowLoader(true)
       const http = tHttpRequest ? tHttpRequest : httpRequest
       let url: string = tAPIurl ? tAPIurl : APIurl
       if (item && (http === 'GET' || http === 'PUT' || http === 'DELETE')) {
@@ -32,9 +34,11 @@ const useFetch = (APIurl: string, httpRequest?: string) => {
         const data = await fetch(url, options)
         const json = await data.json()
         setData(json)
+        setShowLoader(false)
       }
       fetchData()
     } catch (error) {
+      setShowLoader(false)
       console.log(error)
     }
   }

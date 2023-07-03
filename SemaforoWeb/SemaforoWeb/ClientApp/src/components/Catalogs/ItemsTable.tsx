@@ -1,4 +1,11 @@
-import React, { useState, useEffect, HTMLAttributes, forwardRef } from 'react'
+import React, {
+  useState,
+  useEffect,
+  HTMLAttributes,
+  forwardRef,
+  Suspense,
+  useContext,
+} from 'react'
 import { cilPencil, cilTrash } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import { CSmartTable, CCardBody, CCollapse, CButton } from '@coreui/react-pro'
@@ -8,6 +15,8 @@ import { dataItem, dataColumn } from '../../types'
 import PropTypes from 'prop-types'
 import { ConfirmationModal } from '../Utils/confirmationModal'
 import useFetch from '../Utils/useFetch'
+import { SpinnerLoading } from '../Utils/spinnerLoading'
+import { LoaderContext } from '../Utils/loaderContext'
 
 export interface ItemsTableProps extends HTMLAttributes<HTMLDivElement> {
   APIurl: string
@@ -24,14 +33,16 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
     const [isNewItem, setIsNewItem] = useState(false)
     const [isItemUpdated, setIsItemUpdated] = useState(false)
     const [showConfirmDelete, setShowConfirmDelete] = useState(false)
+    // const [isLoading, setIsLoading] = useState(true)
     const [deleteConfirmMessage, setDeleteConfirmMessage] = useState('')
     const [tableData, getTableData] = useFetch(APIurl, 'GET')
     const [itemData, getItemData] = useFetch(APIurl, 'GET')
     const [deletingResponse, deleteItem] = useFetch(APIurl, 'DELETE')
+    const { setShowLoader } = useContext(LoaderContext)
 
     useEffect(() => {
+      setShowLoader(true)
       getTableData()
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
@@ -53,7 +64,6 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
     useEffect(() => {
       if (!deletingResponse) return
       getTableData()
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [deletingResponse])
 
     const handleColumns = (columns: dataColumn[]) => {
@@ -147,6 +157,7 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
       </td>
     )
 
+    // if (isLoading) return <SpinnerLoading />
     return (
       <>
         <div className="d-grid justify-content-md-end">
@@ -184,6 +195,7 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
             hover: true,
             responsive: true,
           }}
+          // loading={isLoading}
         />
         <EditItem
           visible={showEdit}

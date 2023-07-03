@@ -2,6 +2,7 @@ import React from 'react'
 import API from '../../API'
 import { ItemsTable } from '../../components/Catalogs/ItemsTable'
 import { CCol, CRow } from '@coreui/react-pro'
+import { SpinnerLoading } from '../../components/Utils/spinnerLoading'
 
 const Client = () => {
   const ClientTable = () => {

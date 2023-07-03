@@ -119,7 +119,7 @@ namespace SemaforoWeb.Controllers
                     typeDTO.GetProperty("Files").SetValue(itemDTO, filesDTO);
                 }
                 var itemBO = _mapper.Map(itemDTO, typeDTO, typeBO);
-                dynamic response = await _services[entityName].saveEntity(itemBO, entityName);// aqui se puede mejorar la logica a una sola llamada
+                dynamic response = await _services[entityName].saveEntity(itemBO, entityName);
 
                 if (typeBO.GetProperty(entityName + "Id").GetValue(response) > 0)
                 {

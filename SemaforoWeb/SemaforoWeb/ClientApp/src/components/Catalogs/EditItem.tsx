@@ -1,4 +1,10 @@
-import React, { useState, useEffect, HTMLAttributes, forwardRef, Suspense } from 'react'
+import React, {
+  useState,
+  useEffect,
+  HTMLAttributes,
+  forwardRef,
+  Suspense,
+} from 'react'
 import PropTypes, { string } from 'prop-types'
 import {
   CModal,
@@ -57,7 +63,6 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
     const [saveResponse, saveItem] = useFetch(APIurl, 'POST')
     const [existingFiles, setExistingFiles] = useState([] as File[])
     const [existingImage, setExistingImage] = useState([] as File[])
-    // const [isSaving, setIsSaving] = useState(false)
     const {
       register,
       handleSubmit,
@@ -292,9 +297,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
         case 'images':
         case 'files':
           return (
-            <Suspense
-              fallback={<SpinnerLoading visible={true} type="loading" />}
-            >
+            <Suspense fallback={<SpinnerLoading />}>
               <FileUploader
                 itemData={itemData}
                 f={f}

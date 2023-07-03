@@ -30,3 +30,8 @@ export type fileDTO = {
   contentType: string
   archive: string
 }
+
+export type LoaderType = {
+  showLoader: boolean
+  setShowLoader: (show: boolean) => void
+}

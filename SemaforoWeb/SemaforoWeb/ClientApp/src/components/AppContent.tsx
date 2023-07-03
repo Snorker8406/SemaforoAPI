@@ -1,13 +1,31 @@
-import React, { Suspense } from 'react'
+import React, {
+  createContext,
+  Suspense,
+  useContext,
+  useMemo,
+  useState,
+} from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { CSpinner } from '@coreui/react-pro'
+import { SpinnerLoading } from './Utils/spinnerLoading'
 
 // routes config
 import routes from '../routes'
+import { Loader } from './Utils/Loader'
+import { LoaderContext } from './Utils/loaderContext'
 
 const AppContent = () => {
+  const [showLoader, setShowLoader] = useState(false)
+  const [type, setType] = useState('loading')
+  const loaderValues: any = useMemo(
+    () => ({ showLoader, setShowLoader, type, setType }),
+    [showLoader, type],
+  )
+
   return (
-    <Suspense fallback={<CSpinner color="primary" />}>
+    <Suspense fallback={<SpinnerLoading />}>
+      <LoaderContext.Provider value={loaderValues}>
+        <Loader />
+      </LoaderContext.Provider>
       <Routes>
         {routes.map((route, idx) => {
           return (

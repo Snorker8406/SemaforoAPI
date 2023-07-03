@@ -1,4 +1,10 @@
-import React, { forwardRef, HTMLAttributes, Suspense, useState } from 'react'
+import React, {
+  forwardRef,
+  HTMLAttributes,
+  Suspense,
+  useContext,
+  useState,
+} from 'react'
 import PropTypes, { any } from 'prop-types'
 import { dataColumn, dataItem, fileDTO } from '../../types'
 import 'react-dropzone-uploader/dist/styles.css'
@@ -7,6 +13,7 @@ import { useEffect } from 'react'
 import CIcon from '@coreui/icons-react'
 import * as icon from '@coreui/icons'
 import { SpinnerLoading } from '../Utils/spinnerLoading'
+import { LoaderContext } from '../Utils/loaderContext'
 
 export interface FileUploaderProps extends HTMLAttributes<HTMLDivElement> {
   itemData: dataItem
@@ -35,17 +42,16 @@ export const FileUploader = forwardRef<HTMLDivElement, FileUploaderProps>(
     },
     ref,
   ) => {
-    const toLower = (str: string) => {
-      return str.charAt(0).toLowerCase() + str.slice(1)
-    }
-
     const [initialFiles, setInitialFiles] = useState([] as File[])
-    // const [isDownloading, setIsDownloading] = useState(false)
+    const { setShowLoader } = useContext(LoaderContext)
 
     useEffect(() => {
       setInitialFiles([...initialFiles, ...existingFiles])
     }, [existingFiles])
 
+    const toLower = (str: string) => {
+      return str.charAt(0).toLowerCase() + str.slice(1)
+    }
     const handleChangeStatus = ({ meta, file }: never, status: string) => {
       onChangeStatus({ meta, file }, status, f.type, f.key)
     }
@@ -59,7 +65,7 @@ export const FileUploader = forwardRef<HTMLDivElement, FileUploaderProps>(
     }
 
     const downloadFile = (fileName: string) => {
-      // setIsDownloading(true)
+      setShowLoader(true)
       const fileInfo = getFileInfo(fileName)
       const entityId = fileInfo[itemIdField]
       const fileId = fileInfo.fileId
@@ -74,7 +80,7 @@ export const FileUploader = forwardRef<HTMLDivElement, FileUploaderProps>(
           a.download = fileName
           a.click()
           window.URL.revokeObjectURL(url)
-          // setIsDownloading(false)
+          setShowLoader(false)
         })
     }
 
@@ -250,7 +256,7 @@ export const FileUploader = forwardRef<HTMLDivElement, FileUploaderProps>(
     }
     const renderFilesUploader = () => {
       return (
-        <Suspense fallback={<SpinnerLoading visible={true} type="loading" />}>
+        <Suspense fallback={<SpinnerLoading />}>
           <Dropzone
             {...register(toLower(f.key))}
             key={'file-' + f.key}
