@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,12 +11,15 @@ using Semaforo.Logic.Models;
 using Semaforo.Logic.Services;
 using SemaforoWeb.DTO;
 using SemaforoWeb.DTO.CatalogsDTO.Catalogs;
+using SemaforoWeb.Email;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 
 namespace SemaforoWeb.Controllers
@@ -29,19 +34,22 @@ namespace SemaforoWeb.Controllers
         private readonly db_9bc4da_semaforoContext _context;
         private readonly IMapper _mapper;
         private readonly AuthService _authService;
+        private readonly IEmailSender _emailSender;
         public AuthController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IConfiguration configuration,
             db_9bc4da_semaforoContext context,
-            IMapper mapper)
+            IMapper mapper,
+            IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            this._configuration = configuration;
+            _configuration = configuration;
             _context = context;
             _mapper = mapper;
             _authService = new AuthService(context, mapper, null);
+            _emailSender = emailSender;
         }
 
         [Route("Register")]
@@ -50,14 +58,29 @@ namespace SemaforoWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                var appUser = new ApplicationUser { UserName = model.Username, Email = model.Email };
+                var appUser = new ApplicationUser { UserName = model.Username, Email = model.Email, EmailConfirmed = false };
                 var result = await _userManager.CreateAsync(appUser, model.Password);
                 if (result.Succeeded)
                 {
-                    ApplicationUserBO newUser = _mapper.Map<ApplicationUserBO>(model);
-                    _mapper.Map(appUser, newUser);
-                    int userId = await _authService.RegisterApplicationUser(newUser);
-                    return Ok(userId);
+                    var code = _userManager.GenerateEmailConfirmationTokenAsync(appUser);
+                    var emailBody = $"Por favor confirme su correo con este link <a href=\"#URL#\"> click aqui </a>";
+
+                    var callbackUrl = Request.Scheme + "://" + Request.Host + Url.Action("ConfirmEmail", "Auth", values: new { userId = appUser.Id, code = code.Result });
+                    var body = emailBody.Replace("#URL#", callbackUrl);
+                    try
+                    {
+                        await _emailSender.SendEmailAsync(appUser.Email, _configuration.GetValue<string>("CompanyName") + ": Verifica tu Cuenta", body);
+                        return Ok("Por favor verifica tu cuenta en el correo electronico que te acabamos de enviar");
+                    }
+                    catch (Exception ex)
+                    {
+                        return BadRequest("Error en el envío de correo de verificación: "+ ex.Message);
+                    }
+
+                    //ApplicationUserBO newUser = _mapper.Map<ApplicationUserBO>(model);
+                    //_mapper.Map(appUser, newUser);
+                    //int userId = await _authService.RegisterApplicationUser(newUser);
+                    //return Ok(userId);
                 }
                 else
                 {
@@ -72,6 +95,23 @@ namespace SemaforoWeb.Controllers
 
         }
 
+        [HttpGet]
+        [Route("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmail(string userId, string code) {
+            if (userId == null || code == null) {
+                return BadRequest("Invalid Email confirmation URL");
+            }
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return BadRequest("Invalid Email parameters");
+            }
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+            var status = result.Succeeded ? "cuenta validada correctamente" : "tu correo no ha sido confirmado, por favor intentelo mas tarde";
+
+            return Ok();
+        }
+
         [HttpPost]
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDTO userInfo)
@@ -81,7 +121,15 @@ namespace SemaforoWeb.Controllers
                 var result = await _signInManager.PasswordSignInAsync(userInfo.Username, userInfo.Password, isPersistent: true, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    return BuildToken(userInfo);
+                    var user = await _signInManager.UserManager.FindByNameAsync(userInfo.Username);
+                    if (user.EmailConfirmed)
+                    {
+                        return BuildToken(userInfo);
+                    }
+                    else {
+                        ModelState.AddModelError(string.Empty, "Email needs to be confirmed");
+                        return BadRequest(ModelState);
+                    }                        
                 }
                 else
                 {
@@ -110,8 +158,8 @@ namespace SemaforoWeb.Controllers
             var expiration = DateTime.UtcNow.AddHours(1);
 
             JwtSecurityToken token = new JwtSecurityToken(
-               issuer: "yourdomain.com",
-               audience: "yourdomain.com",
+               issuer: "elsemaforouniformes.com",
+               audience: "elsemaforouniformes.com",
                claims: claims,
                expires: expiration,
                signingCredentials: creds);
@@ -122,6 +170,10 @@ namespace SemaforoWeb.Controllers
                 expiration = expiration
             });
 
+        }
+
+        private void SendEmail(string body, string email) {
+        
         }
     }
 }

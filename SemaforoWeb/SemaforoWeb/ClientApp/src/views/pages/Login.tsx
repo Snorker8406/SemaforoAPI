@@ -33,7 +33,7 @@ const Login = (): JSX.Element => {
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
                       <CFormInput
-                        placeholder="Usurio"
+                        placeholder="Email/Usuario"
                         autoComplete="username"
                       />
                     </CInputGroup>

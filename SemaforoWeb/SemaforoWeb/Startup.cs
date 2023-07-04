@@ -14,6 +14,7 @@ using Semaforo.Logic;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SemaforoWeb.Email;
 //Scaffold-DbContext "Data Source=SQL5063.site4now.net;Initial Catalog=db_9bc4da_semaforo;User Id=db_9bc4da_semaforo_admin;Password=semaforo123" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force
 namespace SemaforoWeb
 {
@@ -32,7 +33,7 @@ namespace SemaforoWeb
 
             services.AddControllersWithViews();
 
-            services.AddDbContext<db_9bc4da_semaforoContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SemaforoContext")));
+            services.AddDbContext<db_9bc4da_semaforoContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AppContext")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                  .AddEntityFrameworkStores<db_9bc4da_semaforoContext>()
@@ -58,6 +59,8 @@ namespace SemaforoWeb
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddSwaggerGen(config =>
             {
