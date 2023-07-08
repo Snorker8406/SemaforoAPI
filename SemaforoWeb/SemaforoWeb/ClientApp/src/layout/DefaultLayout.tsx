@@ -12,7 +12,7 @@ import AuthContext from '../components/shared/AuthContext'
 const DefaultLayout = (): JSX.Element => {
   const { user } = useContext(AuthContext) as any
 
-  if (!user) return <Navigate to="/login" />
+  if (!user) return <Navigate to="/login" /> //TODO: implement ProtectedRoute https://www.youtube.com/watch?v=GJZP8vWj12s
   return (
     <>
       <AppSidebar />

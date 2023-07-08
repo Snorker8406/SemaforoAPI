@@ -25,6 +25,7 @@ export const AuthContextProvider = forwardRef<HTMLDivElement, AuthContextProps>(
     }) as any
 
     useEffect(() => {
+      if (!userResponse) return
       setUser(userResponse)
       localStorage.setItem('currentUser', JSON.stringify(userResponse))
     }, [userResponse])

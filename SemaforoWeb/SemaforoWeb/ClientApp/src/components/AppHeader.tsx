@@ -17,6 +17,7 @@ import CIcon from '@coreui/icons-react'
 
 import { AppBreadcrumb } from './index'
 import { logo } from '../assets/brand/logo'
+import AppHeaderDropdown from './header/AppHeaderDropdown'
 
 const AppHeader = (): JSX.Element => {
   const dispatch = useDispatch()
@@ -42,11 +43,14 @@ const AppHeader = (): JSX.Element => {
             </CNavLink>
           </CNavItem>
         </CHeaderNav>
+        <CHeaderNav className="ms-3 me-4">
+          <AppHeaderDropdown />
+        </CHeaderNav>
         <CHeaderToggler
           className="px-md-0 me-md-3"
           onClick={() => dispatch({ type: 'set', asideShow: !asideShow })}
         >
-          <CIcon icon={cilApplicationsSettings} size="lg" />
+          {/* <CIcon icon={cilApplicationsSettings} size="lg" /> */}
         </CHeaderToggler>
       </CContainer>
       <CHeaderDivider />
