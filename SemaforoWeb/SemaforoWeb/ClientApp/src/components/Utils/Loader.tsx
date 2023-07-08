@@ -1,6 +1,6 @@
 import React, { HTMLAttributes, forwardRef, useContext } from 'react'
 import { CSpinner } from '@coreui/react-pro'
-import { LoaderContext } from './loaderContext'
+import { LoaderContext } from '../shared/loaderContext'
 
 export type LoaderProps = HTMLAttributes<HTMLDivElement>
 

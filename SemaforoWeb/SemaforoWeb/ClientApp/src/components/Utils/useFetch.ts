@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import { LoaderContext } from './loaderContext'
+import { LoaderContext } from '../shared/loaderContext'
 
 const useFetchCatalogs = (APIurl: string, httpRequest?: string) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

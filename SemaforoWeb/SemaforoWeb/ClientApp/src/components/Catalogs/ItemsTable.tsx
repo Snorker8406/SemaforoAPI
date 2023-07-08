@@ -16,7 +16,7 @@ import PropTypes from 'prop-types'
 import { ConfirmationModal } from '../Utils/confirmationModal'
 import useFetchCatalogs from '../Utils/useFetch'
 import { SpinnerLoading } from '../Utils/spinnerLoading'
-import { LoaderContext } from '../Utils/loaderContext'
+import { LoaderContext } from '../shared/loaderContext'
 
 export interface ItemsTableProps extends HTMLAttributes<HTMLDivElement> {
   APIurl: string

@@ -13,7 +13,7 @@ import { useEffect } from 'react'
 import CIcon from '@coreui/icons-react'
 import * as icon from '@coreui/icons'
 import { SpinnerLoading } from '../Utils/spinnerLoading'
-import { LoaderContext } from '../Utils/loaderContext'
+import { LoaderContext } from '../shared/loaderContext'
 
 export interface FileUploaderProps extends HTMLAttributes<HTMLDivElement> {
   itemData: dataItem

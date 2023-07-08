@@ -11,7 +11,7 @@ import { SpinnerLoading } from './Utils/spinnerLoading'
 // routes config
 import routes from '../routes'
 import { Loader } from './Utils/Loader'
-import { LoaderContext } from './Utils/loaderContext'
+import { LoaderContext } from './shared/loaderContext'
 
 const AppContent = () => {
   const [showLoader, setShowLoader] = useState(false)
