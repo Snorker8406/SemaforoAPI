@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -20,12 +20,15 @@ import AuthContext from '../../components/shared/AuthContext'
 const Login = (): JSX.Element => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const { loginApiCall } = useContext(AuthContext) as any
+  const { loginApiCall, user } = useContext(AuthContext) as any
 
   const sendCredentials = async (username: string, password: string) => {
     loginApiCall(null, { username, password })
   }
 
+  if (user) {
+    return <Navigate to="/" />
+  }
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>

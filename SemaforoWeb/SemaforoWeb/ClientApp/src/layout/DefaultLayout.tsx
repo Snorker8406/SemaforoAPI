@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { Navigate } from 'react-router-dom'
 import {
   AppAside,
   AppContent,
@@ -6,8 +7,12 @@ import {
   AppFooter,
   AppHeader,
 } from '../components/index'
+import AuthContext from '../components/shared/AuthContext'
 
 const DefaultLayout = (): JSX.Element => {
+  const { user } = useContext(AuthContext) as any
+
+  if (!user) return <Navigate to="/login" />
   return (
     <>
       <AppSidebar />
