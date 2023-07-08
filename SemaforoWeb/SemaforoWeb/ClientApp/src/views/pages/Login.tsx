@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   CButton,
@@ -15,8 +15,17 @@ import {
 } from '@coreui/react-pro'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
+import AuthContext from '../../components/shared/AuthContext'
 
 const Login = (): JSX.Element => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const { loginApiCall } = useContext(AuthContext) as any
+
+  const sendCredentials = async (username: string, password: string) => {
+    loginApiCall(null, { username, password })
+  }
+
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
@@ -35,6 +44,10 @@ const Login = (): JSX.Element => {
                       <CFormInput
                         placeholder="Email/Usuario"
                         autoComplete="username"
+                        value={username}
+                        onChange={(e) => {
+                          setUsername(e.target.value)
+                        }}
                       />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
@@ -45,11 +58,21 @@ const Login = (): JSX.Element => {
                         type="password"
                         placeholder="Contraseña"
                         autoComplete="current-password"
+                        value={password}
+                        onChange={(e) => {
+                          setPassword(e.target.value)
+                        }}
                       />
                     </CInputGroup>
                     <CRow>
                       <CCol xs={6}>
-                        <CButton color="primary" className="px-4">
+                        <CButton
+                          color="primary"
+                          className="px-4"
+                          onClick={() => {
+                            sendCredentials(username, password)
+                          }}
+                        >
                           Login
                         </CButton>
                       </CCol>

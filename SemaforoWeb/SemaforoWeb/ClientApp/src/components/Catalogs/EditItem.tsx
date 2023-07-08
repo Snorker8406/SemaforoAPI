@@ -5,7 +5,7 @@ import React, {
   forwardRef,
   Suspense,
 } from 'react'
-import PropTypes, { string } from 'prop-types'
+import PropTypes from 'prop-types'
 import {
   CModal,
   CModalHeader,
@@ -25,7 +25,7 @@ import {
 } from '@coreui/react-pro'
 
 import { dataItem, dataColumn, fileDTO } from '../../types'
-import useFetch from '../Utils/useFetch'
+import useFetchCatalogs from '../Utils/useFetch'
 import { useForm } from 'react-hook-form'
 import { FileUploader } from './FileUploader'
 import { SpinnerLoading } from '../Utils/spinnerLoading'
@@ -60,7 +60,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
     const [formTitle, setFormTitle] = useState('')
     const [images, setImages] = useState([])
     const [image, setImage] = useState([])
-    const [saveResponse, saveItem] = useFetch(APIurl, 'POST')
+    const [saveResponse, saveItem] = useFetchCatalogs(APIurl, 'POST')
     const [existingFiles, setExistingFiles] = useState([] as File[])
     const [existingImage, setExistingImage] = useState([] as File[])
     const {

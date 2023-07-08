@@ -32,12 +32,36 @@ namespace Semaforo.Logic.Services
         }
 
         public async Task<int> RegisterApplicationUser(ApplicationUserBO newUser) {
-            Employee employee = _mapper.Map<Employee>(newUser);
-            Context.Employees.Add(employee);
-            await Context.SaveChangesAsync();
+            try
+            {
+                Employee employee = _mapper.Map<Employee>(newUser);
+                Context.Employees.Add(employee);
+                await Context.SaveChangesAsync();
 
-            return newUser.EmployeeId;
+                return newUser.EmployeeId;
+            }
+            catch (Exception ex)
+            {
+
+                return 0;
+            }
             
+            
+        }
+        public async Task<ApplicationUserBO> getUserInfoFromEmployee(string userId)
+        {
+            try
+            {
+                Employee employee = await Context.Employees.FirstOrDefaultAsync(e => e.AppUserId == userId);
+                ApplicationUserBO applicationUserBO = _mapper.Map<ApplicationUserBO>(employee);
+                return applicationUserBO;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+
         }
     }
 }

@@ -15,9 +15,11 @@ using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System.IO;
 using System.Reflection;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SemaforoWeb.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CatalogController : ControllerBase

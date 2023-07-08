@@ -70,17 +70,15 @@ namespace SemaforoWeb.Controllers
                     try
                     {
                         await _emailSender.SendEmailAsync(appUser.Email, _configuration.GetValue<string>("CompanyName") + ": Verifica tu Cuenta", body);
+                        ApplicationUserBO newUser = _mapper.Map<ApplicationUserBO>(model);
+                        _mapper.Map(appUser, newUser);
+                        int userId = await _authService.RegisterApplicationUser(newUser);
                         return Ok("Por favor verifica tu cuenta en el correo electronico que te acabamos de enviar");
                     }
                     catch (Exception ex)
                     {
                         return BadRequest("Error en el envío de correo de verificación: "+ ex.Message);
                     }
-
-                    //ApplicationUserBO newUser = _mapper.Map<ApplicationUserBO>(model);
-                    //_mapper.Map(appUser, newUser);
-                    //int userId = await _authService.RegisterApplicationUser(newUser);
-                    //return Ok(userId);
                 }
                 else
                 {
@@ -124,16 +122,17 @@ namespace SemaforoWeb.Controllers
                     var user = await _signInManager.UserManager.FindByNameAsync(userInfo.Username);
                     if (user.EmailConfirmed)
                     {
-                        return BuildToken(userInfo);
+                        var appUser = await BuildToken(user);
+                        return Ok(appUser);
                     }
                     else {
-                        ModelState.AddModelError(string.Empty, "Email needs to be confirmed");
+                        ModelState.AddModelError(string.Empty, "Email not confirmed");
                         return BadRequest(ModelState);
                     }                        
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Invalid credentials.");
                     return BadRequest(ModelState);
                 }
             }
@@ -143,11 +142,11 @@ namespace SemaforoWeb.Controllers
             }
         }
 
-        private IActionResult BuildToken(UserLoginDTO userInfo)
+        private async Task<ApplicationUserDTO> BuildToken(ApplicationUser userInfo)
         {
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.Username),
+                new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.UserName),
                 new Claim("miValor", "Lo que yo quiera"),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
@@ -155,7 +154,7 @@ namespace SemaforoWeb.Controllers
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["App_Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var expiration = DateTime.UtcNow.AddHours(1);
+            var expiration = DateTime.UtcNow.AddHours(12);
 
             JwtSecurityToken token = new JwtSecurityToken(
                issuer: "elsemaforouniformes.com",
@@ -163,12 +162,13 @@ namespace SemaforoWeb.Controllers
                claims: claims,
                expires: expiration,
                signingCredentials: creds);
+            ApplicationUserDTO appUser = _mapper.Map<ApplicationUserDTO>(userInfo);
+            ApplicationUserBO applicationUserBO = await _authService.getUserInfoFromEmployee(appUser.AppUserId);
+            _mapper.Map(applicationUserBO, appUser);
+            //appUser.Token = new JwtSecurityTokenHandler().WriteToken(token);
+            //appUser.Expiration= expiration;
 
-            return Ok(new
-            {
-                token = new JwtSecurityTokenHandler().WriteToken(token),
-                expiration = expiration
-            });
+            return appUser;
 
         }
 

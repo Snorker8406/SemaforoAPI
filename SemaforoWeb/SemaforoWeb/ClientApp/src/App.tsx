@@ -2,6 +2,7 @@ import React, { Component, Suspense } from 'react'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import './scss/style.scss'
 import { SpinnerLoading } from './components/Utils/spinnerLoading'
+import { AuthContextProvider } from './components/shared/AuthContext'
 
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
@@ -14,13 +15,15 @@ class App extends Component {
     return (
       <HashRouter>
         <Suspense fallback={<SpinnerLoading />}>
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/404" element={<Page404 />} />
-            <Route path="/500" element={<Page500 />} />
-            <Route path="*" element={<DefaultLayout />} />
-          </Routes>
+          <AuthContextProvider>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/404" element={<Page404 />} />
+              <Route path="/500" element={<Page500 />} />
+              <Route path="*" element={<DefaultLayout />} />
+            </Routes>
+          </AuthContextProvider>
         </Suspense>
       </HashRouter>
     )

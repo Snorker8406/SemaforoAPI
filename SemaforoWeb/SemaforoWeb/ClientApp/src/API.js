@@ -11,6 +11,9 @@ const API = {
     APIurl: '/api/Catalog/Brand/',
     idField: 'brandId',
   },
+  login: {
+    APIurl: '/api/Auth/Login',
+  },
 }
 
 export default API

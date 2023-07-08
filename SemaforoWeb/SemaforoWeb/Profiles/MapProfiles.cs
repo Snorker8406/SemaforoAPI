@@ -93,10 +93,14 @@ namespace SemaforoWeb.Profiles
                 .ForMember(dest => dest.AppUserId, opt => opt.MapFrom(src => src.Id));
             CreateMap<ApplicationUserBO, ApplicationUserDTO>();
             CreateMap<ApplicationUserDTO, ApplicationUserBO>();
-                
+            CreateMap<ApplicationUser, ApplicationUserDTO>()
+                .ForMember(dest => dest.AppUserId, opt => opt.MapFrom(src => src.Id));
+
+
 
             CreateMap<ApplicationUserBO, Employee>();
             CreateMap<ApplicationUserBO, EmployeeDTO>();
+            CreateMap<Employee, ApplicationUserBO>();
 
             CreateMap<ArchiveBO, Archive>();
             CreateMap<FileBO, File>()
