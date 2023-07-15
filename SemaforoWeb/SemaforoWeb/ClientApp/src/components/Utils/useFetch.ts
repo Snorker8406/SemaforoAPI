@@ -73,6 +73,9 @@ export const useFetch = (APIurl: string, httpRequest?: string) => {
       }
       if (http === 'POST' || (item && http === 'PUT')) {
         options.body = JSON.stringify(payload ? payload : '')
+        if (url.indexOf('Catalog') > -1) {
+          options.headers = { enctype: 'multipart/form-data' }
+        }
       }
 
       const fetchData = async () => {

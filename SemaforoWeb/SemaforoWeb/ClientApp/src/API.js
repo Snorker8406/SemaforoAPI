@@ -14,6 +14,9 @@ const API = {
   login: {
     APIurl: '/api/Auth/Login',
   },
+  registerUser: {
+    APIurl: '/api/Auth/Register',
+  },
 }
 
 export default API

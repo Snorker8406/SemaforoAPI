@@ -14,7 +14,7 @@ import {
   CRow,
 } from '@coreui/react-pro'
 import CIcon from '@coreui/icons-react'
-import { cilLockLocked, cilUser } from '@coreui/icons'
+import { cilLockLocked } from '@coreui/icons'
 import AuthContext from '../../components/shared/AuthContext'
 
 const Login = (): JSX.Element => {
@@ -41,9 +41,7 @@ const Login = (): JSX.Element => {
                     <h1>Login</h1>
                     <p className="text-medium-emphasis">Accesa a tu cuenta</p>
                     <CInputGroup className="mb-3">
-                      <CInputGroupText>
-                        <CIcon icon={cilUser} />
-                      </CInputGroupText>
+                      <CInputGroupText>@</CInputGroupText>
                       <CFormInput
                         placeholder="Email/Usuario"
                         autoComplete="username"

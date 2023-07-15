@@ -58,7 +58,7 @@ namespace SemaforoWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                var appUser = new ApplicationUser { UserName = model.Username, Email = model.Email, EmailConfirmed = false };
+                var appUser = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = false };
                 var result = await _userManager.CreateAsync(appUser, model.Password);
                 if (result.Succeeded)
                 {
