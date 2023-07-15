@@ -14,7 +14,7 @@ import { Item } from '@coreui/react-pro/dist/components/table/CTable'
 import { dataItem, dataColumn } from '../../types'
 import PropTypes from 'prop-types'
 import { ConfirmationModal } from '../Utils/confirmationModal'
-import useFetchCatalogs from '../Utils/useFetch'
+import useFetch from '../Utils/useFetch'
 import { SpinnerLoading } from '../Utils/spinnerLoading'
 import { LoaderContext } from '../shared/loaderContext'
 
@@ -35,9 +35,9 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
     const [showConfirmDelete, setShowConfirmDelete] = useState(false)
     // const [isLoading, setIsLoading] = useState(true)
     const [deleteConfirmMessage, setDeleteConfirmMessage] = useState('')
-    const [tableData, getTableData] = useFetchCatalogs(APIurl, 'GET')
-    const [itemData, getItemData] = useFetchCatalogs(APIurl, 'GET')
-    const [deletingResponse, deleteItem] = useFetchCatalogs(APIurl, 'DELETE')
+    const [tableData, getTableData] = useFetch(APIurl, 'GET')
+    const [itemData, getItemData] = useFetch(APIurl, 'GET')
+    const [deletingResponse, deleteItem] = useFetch(APIurl, 'DELETE')
     const { setShowLoader } = useContext(LoaderContext)
 
     useEffect(() => {
