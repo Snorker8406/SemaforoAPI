@@ -36,15 +36,20 @@ export const useFetch = (APIurl: string, httpRequest?: string) => {
       }
 
       const fetchData = async () => {
-        const data = await fetch(url, options)
-        const json = await data.json()
-        setData(json)
+        let text = null
+        try {
+          const response = await fetch(url, options)
+          text = await response.text()
+          const data = JSON.parse(text)
+          setData(data)
+        } catch (error) {
+          setData(text)
+        }
         setShowLoader(false)
       }
       fetchData()
     } catch (error) {
       setShowLoader(false)
-      console.log(error)
     }
   }
 

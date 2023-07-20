@@ -36,22 +36,36 @@ const Register = () => {
   } = useForm<any>()
   const [message, registerUser] = useFetch(API.registerUser.APIurl, 'POST')
   const [confirmedPass, setConfirmedPass] = useState(false)
-  const [userTaken, setUserTaken] = useState(false)
-  const [response, setResponse] = useState('')
   const sendUserInfo: SubmitHandler<Inputs> = async (data) => {
     setConfirmedPass(data['passwordConfirmed'] === data['password'])
     if (data['passwordConfirmed'] === data['password']) {
       // enviar
-      console.log(data)
       await registerUser(null, data)
-      setResponse(message)
     }
   }
   useEffect(() => {
-    if (response && response.indexOf('correo electronico') > 0) {
+    if (message?.indexOf('Verification Email Sent') > -1) {
       reset()
     }
   }, [message])
+
+  if (message?.indexOf('Verification Email Sent') > -1) {
+    return (
+      <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
+        <CContainer>
+          <CRow className="justify-content-center">
+            <CCol md={9} lg={7} xl={6}>
+              <CCard className="mx-4">
+                <CCardBody className="p-4">
+                  <h1> Hemos enviado un Email de verificación a tu cuenta!</h1>
+                </CCardBody>
+              </CCard>
+            </CCol>
+          </CRow>
+        </CContainer>
+      </div>
+    )
+  }
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
@@ -122,7 +136,13 @@ const Register = () => {
                         'Este campo es obligatorio.'}
                       {errors['email']?.type === 'pattern' &&
                         'formato de correo invalido.'}
-                      {userTaken && 'Este correo ya esta registrado'}
+                      {message?.indexOf('already taken') > 0 &&
+                        'Este correo ya esta registrado'}
+                    </CFormText>
+                  )}
+                  {message?.indexOf('already taken') > -1 && (
+                    <CFormText component="span">
+                      Este correo ya esta registrado
                     </CFormText>
                   )}
                   <CInputGroup className="mb-3">
@@ -188,9 +208,6 @@ const Register = () => {
               </CCardBody>
             </CCard>
           </CCol>
-        </CRow>
-        <CRow>
-          <h2>{response}</h2>
         </CRow>
       </CContainer>
     </div>

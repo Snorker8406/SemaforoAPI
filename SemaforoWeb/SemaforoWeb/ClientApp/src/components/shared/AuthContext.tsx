@@ -25,13 +25,17 @@ export const AuthContextProvider = forwardRef<HTMLDivElement, AuthContextProps>(
     }) as any
 
     useEffect(() => {
-      if (!userResponse) return
-      setUser(userResponse)
-      localStorage.setItem('currentUser', JSON.stringify(userResponse))
+      loadUser(userResponse)
     }, [userResponse])
 
+    const loadUser = (createdUser: any) => {
+      if (!createdUser) return
+      setUser(createdUser)
+      localStorage.setItem('currentUser', JSON.stringify(createdUser))
+    }
+
     return (
-      <AuthContext.Provider value={{ loginApiCall, user }}>
+      <AuthContext.Provider value={{ loginApiCall, user, loadUser }}>
         {children}
       </AuthContext.Provider>
     )

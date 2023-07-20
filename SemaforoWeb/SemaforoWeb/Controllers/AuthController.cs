@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Semaforo.Logic.BO;
@@ -63,21 +64,23 @@ namespace SemaforoWeb.Controllers
                 if (result.Succeeded)
                 {
                     var code = _userManager.GenerateEmailConfirmationTokenAsync(appUser);
-                    var emailBody = $"Por favor confirme su correo con este link <a href=\"#URL#\"> click aqui </a>";
-
-                    var callbackUrl = Request.Scheme + "://" + Request.Host + Url.Action("ConfirmEmail", "Auth", values: new { userId = appUser.Id, code = code.Result });
-                    var body = emailBody.Replace("#URL#", callbackUrl);
+                    var emailBody = $"Por favor confirme su correo con este link <a href=\"#URL#\"> click aqui </a> Link 2: \"#URL2#\"";
+                    string url = Request.Scheme + "://" + Request.Host + "/ConfirmEmail";
+                    var callbackUrl = new Uri(QueryHelpers.AddQueryString(url, new Dictionary<string, string>() { { "userId", appUser.Id }, { "code", code.Result } }));
+                    var callbackUrl2 = Request.Scheme + "://" + Request.Host + Url.Action("ConfirmEmail", "Auth", values: new { userId = appUser.Id, code = code.Result });
+                    var body = emailBody.Replace("#URL#", callbackUrl.ToString());
+                    body = body.Replace("#URL2#", callbackUrl2);
                     try
                     {
                         await _emailSender.SendEmailAsync(appUser.Email, _configuration.GetValue<string>("CompanyName") + ": Verifica tu Cuenta", body);
                         ApplicationUserBO newUser = _mapper.Map<ApplicationUserBO>(model);
                         _mapper.Map(appUser, newUser);
                         int userId = await _authService.RegisterApplicationUser(newUser);
-                        return Ok("Por favor verifica tu cuenta en el correo electronico que te acabamos de enviar");
+                        return Ok("Verification Email Sent");
                     }
                     catch (Exception ex)
                     {
-                        return BadRequest("Error en el envío de correo de verificación: "+ ex.Message);
+                        return BadRequest("Error at send verification Email: "+ ex.Message);
                     }
                 }
                 else
@@ -99,15 +102,21 @@ namespace SemaforoWeb.Controllers
             if (userId == null || code == null) {
                 return BadRequest("Invalid Email confirmation URL");
             }
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
+            var appUser = await _userManager.FindByIdAsync(userId);
+            if (appUser == null)
             {
                 return BadRequest("Invalid Email parameters");
             }
-            var result = await _userManager.ConfirmEmailAsync(user, code);
-            var status = result.Succeeded ? "cuenta validada correctamente" : "tu correo no ha sido confirmado, por favor intentelo mas tarde";
-
-            return Ok();
+            var result = await _userManager.ConfirmEmailAsync(appUser, code);
+            if (result.Succeeded)
+            {
+                await _signInManager.SignInAsync(appUser, isPersistent: false); 
+                var user = await BuildToken(appUser);
+                return Ok(user);
+            }
+            else {
+                return  BadRequest("tu correo no ha sido confirmado, por favor intentelo mas tarde");
+            }
         }
 
         [HttpPost]
@@ -119,11 +128,11 @@ namespace SemaforoWeb.Controllers
                 var result = await _signInManager.PasswordSignInAsync(userInfo.Username, userInfo.Password, isPersistent: true, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    var user = await _signInManager.UserManager.FindByNameAsync(userInfo.Username);
-                    if (user.EmailConfirmed)
+                    var appUser = await _signInManager.UserManager.FindByNameAsync(userInfo.Username);
+                    if (appUser.EmailConfirmed)
                     {
-                        var appUser = await BuildToken(user);
-                        return Ok(appUser);
+                        var user = await BuildToken(appUser);
+                        return Ok(user);
                     }
                     else {
                         ModelState.AddModelError(string.Empty, "Email not confirmed");

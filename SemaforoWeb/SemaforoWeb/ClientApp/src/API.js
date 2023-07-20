@@ -16,6 +16,7 @@ const API = {
   },
   registerUser: {
     APIurl: '/api/Auth/Register',
+    ConfirmEmailUrl: '/api/Auth/ConfirmEmail?userId=#uid&code=#cd',
   },
 }
 
