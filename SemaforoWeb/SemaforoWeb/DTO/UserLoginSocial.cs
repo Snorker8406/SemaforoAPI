@@ -16,6 +16,7 @@
         public string userID { get; set; }
         public string picture_url { get; set; }
         public string birthday { get; set; }
+        public string accessToken { get; set; }
 
     }
 }

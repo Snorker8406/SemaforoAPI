@@ -63,5 +63,20 @@ namespace Semaforo.Logic.Services
 
 
         }
+        public async Task<int> updateFacebookImage(int employeeId, byte[] image)
+        {
+            try
+            {
+                Employee employee = await Context.Employees.FirstOrDefaultAsync(e => e.EmployeeId == employeeId);
+                employee.FacebookProfileImage = image;
+                return await Context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+
+        }
     }
 }

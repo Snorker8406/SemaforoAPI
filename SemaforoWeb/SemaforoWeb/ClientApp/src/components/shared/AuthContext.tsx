@@ -36,7 +36,7 @@ export const AuthContextProvider = forwardRef<HTMLDivElement, AuthContextProps>(
     }
 
     return (
-      <AuthContext.Provider value={{ loginApiCall, user, loadUser }}> 
+      <AuthContext.Provider value={{ loginApiCall, user, loadUser }}>
         {children}
       </AuthContext.Provider>
     )

@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using Semaforo.Logic.BO;
 using Semaforo.Logic.Models;
 using Semaforo.Logic.Services;
@@ -14,14 +16,20 @@ using SemaforoWeb.DTO;
 using SemaforoWeb.DTO.CatalogsDTO.Catalogs;
 using SemaforoWeb.Email;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Reflection.Metadata;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Unicode;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace SemaforoWeb.Controllers
 {
@@ -67,9 +75,9 @@ namespace SemaforoWeb.Controllers
                     var emailBody = $"Por favor confirme su correo con este link <a href=\"#URL#\"> click aqui </a> Link 2: \"#URL2#\"";
                     string url = Request.Scheme + "://" + Request.Host + "/ConfirmEmail";
                     var callbackUrl = new Uri(QueryHelpers.AddQueryString(url, new Dictionary<string, string>() { { "userId", appUser.Id }, { "code", code.Result } }));
-                    var callbackUrl2 = Request.Scheme + "://" + Request.Host + Url.Action("ConfirmEmail", "Auth", values: new { userId = appUser.Id, code = code.Result });
+                    //var callbackUrl2 = Request.Scheme + "://" + Request.Host + Url.Action("ConfirmEmail", "Auth", values: new { userId = appUser.Id, code = code.Result });
                     var body = emailBody.Replace("#URL#", callbackUrl.ToString());
-                    body = body.Replace("#URL2#", callbackUrl2);
+                    //body = body.Replace("#URL2#", callbackUrl2);
                     try
                     {
                         ApplicationUserBO newUser = _mapper.Map<ApplicationUserBO>(model);
@@ -150,6 +158,21 @@ namespace SemaforoWeb.Controllers
                 return BadRequest(ModelState);
             }
         }
+        readonly string _facebookAPI = "https://graph.facebook.com/v17.0/";
+        private async Task<byte[]> SaveFacebookProfileImage(UserLoginSocialDTO userInfo, int employeeId) {
+            string token = userInfo.Data.accessToken;
+            string userID = userInfo.Data.userID;
+            using (var http = new HttpClient())
+            {
+                var httpResponse = await http.GetAsync($"{_facebookAPI}{userID}/picture?access_token={token}&height=720&width=720");
+                var httpContent = await httpResponse.Content.ReadAsByteArrayAsync();
+                if (employeeId > 0)
+                    await _authService.updateFacebookImage(employeeId, httpContent);
+                return httpContent;
+                //System.IO.File.WriteAllBytes("face.png", httpContent);
+                //var imagex =  "data:image/png;base64," + Convert.ToBase64String(httpContent);
+            }
+        }
 
         [HttpPost]
         [Route("SocialLogin")]
@@ -167,9 +190,11 @@ namespace SemaforoWeb.Controllers
                     {
                         ApplicationUserBO newUser = _mapper.Map<ApplicationUserBO>(userInfo);
                         _mapper.Map(appUser, newUser);
+                        newUser.ProfileImage = await SaveFacebookProfileImage(userInfo, newUser.EmployeeId);
                         int userId = await _authService.RegisterApplicationUser(newUser);
                         await _signInManager.SignInAsync(appUser, isPersistent: false);
                         var user = await BuildToken(appUser);
+                        user.ProfileImage = "data:image/png;base64," + Convert.ToBase64String(newUser.ProfileImage);
                         return Ok(user);
                     }
                     else
@@ -182,6 +207,10 @@ namespace SemaforoWeb.Controllers
                     // login
                     await _signInManager.SignInAsync(appUser, isPersistent: false);
                     var user = await BuildToken(appUser);
+                    var imageByteArray = await SaveFacebookProfileImage(userInfo, user.EmployeeId);
+                    user.ProfileImage = "data:image/png;base64," + Convert.ToBase64String(imageByteArray);
+                   
+
                     return Ok(user);
                 }
             }

@@ -7,6 +7,7 @@ using SemaforoWeb.DTO.CatalogsDTO;
 using SemaforoWeb.DTO.CatalogsDTO.Catalogs;
 using System;
 using System.Data;
+using System.Net.Http;
 
 namespace SemaforoWeb.Profiles
 {
@@ -92,7 +93,8 @@ namespace SemaforoWeb.Profiles
             CreateMap<ApplicationUser, ApplicationUserBO>()
                 .ForMember(dest => dest.AppUserId, opt => opt.MapFrom(src => src.Id));
             CreateMap<ApplicationUserBO, ApplicationUserDTO>()
-                .ForMember(dest => dest.Username, opt => opt.Ignore());
+                .ForMember(dest => dest.Username, opt => opt.Ignore())
+                .ForMember(dest => dest.ProfileImage, opt => opt.MapFrom(src => "data:image/png;base64," + Convert.ToBase64String(src.ProfileImage)));
             CreateMap<ApplicationUserDTO, ApplicationUserBO>();
             CreateMap<ApplicationUser, ApplicationUserDTO>()
                 .ForMember(dest => dest.AppUserId, opt => opt.MapFrom(src => src.Id));
@@ -104,9 +106,11 @@ namespace SemaforoWeb.Profiles
 
 
 
-            CreateMap<ApplicationUserBO, Employee>();
+            CreateMap<ApplicationUserBO, Employee>()
+                .ForMember(dest => dest.FacebookProfileImage, opt => opt.MapFrom(src => src.ProfileImage));
             CreateMap<ApplicationUserBO, EmployeeDTO>();
-            CreateMap<Employee, ApplicationUserBO>();
+            CreateMap<Employee, ApplicationUserBO>()
+                .ForMember(dest => dest.ProfileImage, opt => opt.MapFrom(src =>src.FacebookProfileImage));
 
             CreateMap<ArchiveBO, Archive>();
             CreateMap<FileBO, File>()

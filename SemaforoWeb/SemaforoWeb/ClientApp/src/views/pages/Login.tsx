@@ -34,7 +34,6 @@ const Login = (): JSX.Element => {
   const onSocialLogin = async ({ provider, data }: IResolveParams) => {
     switch (provider) {
       case 'facebook':
-        //register or login
         await socialLogin(null, { provider, data })
         break
       default:

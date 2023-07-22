@@ -35,7 +35,7 @@ namespace SemaforoWeb.DTO.CatalogsDTO.Catalogs
         public string Password { get; set; }
         public bool? Whatsapp { get; set; }
         public string Facebook { get; set; }
-        public byte[] ProfileImage { get; set; }
+        public string ProfileImage { get; set; }
         public byte[] Photo { get; set; }
 
     }
