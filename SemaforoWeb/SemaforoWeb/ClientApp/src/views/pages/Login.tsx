@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import {
   CButton,
@@ -16,15 +16,35 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked } from '@coreui/icons'
 import AuthContext from '../../components/shared/AuthContext'
+import { IResolveParams, LoginSocialFacebook } from 'reactjs-social-login'
+import { FacebookLoginButton } from 'react-social-login-buttons'
+import useFetch from '../../components/Utils/useFetch'
+import API from '../../API'
 
 const Login = (): JSX.Element => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const { loginApiCall, user } = useContext(AuthContext) as any
+  const { loginApiCall, user, loadUser } = useContext(AuthContext) as any
+  const [socialUser, socialLogin] = useFetch(API.login.SocialUrl, 'POST') as any
 
   const sendCredentials = async (username: string, password: string) => {
     loginApiCall(null, { username, password })
   }
+
+  const onSocialLogin = async ({ provider, data }: IResolveParams) => {
+    switch (provider) {
+      case 'facebook':
+        //register or login
+        await socialLogin(null, { provider, data })
+        break
+      default:
+        break
+    }
+  }
+
+  useEffect(() => {
+    loadUser(socialUser)
+  }, [socialUser])
 
   if (user) {
     return <Navigate to="/" />
@@ -93,9 +113,7 @@ const Login = (): JSX.Element => {
                 <CCardBody className="text-center">
                   <div>
                     <h2>Registrate!</h2>
-                    <p>
-                      si no tienes una cuenta creada registrate y obten una.
-                    </p>
+                    <p>si no tienes una cuenta creada obten una.</p>
                     <Link to="/register">
                       <CButton
                         color="primary"
@@ -107,6 +125,24 @@ const Login = (): JSX.Element => {
                       </CButton>
                     </Link>
                   </div>
+                  <h2>ó</h2>
+                  <CRow>
+                    <LoginSocialFacebook
+                      appId={process.env.REACT_APP_FB_APP_ID || ''}
+                      fieldsProfile={
+                        'id,first_name,last_name,middle_name,name,name_format,picture,short_name,email,gender,birthday'
+                      }
+                      // onLoginStart={onLoginStart}
+                      // onLogoutSuccess={onLogoutSuccess}
+                      // redirect_uri={REDIRECT_URI}
+                      onResolve={onSocialLogin}
+                      onReject={(err) => {
+                        console.log(err)
+                      }}
+                    >
+                      <FacebookLoginButton text="Entra con Facebook" />
+                    </LoginSocialFacebook>
+                  </CRow>
                 </CCardBody>
               </CCard>
             </CCardGroup>

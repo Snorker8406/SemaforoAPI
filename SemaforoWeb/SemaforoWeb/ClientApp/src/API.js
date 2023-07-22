@@ -13,6 +13,7 @@ const API = {
   },
   login: {
     APIurl: '/api/Auth/Login',
+    SocialUrl: '/api/Auth/SocialLogin',
   },
   registerUser: {
     APIurl: '/api/Auth/Register',

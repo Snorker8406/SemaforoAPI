@@ -96,6 +96,11 @@ namespace SemaforoWeb.Profiles
             CreateMap<ApplicationUserDTO, ApplicationUserBO>();
             CreateMap<ApplicationUser, ApplicationUserDTO>()
                 .ForMember(dest => dest.AppUserId, opt => opt.MapFrom(src => src.Id));
+            CreateMap<UserLoginSocialDTO, ApplicationUserBO>()
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Data.email))
+                .ForMember(dest => dest.Facebook, opt => opt.MapFrom(src => src.Data.userID))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Data.name))
+                .ForMember(dest => dest.Birthdate, opt => opt.MapFrom(src => DateTime.ParseExact(src.Data.birthday, "MM/dd/yyyy", null)));
 
 
 

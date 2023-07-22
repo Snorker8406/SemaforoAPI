@@ -72,10 +72,10 @@ namespace SemaforoWeb.Controllers
                     body = body.Replace("#URL2#", callbackUrl2);
                     try
                     {
-                        await _emailSender.SendEmailAsync(appUser.Email, _configuration.GetValue<string>("CompanyName") + ": Verifica tu Cuenta", body);
                         ApplicationUserBO newUser = _mapper.Map<ApplicationUserBO>(model);
                         _mapper.Map(appUser, newUser);
                         int userId = await _authService.RegisterApplicationUser(newUser);
+                        await _emailSender.SendEmailAsync(appUser.Email, _configuration.GetValue<string>("CompanyName") + ": Verifica tu Cuenta", body);
                         return Ok("Verification Email Sent");
                     }
                     catch (Exception ex)
@@ -143,6 +143,46 @@ namespace SemaforoWeb.Controllers
                 {
                     ModelState.AddModelError(string.Empty, "Invalid credentials.");
                     return BadRequest(ModelState);
+                }
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
+
+        [HttpPost]
+        [Route("SocialLogin")]
+        public async Task<IActionResult> SocialLogin([FromBody] UserLoginSocialDTO userInfo)
+        {
+            if (ModelState.IsValid)
+            {
+                var appUser = await _userManager.FindByEmailAsync(userInfo.Data.email);
+                if (appUser == null)
+                {
+                    // register
+                    appUser = new ApplicationUser { UserName = userInfo.Data.email, Email = userInfo.Data.email, EmailConfirmed = true };
+                    var result = await _userManager.CreateAsync(appUser);
+                    if (result.Succeeded)
+                    {
+                        ApplicationUserBO newUser = _mapper.Map<ApplicationUserBO>(userInfo);
+                        _mapper.Map(appUser, newUser);
+                        int userId = await _authService.RegisterApplicationUser(newUser);
+                        await _signInManager.SignInAsync(appUser, isPersistent: false);
+                        var user = await BuildToken(appUser);
+                        return Ok(user);
+                    }
+                    else
+                    {
+                        string messages = string.Join("\n ", result.Errors.Select(e => e.Description).ToList());
+                        return BadRequest(messages);
+                    }
+                }
+                else {
+                    // login
+                    await _signInManager.SignInAsync(appUser, isPersistent: false);
+                    var user = await BuildToken(appUser);
+                    return Ok(user);
                 }
             }
             else
