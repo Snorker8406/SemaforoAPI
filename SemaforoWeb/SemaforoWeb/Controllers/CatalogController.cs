@@ -63,9 +63,9 @@ namespace SemaforoWeb.Controllers
                 var result = Catalog<dynamic>.BuildCatalog(entityName, items, _mapper);
                 return result;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                return BadRequest(ex.Message);
             }
         }
 

@@ -16,8 +16,7 @@ import CIcon from '@coreui/icons-react'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 
-import { logoNegative } from '../assets/brand/logo-negative'
-import { sygnet } from '../assets/brand/sygnet'
+import brand from '../assets/brand/brand.png'
 // sidebar nav config
 import navigation from '../_nav'
 
@@ -36,8 +35,7 @@ const AppSidebar = () => {
       }}
     >
       <CSidebarBrand className="d-none d-md-flex">
-        <CIcon className="sidebar-brand-full" icon={logoNegative} height={35} />
-        <CIcon className="sidebar-brand-narrow" icon={sygnet} height={35} />
+        <img src={brand} alt="marca" width={180}></img>
       </CSidebarBrand>
       <CSidebarNav>
         <SimpleBar>

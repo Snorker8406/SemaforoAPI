@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 using Newtonsoft.Json;
 using Semaforo.Logic.BO;
 using Semaforo.Logic.Models;
@@ -15,21 +16,15 @@ using Semaforo.Logic.Services;
 using SemaforoWeb.DTO;
 using SemaforoWeb.DTO.CatalogsDTO.Catalogs;
 using SemaforoWeb.Email;
+using SemaforoWeb.SettingsModels;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IdentityModel.Tokens.Jwt;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection.Metadata;
 using System.Security.Claims;
 using System.Text;
-using System.Text.Unicode;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace SemaforoWeb.Controllers
 {
@@ -131,32 +126,42 @@ namespace SemaforoWeb.Controllers
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDTO userInfo)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var result = await _signInManager.PasswordSignInAsync(userInfo.Username, userInfo.Password, isPersistent: true, lockoutOnFailure: false);
-                if (result.Succeeded)
+                if (ModelState.IsValid)
                 {
-                    var appUser = await _signInManager.UserManager.FindByNameAsync(userInfo.Username);
-                    if (appUser.EmailConfirmed)
+                    var result = await _signInManager.PasswordSignInAsync(userInfo.Username, userInfo.Password, isPersistent: true, lockoutOnFailure: false);
+                    if (result.Succeeded)
                     {
-                        var user = await BuildToken(appUser);
-                        return Ok(user);
+                        var appUser = await _signInManager.UserManager.FindByNameAsync(userInfo.Username);
+                        if (appUser.EmailConfirmed)
+                        {
+                            var user = await BuildToken(appUser);
+                            return Ok(user);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Email not confirmed");
+                            return BadRequest(ModelState);
+                        }
                     }
-                    else {
-                        ModelState.AddModelError(string.Empty, "Email not confirmed");
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid credentials.");
                         return BadRequest(ModelState);
-                    }                        
+                    }
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid credentials.");
                     return BadRequest(ModelState);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(ModelState);
+
+                return BadRequest(ex.Message);
             }
+            
         }
         readonly string _facebookAPI = "https://graph.facebook.com/v17.0/";
         private async Task<byte[]> SaveFacebookProfileImage(UserLoginSocialDTO userInfo, int employeeId) {
@@ -178,46 +183,56 @@ namespace SemaforoWeb.Controllers
         [Route("SocialLogin")]
         public async Task<IActionResult> SocialLogin([FromBody] UserLoginSocialDTO userInfo)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var appUser = await _userManager.FindByEmailAsync(userInfo.Data.email);
-                if (appUser == null)
+                if (ModelState.IsValid)
                 {
-                    // register
-                    appUser = new ApplicationUser { UserName = userInfo.Data.email, Email = userInfo.Data.email, EmailConfirmed = true };
-                    var result = await _userManager.CreateAsync(appUser);
-                    if (result.Succeeded)
+                    var appUser = await _userManager.FindByEmailAsync(userInfo.Data.email);
+                    if (appUser == null)
                     {
-                        ApplicationUserBO newUser = _mapper.Map<ApplicationUserBO>(userInfo);
-                        _mapper.Map(appUser, newUser);
-                        newUser.ProfileImage = await SaveFacebookProfileImage(userInfo, newUser.EmployeeId);
-                        int userId = await _authService.RegisterApplicationUser(newUser);
-                        await _signInManager.SignInAsync(appUser, isPersistent: false);
-                        var user = await BuildToken(appUser);
-                        user.ProfileImage = "data:image/png;base64," + Convert.ToBase64String(newUser.ProfileImage);
-                        return Ok(user);
+                        // register
+                        appUser = new ApplicationUser { UserName = userInfo.Data.email, Email = userInfo.Data.email, EmailConfirmed = true };
+                        var result = await _userManager.CreateAsync(appUser);
+                        if (result.Succeeded)
+                        {
+                            ApplicationUserBO newUser = _mapper.Map<ApplicationUserBO>(userInfo);
+                            _mapper.Map(appUser, newUser);
+                            newUser.ProfileImage = await SaveFacebookProfileImage(userInfo, newUser.EmployeeId);
+                            int userId = await _authService.RegisterApplicationUser(newUser);
+                            await _signInManager.SignInAsync(appUser, isPersistent: false);
+                            var user = await BuildToken(appUser);
+                            user.ProfileImage = "data:image/png;base64," + Convert.ToBase64String(newUser.ProfileImage);
+                            return Ok(user);
+                        }
+                        else
+                        {
+                            string messages = string.Join("\n ", result.Errors.Select(e => e.Description).ToList());
+                            return BadRequest(messages);
+                        }
                     }
                     else
                     {
-                        string messages = string.Join("\n ", result.Errors.Select(e => e.Description).ToList());
-                        return BadRequest(messages);
+                        // login
+                        await _signInManager.SignInAsync(appUser, isPersistent: false);
+                        var user = await BuildToken(appUser);
+                        var imageByteArray = await SaveFacebookProfileImage(userInfo, user.EmployeeId);
+                        user.ProfileImage = "data:image/png;base64," + Convert.ToBase64String(imageByteArray);
+
+
+                        return Ok(user);
                     }
                 }
-                else {
-                    // login
-                    await _signInManager.SignInAsync(appUser, isPersistent: false);
-                    var user = await BuildToken(appUser);
-                    var imageByteArray = await SaveFacebookProfileImage(userInfo, user.EmployeeId);
-                    user.ProfileImage = "data:image/png;base64," + Convert.ToBase64String(imageByteArray);
-                   
-
-                    return Ok(user);
+                else
+                {
+                    return BadRequest(ModelState);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(ModelState);
+
+                return BadRequest(ex.Message);
             }
+           
         }
 
         private async Task<ApplicationUserDTO> BuildToken(ApplicationUser userInfo)
@@ -229,14 +244,15 @@ namespace SemaforoWeb.Controllers
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["App_Key"]));
+            var jwtSettings = _configuration.GetSection("JWT").Get<JWTSettings>();
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.ServerSecret));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var expiration = DateTime.UtcNow.AddHours(12);
 
             JwtSecurityToken token = new JwtSecurityToken(
-               issuer: "elsemaforouniformes.com",
-               audience: "elsemaforouniformes.com",
+               issuer: jwtSettings.Issuer,
+               audience: jwtSettings.Audience,
                claims: claims,
                expires: expiration,
                signingCredentials: creds);

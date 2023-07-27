@@ -14,7 +14,7 @@ const Page500 = React.lazy(() => import('./views/pages/Page500'))
 
 const App = (): JSX.Element => {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Suspense fallback={<SpinnerLoading />}>
         <AuthContextProvider>
           <Routes>
@@ -27,7 +27,7 @@ const App = (): JSX.Element => {
           </Routes>
         </AuthContextProvider>
       </Suspense>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
 

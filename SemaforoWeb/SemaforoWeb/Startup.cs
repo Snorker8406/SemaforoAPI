@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using SemaforoWeb.Email;
+using SemaforoWeb.SettingsModels;
 //Scaffold-DbContext "Data Source=SQL5063.site4now.net;Initial Catalog=db_9bc4da_semaforo;User Id=db_9bc4da_semaforo_admin;Password=semaforo123" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force
 namespace SemaforoWeb
 {
@@ -38,6 +39,7 @@ namespace SemaforoWeb
             services.AddIdentity<ApplicationUser, IdentityRole>()
                  .AddEntityFrameworkStores<db_9bc4da_semaforoContext>()
                  .AddDefaultTokenProviders();
+            var jwtSettings = Configuration.GetSection("JWT").Get<JWTSettings>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -45,11 +47,11 @@ namespace SemaforoWeb
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = "yourdomain.com",
-                    ValidAudience = "yourdomain.com",
+                    ValidIssuer = jwtSettings.Issuer,
+                    ValidAudience = jwtSettings.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(Configuration["App_Key"])),
-                    //Encoding.UTF8.GetBytes("ElSemaforoUniformesZapotlan")),
+                    //Encoding.UTF8.GetBytes(Configuration["App_Key"])),
+                    Encoding.UTF8.GetBytes(jwtSettings.ServerSecret)),
 
                     ClockSkew = TimeSpan.Zero
                 });

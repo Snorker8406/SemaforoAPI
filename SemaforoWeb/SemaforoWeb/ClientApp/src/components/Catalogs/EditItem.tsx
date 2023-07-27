@@ -61,6 +61,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
     const [images, setImages] = useState([])
     const [image, setImage] = useState([])
     const [saveResponse, saveItem] = useFetch(APIurl, 'POST')
+    const [isSaving, setIsSaving] = useState(false)
     const [existingFiles, setExistingFiles] = useState([] as File[])
     const [existingImage, setExistingImage] = useState([] as File[])
     const {
@@ -129,6 +130,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
     useEffect(() => {
       if (!saveResponse) return
       setVisible(false)
+      setIsSaving(false)
       itemHasBeenUpdated(true)
     }, [saveResponse])
 
@@ -142,6 +144,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       fieldType: string,
       fieldKey: string,
     ) => {
+      if (isSaving) return
       if (status === 'done') {
         switch (fieldType) {
           case 'files':
@@ -187,7 +190,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
     }
 
     const saveChanges = async (data: any) => {
-      // setIsSaving(true)
+      await setIsSaving(true)
       const formData = new FormData()
       if (image.length > 0) {
         formData.append('image', image[0])
@@ -220,7 +223,6 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       setImage([])
       setExistingFiles([])
       setExistingImage([])
-      // setIsSaving(false)
     }
 
     const onCloseEdit = () => {
@@ -334,6 +336,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
         visible={visible}
         onClose={onCloseEdit}
       >
+        {isSaving && <SpinnerLoading />}
         <CModalHeader>
           <CModalTitle>{formTitle}</CModalTitle>
         </CModalHeader>
@@ -372,12 +375,6 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
             </CButton>
           </CModalFooter>
         </CForm>
-        {/* <SpinnerLoading
-          color="primary"
-          visible={isSaving}
-          type="saving"
-          setVisible={setIsSaving}
-        /> */}
       </CModal>
     )
   },

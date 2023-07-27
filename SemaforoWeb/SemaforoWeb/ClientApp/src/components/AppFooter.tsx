@@ -5,19 +5,25 @@ const AppFooter = () => {
   return (
     <CFooter>
       <div>
-        <a href="https://coreui.io" target="_blank" rel="noopener noreferrer">
-          CoreUI
+        <a
+          href="https://elsemaforo.net"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Uniformes Zapotlán El Semáforo
         </a>
-        <span className="ms-1">&copy; 2022 creativeLabs.</span>
+        <span className="ms-1">
+          &copy; Nosotros los diseñamos, por eso los hacemos mejor
+        </span>
       </div>
       <div className="ms-auto">
         <span className="me-1">Powered by</span>
         <a
-          href="https://coreui.io/react"
+          href="https://agrotecsa.com.mx"
           target="_blank"
           rel="noopener noreferrer"
         >
-          CoreUI for React
+          AgroTECSA
         </a>
       </div>
     </CFooter>

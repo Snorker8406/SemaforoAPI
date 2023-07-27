@@ -6,7 +6,7 @@ import React, {
   Suspense,
   useContext,
 } from 'react'
-import { cilPencil, cilTrash } from '@coreui/icons'
+import { cilInfo, cilPencil, cilTrash } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import { CSmartTable, CCardBody, CCollapse, CButton } from '@coreui/react-pro'
 import { EditItem } from './EditItem'
@@ -149,10 +149,23 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
 
     const renderActions = (item: Item) => (
       <td>
-        <CIcon icon={cilPencil} onClick={() => onEditItem(item[idField])} />
+        <CIcon
+          icon={cilInfo}
+          onClick={() => toggleDetails(item[idField])}
+          height={30}
+          className="mx-2 text-success"
+        />
+        <CIcon
+          icon={cilPencil}
+          onClick={() => onEditItem(item[idField])}
+          height={30}
+          className="mx-2 text-primary"
+        />
         <CIcon
           icon={cilTrash}
           onClick={() => onDeleteItem(item[idField], item.name)}
+          height={30}
+          className="mx-2 text-danger"
         />
       </td>
     )
@@ -162,7 +175,7 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
       <>
         <div className="d-grid justify-content-md-end">
           <CButton
-            color="success"
+            color="secondary"
             shape="rounded-0"
             onClick={() => onAddNewItem()}
           >
@@ -177,18 +190,18 @@ export const ItemsTable = forwardRef<HTMLDivElement, ItemsTableProps>(
           columnSorter
           items={catalogItems}
           itemsPerPageSelect
-          itemsPerPage={5}
+          itemsPerPage={30}
           pagination
           scopedColumns={{
             actions: (item: Item) => renderActions(item),
             details: (item) => renderDetails(item),
           }}
-          onRowClick={(item) => toggleDetails(item[idField])}
+          // onRowClick={(item) => toggleDetails(item[idField])}
           selectable
           sorterValue={{ column: 'name', state: 'asc' }}
           tableFilter
           tableHeadProps={{
-            color: 'success',
+            color: 'primary',
           }}
           tableProps={{
             striped: true,
