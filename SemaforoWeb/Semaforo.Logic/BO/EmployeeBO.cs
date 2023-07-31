@@ -15,7 +15,7 @@ namespace  Semaforo.Logic.BO
         public string Gender { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public byte[] Picture { get; set; }
+        public byte[] Photo { get; set; }
         public string Address { get; set; }
         public string Cellphone { get; set; }
         public string Phone { get; set; }
@@ -24,6 +24,7 @@ namespace  Semaforo.Logic.BO
         public string MaritalStatus { get; set; }
         public bool Active { get; set; }
         public string Comments { get; set; }
+        public List<FileBO> Files { get; set; }
 
     }
 }

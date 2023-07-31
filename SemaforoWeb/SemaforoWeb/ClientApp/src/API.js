@@ -11,6 +11,10 @@ const API = {
     APIurl: '/api/Catalog/Brand/',
     idField: 'brandId',
   },
+  employees: {
+    APIurl: '/api/Catalog/Employee/',
+    idField: 'employeeId',
+  },
   login: {
     APIurl: '/api/Auth/Login',
     SocialUrl: '/api/Auth/SocialLogin',

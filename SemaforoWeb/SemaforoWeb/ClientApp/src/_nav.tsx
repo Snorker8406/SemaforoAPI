@@ -59,6 +59,12 @@ const _nav = [
         to: '/catalogs/brands',
         icon: <CIcon icon={cilFlightTakeoff} customClassName="nav-icon" />,
       },
+      {
+        component: CNavItem,
+        name: 'Empleados',
+        to: '/catalogs/employees',
+        icon: <CIcon icon={cilFlightTakeoff} customClassName="nav-icon" />,
+      },
     ],
   },
 ]

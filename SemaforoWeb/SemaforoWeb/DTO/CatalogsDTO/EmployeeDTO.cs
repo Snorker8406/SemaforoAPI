@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SemaforoWeb.DTO.CatalogsDTO.Catalogs
+namespace SemaforoWeb.DTO.CatalogsDTO
 {
     public class EmployeeDTO
     {
@@ -15,7 +16,7 @@ namespace SemaforoWeb.DTO.CatalogsDTO.Catalogs
         public string Gender { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public byte[] Picture { get; set; }
+        public IFormFile Image { get; set; }
         public string Address { get; set; }
         public string Cellphone { get; set; }
         public string Phone { get; set; }
@@ -24,6 +25,7 @@ namespace SemaforoWeb.DTO.CatalogsDTO.Catalogs
         public string MaritalStatus { get; set; }
         public bool Active { get; set; }
         public string Comments { get; set; }
+        public List<FileDTO> Files { get; set; }
         public List<RoleDTO> Roles { get; set; }
 
     }

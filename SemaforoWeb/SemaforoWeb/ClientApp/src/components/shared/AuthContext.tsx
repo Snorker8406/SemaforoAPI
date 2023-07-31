@@ -30,7 +30,7 @@ export const AuthContextProvider = forwardRef<HTMLDivElement, AuthContextProps>(
 
     const loadUser = (createdUser: any) => {
       //TODO: cambiar este loadUser X funcion loginApiCall multi parametros
-      if (!createdUser) return
+      if (!createdUser?.name) return
       setUser(createdUser)
       localStorage.setItem('currentUser', JSON.stringify(createdUser))
     }

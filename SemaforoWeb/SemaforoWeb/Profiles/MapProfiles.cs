@@ -51,8 +51,12 @@ namespace SemaforoWeb.Profiles
 
             CreateMap<Employee, EmployeeBO>();
             CreateMap<EmployeeBO, Employee>();
-            CreateMap<EmployeeDTO, EmployeeBO>();
-            CreateMap<EmployeeBO, EmployeeDTO>();
+                
+            CreateMap<EmployeeDTO, EmployeeBO>()
+                .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => mapFile(src.Image)))
+                .ForMember(dest => dest.Files, opt => opt.MapFrom(src => src.Files));
+            CreateMap<EmployeeBO, EmployeeDTO>()
+                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => "data:image/png;base64," + Convert.ToBase64String(src.Photo)));
 
             CreateMap<Product, ProductBO>();
             CreateMap<ProductBO, ProductDTO>();
