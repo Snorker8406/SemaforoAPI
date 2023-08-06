@@ -35,3 +35,8 @@ export type LoaderType = {
   showLoader: boolean
   setShowLoader: (show: boolean) => void
 }
+
+export type dateField = {
+  field: string
+  datetime: Date | null
+}

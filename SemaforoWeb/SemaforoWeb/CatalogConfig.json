@@ -395,9 +395,25 @@
         "size": 9
       },
       {
+        "key": "startDate",
+        "label": "Fecha de Inicio",
+        "type": "datetime",
+        "isColumn": false,
+        "isInForm": true,
+        "size": 3
+      },
+      {
+        "key": "endDate",
+        "label": "Fecha de Salida",
+        "type": "datetime",
+        "isColumn": false,
+        "isInForm": true,
+        "size": 3
+      },
+      {
         "key": "birthdate",
         "label": "Fecha de Nacimiento",
-        "type": "date",
+        "type": "datetime",
         "isColumn": false,
         "isInForm": true,
         "size": 3

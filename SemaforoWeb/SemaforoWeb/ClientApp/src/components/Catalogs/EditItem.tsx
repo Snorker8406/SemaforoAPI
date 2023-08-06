@@ -22,9 +22,10 @@ import {
   CFormSelect,
   CFormCheck,
   CFormTextarea,
+  CDatePicker,
 } from '@coreui/react-pro'
 
-import { dataItem, dataColumn, fileDTO } from '../../types'
+import { dataItem, dataColumn, fileDTO, dateField } from '../../types'
 import useFetch from '../Utils/useFetch'
 import { useForm } from 'react-hook-form'
 import { FileUploader } from './FileUploader'
@@ -64,6 +65,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
     const [isSaving, setIsSaving] = useState(false)
     const [existingFiles, setExistingFiles] = useState([] as File[])
     const [existingImage, setExistingImage] = useState([] as File[])
+    const [dateValues, setDateValues] = useState([] as dateField[])
     const {
       register,
       handleSubmit,
@@ -211,6 +213,13 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
           formData.append('removedFiles', name)
         }
       }
+      if (dateValues.length > 0) {
+        for (let i = 0; i < dateValues.length; i++) {
+          data[toLower(dateValues[i].field) as dataItemKey] =
+            dateValues[i].datetime
+        }
+      }
+
       formData.append('dto', JSON.stringify({ ...data }))
       await saveItem(
         isNewItem ? '' : itemData[itemIdField as dataItemKey],
@@ -282,6 +291,21 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
               id={'textarea-' + f.key}
               rows={f.rows}
             />
+          )
+        case 'datetime':
+          return (
+            <>
+              <CDatePicker
+                {...register(toLower(f.key))}
+                id={'datetime-' + f.key}
+                locale="en-US"
+                onDateChange={(date) => {
+                  const newDate: dateField = { field: f.key, datetime: date }
+                  setDateValues([...dateValues, newDate])
+                }}
+                timepicker
+              />
+            </>
           )
         case 'image':
           return (

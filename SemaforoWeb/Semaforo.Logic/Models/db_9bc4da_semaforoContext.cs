@@ -470,7 +470,7 @@ namespace Semaforo.Logic.Models
                     .HasMaxLength(450)
                     .HasColumnName("AppUser_ID");
 
-                entity.Property(e => e.Birthdate).HasColumnType("date");
+                entity.Property(e => e.Birthdate).HasColumnType("datetime");
 
                 entity.Property(e => e.Cellphone)
                     .HasMaxLength(10)
@@ -488,7 +488,7 @@ namespace Semaforo.Logic.Models
                 entity.Property(e => e.Email).HasMaxLength(100);
 
                 entity.Property(e => e.EndDate)
-                    .HasColumnType("date")
+                    .HasColumnType("datetime")
                     .HasColumnName("End_Date");
 
                 entity.Property(e => e.Facebook)
@@ -535,7 +535,7 @@ namespace Semaforo.Logic.Models
                     .UseCollation("Modern_Spanish_CI_AS");
 
                 entity.Property(e => e.StartDate)
-                    .HasColumnType("date")
+                    .HasColumnType("datetime")
                     .HasColumnName("Start_Date");
 
                 entity.HasOne(d => d.AppUser)
@@ -644,6 +644,7 @@ namespace Semaforo.Logic.Models
                 entity.HasOne(d => d.Archive)
                     .WithMany(p => p.Files)
                     .HasForeignKey(d => d.ArchiveId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_FILES_ARCHIVES");
 
                 entity.HasOne(d => d.Client)

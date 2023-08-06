@@ -11,6 +11,7 @@ namespace  Semaforo.Logic.BO
         public string Name { get; set; }
         public string FirstLastName { get; set; }
         public string SecondLastName { get; set; }
+        public string FullName { get; set; }
         public DateTime? Birthdate { get; set; }
         public string Gender { get; set; }
         public DateTime? StartDate { get; set; }
