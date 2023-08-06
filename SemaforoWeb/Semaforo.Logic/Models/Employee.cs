@@ -28,7 +28,7 @@ namespace Semaforo.Logic.Models
         public string SecondLastName { get; set; }
         public DateTime? Birthdate { get; set; }
         public string Gender { get; set; }
-        public DateTime CreateDate { get; set; }
+        public DateTime? CreateDate { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public byte[] Photo { get; set; }
@@ -41,7 +41,7 @@ namespace Semaforo.Logic.Models
         public byte[] FacebookProfileImage { get; set; }
         public string HealthInfo { get; set; }
         public string MaritalStatus { get; set; }
-        public bool Active { get; set; }
+        public bool? Active { get; set; }
         public string Comments { get; set; }
 
         public virtual ApplicationUser AppUser { get; set; }

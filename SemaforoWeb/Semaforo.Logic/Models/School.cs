@@ -16,6 +16,7 @@ namespace Semaforo.Logic.Models
 
         public int SchoolId { get; set; }
         public int SchoolLevelId { get; set; }
+        public DateTime? CreateDate { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public string Ciudad { get; set; }

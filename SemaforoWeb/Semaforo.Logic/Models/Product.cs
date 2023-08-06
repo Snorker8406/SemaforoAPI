@@ -22,7 +22,7 @@ namespace Semaforo.Logic.Models
         public int? BrandId { get; set; }
         public int? ProductPictureId { get; set; }
         public string Name { get; set; }
-        public DateTime CreateDate { get; set; }
+        public DateTime? CreateDate { get; set; }
         public string Barcode { get; set; }
         public string Description { get; set; }
         public string Model { get; set; }

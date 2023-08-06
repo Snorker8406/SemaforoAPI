@@ -18,7 +18,7 @@ namespace Semaforo.Logic.Models
         public int? ClientId { get; set; }
         public int SiteId { get; set; }
         public int SaleTypeId { get; set; }
-        public DateTime SaleDate { get; set; }
+        public DateTime? SaleDate { get; set; }
         public string Notes { get; set; }
         public string ClientName { get; set; }
         public decimal? Total { get; set; }

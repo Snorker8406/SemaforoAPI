@@ -107,24 +107,24 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
           convertFiles(itemData['files'])
         }
 
-        // TODO: cambiar que dependa del nombre profile image
-        if (itemData['profileImage']) {
-          // this is to convert files into valid bolb
+        const imageFields = catalogFields.filter((cf) => cf.type === 'image')
+        imageFields?.forEach((ifd) => {
           const convertImage = async (dtoImage: string) => {
             const convertedFiles = [] as File[]
             const base64Response = await fetch(
               `data:image/jpeg;base64,${dtoImage}`,
             )
             const buf = await base64Response.arrayBuffer()
-            const file = new File([buf], 'profileImage.jpg', {
+            const file = new File([buf], ifd.key + '.jpg', {
               type: 'image/jpeg',
             })
             convertedFiles.push(file)
             setExistingImage([...existingImage, ...convertedFiles])
           }
-
-          convertImage(itemData['profileImage'])
-        }
+          const imageString = itemData[ifd.key as dataItemKey]
+          if (imageString.length > 0)
+            convertImage(itemData[ifd.key as dataItemKey])
+        })
       }
       reset(itemData)
     }, [itemData])
@@ -298,11 +298,12 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
               <CDatePicker
                 {...register(toLower(f.key))}
                 id={'datetime-' + f.key}
-                locale="en-US"
+                locale="es-MX"
                 onDateChange={(date) => {
                   const newDate: dateField = { field: f.key, datetime: date }
                   setDateValues([...dateValues, newDate])
                 }}
+                date={itemData[toLower(f.key) as dataItemKey]}
                 timepicker
               />
             </>

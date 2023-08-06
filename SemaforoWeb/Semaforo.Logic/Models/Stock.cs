@@ -13,7 +13,7 @@ namespace Semaforo.Logic.Models
         public int? SizeId { get; set; }
         public int? SaleDetailId { get; set; }
         public decimal? PriceSpecial { get; set; }
-        public DateTime CreateDate { get; set; }
+        public DateTime? CreateDate { get; set; }
         public int? SerialNumber { get; set; }
         public int? Quantity { get; set; }
         public string Barcode { get; set; }

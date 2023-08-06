@@ -462,6 +462,10 @@ namespace Semaforo.Logic.Models
 
                 entity.Property(e => e.EmployeeId).HasColumnName("Employee_ID");
 
+                entity.Property(e => e.Active)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
                 entity.Property(e => e.Address)
                     .HasMaxLength(150)
                     .UseCollation("Modern_Spanish_CI_AS");
@@ -1017,7 +1021,8 @@ namespace Semaforo.Logic.Models
 
                 entity.Property(e => e.SaleDate)
                     .HasColumnType("datetime")
-                    .HasColumnName("Sale_Date");
+                    .HasColumnName("Sale_Date")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.SaleTypeId).HasColumnName("Sale_Type_ID");
 
@@ -1121,6 +1126,11 @@ namespace Semaforo.Logic.Models
                     .HasMaxLength(150);
 
                 entity.Property(e => e.Ciudad).HasMaxLength(100);
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("Create_Date")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.Description).HasMaxLength(500);
 
