@@ -51,13 +51,19 @@ namespace SemaforoWeb.Profiles
 
             CreateMap<Employee, EmployeeBO>()
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FirstLastName + " " + src.SecondLastName + " " + src.Name));
-            CreateMap<EmployeeBO, Employee>();
+            CreateMap<EmployeeBO, Employee>()
+                .ForMember(dest => dest.Birthdate, opt => opt.MapFrom(src => src.Birthdate == null ? src.Birthdate : src.Birthdate.Value.ToUniversalTime()))
+                .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.StartDate == null ? src.StartDate : src.StartDate.Value.ToUniversalTime()))
+                .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.EndDate == null ? src.EndDate : src.EndDate.Value.ToUniversalTime()));
 
             CreateMap<EmployeeDTO, EmployeeBO>()
                 .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => mapFile(src.Image)))
                 .ForMember(dest => dest.Files, opt => opt.MapFrom(src => src.Files));
             CreateMap<EmployeeBO, EmployeeDTO>()
-                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => "data:image/png;base64," + Convert.ToBase64String(src.Photo)));
+                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => "data:image/png;base64," + Convert.ToBase64String(src.Photo)))
+                .ForMember(dest => dest.Birthdate, opt => opt.MapFrom(src => src.Birthdate == null ? src.Birthdate : src.Birthdate.Value.ToUniversalTime()))
+                .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.StartDate == null ? src.StartDate : src.StartDate.Value.ToUniversalTime()))
+                .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.EndDate == null ? src.EndDate : src.EndDate.Value.ToUniversalTime()));
 
             CreateMap<Product, ProductBO>();
             CreateMap<ProductBO, ProductDTO>();

@@ -293,15 +293,23 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
             />
           )
         case 'datetime':
+          // const utcDate1 = itemData[toLower(f.key) as dataItemKey].toISOString()
           return (
             <>
               <CDatePicker
                 {...register(toLower(f.key))}
                 id={'datetime-' + f.key}
-                locale="es-MX"
-                onDateChange={(date) => {
-                  const newDate: dateField = { field: f.key, datetime: date }
-                  setDateValues([...dateValues, newDate])
+                onDateChange={(utcDate) => {
+                  const existing = dateValues.find((ex) => ex.field === f.key)
+                  if (existing) {
+                    existing.datetime = utcDate
+                  } else {
+                    const newDate: dateField = {
+                      field: f.key,
+                      datetime: utcDate,
+                    }
+                    setDateValues([...dateValues, newDate])
+                  }
                 }}
                 date={itemData[toLower(f.key) as dataItemKey]}
                 timepicker

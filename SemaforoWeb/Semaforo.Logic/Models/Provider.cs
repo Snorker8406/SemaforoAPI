@@ -21,6 +21,7 @@ namespace Semaforo.Logic.Models
         public string Cellphone { get; set; }
         public string BankAccounts { get; set; }
         public string Description { get; set; }
+        public DateTime? CreateDate { get; set; }
         public string Whatsapp { get; set; }
         public string Website { get; set; }
         public byte[] Image { get; set; }

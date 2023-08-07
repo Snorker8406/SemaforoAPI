@@ -99,7 +99,7 @@ namespace Semaforo.Logic.Models
                 entity.Property(e => e.OpeningDate)
                     .HasColumnType("datetime")
                     .HasColumnName("Opening_Date")
-                    .HasDefaultValueSql("(getdate())");
+                    .HasDefaultValueSql("(getutcdate())");
 
                 entity.Property(e => e.SaleId).HasColumnName("Sale_ID");
 
@@ -275,7 +275,7 @@ namespace Semaforo.Logic.Models
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
                     .HasColumnName("Create_Date")
-                    .HasDefaultValueSql("(getdate())");
+                    .HasDefaultValueSql("(getutcdate())");
 
                 entity.Property(e => e.Description)
                     .HasMaxLength(250)
@@ -318,7 +318,7 @@ namespace Semaforo.Logic.Models
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
                     .HasColumnName("Create_Date")
-                    .HasDefaultValueSql("(getdate())");
+                    .HasDefaultValueSql("(getutcdate())");
 
                 entity.Property(e => e.Email)
                     .HasMaxLength(100)
@@ -421,6 +421,11 @@ namespace Semaforo.Logic.Models
 
                 entity.Property(e => e.ColorSecuence).HasColumnName("Color_Secuence");
 
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("Create_Date")
+                    .HasDefaultValueSql("(getutcdate())");
+
                 entity.Property(e => e.Description).HasMaxLength(250);
 
                 entity.Property(e => e.DstFile)
@@ -487,7 +492,7 @@ namespace Semaforo.Logic.Models
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
                     .HasColumnName("Create_Date")
-                    .HasDefaultValueSql("(getdate())");
+                    .HasDefaultValueSql("(getutcdate())");
 
                 entity.Property(e => e.Email).HasMaxLength(100);
 
@@ -614,7 +619,7 @@ namespace Semaforo.Logic.Models
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
                     .HasColumnName("Create_Date")
-                    .HasDefaultValueSql("(getdate())");
+                    .HasDefaultValueSql("(getutcdate())");
 
                 entity.Property(e => e.EmployeeId).HasColumnName("Employee_ID");
 
@@ -699,7 +704,7 @@ namespace Semaforo.Logic.Models
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
                     .HasColumnName("Create_Date")
-                    .HasDefaultValueSql("(getdate())");
+                    .HasDefaultValueSql("(getutcdate())");
 
                 entity.Property(e => e.Description)
                     .HasMaxLength(250)
@@ -802,7 +807,7 @@ namespace Semaforo.Logic.Models
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("date")
                     .HasColumnName("Create_Date")
-                    .HasDefaultValueSql("(getdate())");
+                    .HasDefaultValueSql("(getutcdate())");
 
                 entity.Property(e => e.Picture).HasColumnType("image");
 
@@ -914,6 +919,11 @@ namespace Semaforo.Logic.Models
                     .HasMaxLength(250)
                     .HasColumnName("Contact_Name");
 
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("Create_Date")
+                    .HasDefaultValueSql("(getutcdate())");
+
                 entity.Property(e => e.Description).HasMaxLength(500);
 
                 entity.Property(e => e.Image).HasColumnType("image");
@@ -1022,7 +1032,7 @@ namespace Semaforo.Logic.Models
                 entity.Property(e => e.SaleDate)
                     .HasColumnType("datetime")
                     .HasColumnName("Sale_Date")
-                    .HasDefaultValueSql("(getdate())");
+                    .HasDefaultValueSql("(getutcdate())");
 
                 entity.Property(e => e.SaleTypeId).HasColumnName("Sale_Type_ID");
 
@@ -1130,7 +1140,7 @@ namespace Semaforo.Logic.Models
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
                     .HasColumnName("Create_Date")
-                    .HasDefaultValueSql("(getdate())");
+                    .HasDefaultValueSql("(getutcdate())");
 
                 entity.Property(e => e.Description).HasMaxLength(500);
 
@@ -1251,7 +1261,7 @@ namespace Semaforo.Logic.Models
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
                     .HasColumnName("Create_Date")
-                    .HasDefaultValueSql("(getdate())");
+                    .HasDefaultValueSql("(getutcdate())");
 
                 entity.Property(e => e.PriceSpecial)
                     .HasColumnType("money")

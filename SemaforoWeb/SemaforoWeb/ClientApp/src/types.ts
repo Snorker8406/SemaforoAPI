@@ -4,7 +4,7 @@ export type dataItem = {
   // value: string
   files?: fileDTO[] | any
   images?: fileDTO[] | any
-  profileImage: string
+  // profileImage: string
 }
 export type dataColumn = {
   isColumn?: boolean

@@ -15,6 +15,7 @@ namespace Semaforo.Logic.Models
         public int EmbroideryId { get; set; }
         public int? SchoolId { get; set; }
         public string Name { get; set; }
+        public DateTime? CreateDate { get; set; }
         public byte[] EmbFile { get; set; }
         public byte[] DstFile { get; set; }
         public string Description { get; set; }
