@@ -293,7 +293,8 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
             />
           )
         case 'datetime':
-          // const utcDate1 = itemData[toLower(f.key) as dataItemKey].toISOString()
+          const dateUtcString = itemData[toLower(f.key) as dataItemKey]
+          const dateUTC = dateUtcString ? new Date(dateUtcString + 'Z') : null
           return (
             <>
               <CDatePicker
@@ -311,7 +312,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
                     setDateValues([...dateValues, newDate])
                   }
                 }}
-                date={itemData[toLower(f.key) as dataItemKey]}
+                date={dateUTC}
                 timepicker
               />
             </>
