@@ -117,6 +117,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
 
         const imageFields = catalogFields.filter((cf) => cf.type === 'image')
         const forLoopAsync = async () => {
+          const existingImages = []
           for (let i = 0; i < imageFields.length; i++) {
             const imageString = itemData[imageFields[i].key as dataItemKey]
             if (imageString?.length > 0) {
@@ -127,11 +128,10 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
                   imageFields[i],
                 ),
               }
-              setSingleImages([...singleImages, sif])
-              console.log('singleImages', singleImages)
-              console.log('sif', sif)
+              existingImages.push(sif)
             }
           }
+          setSingleImages(existingImages)
         }
         forLoopAsync()
       }
@@ -190,7 +190,6 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
           case 'image':
             const newSingleImage: sigleImageFile = { key: fieldKey, file: file }
             setSingleImages([...singleImages, newSingleImage])
-            console.log('case done', singleImages)
             break
           default:
             break
@@ -199,7 +198,6 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
 
       if (status === 'removed') {
         if (fieldType === 'image') {
-          console.log('caser', singleImages)
           setSingleImages(singleImages.filter((si) => si.key !== fieldKey))
         } else if (fieldType === 'files' || fieldType === 'gallery') {
           if (!files.find((f) => f.name === file['name'])) {
