@@ -21,6 +21,7 @@ namespace  Semaforo.Logic.BO
         public string Cellphone { get; set; }
         public string Phone { get; set; }
         public string Facebook { get; set; }
+        public byte[] FacebookProfileImage { get; set; }
         public string HealthInfo { get; set; }
         public string MaritalStatus { get; set; }
         public bool Active { get; set; }

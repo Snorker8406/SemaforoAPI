@@ -1,9 +1,11 @@
+import { type } from "os"
+
 export type dataItem = {
   itemIdField: string | undefined
   name: string
   // value: string
   files?: fileDTO[] | any
-  images?: fileDTO[] | any
+  gallery?: fileDTO[] | any
   // profileImage: string
 }
 export type dataColumn = {
@@ -39,4 +41,9 @@ export type LoaderType = {
 export type dateField = {
   field: string
   datetime: Date | null
+}
+
+export type sigleImageFile = {
+  key: string
+  file: File | never
 }

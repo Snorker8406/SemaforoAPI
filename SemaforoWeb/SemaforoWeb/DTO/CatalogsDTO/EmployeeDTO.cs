@@ -16,7 +16,6 @@ namespace SemaforoWeb.DTO.CatalogsDTO
         public string Gender { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public IFormFile Image { get; set; }
         public string Address { get; set; }
         public string Cellphone { get; set; }
         public string Phone { get; set; }
@@ -25,6 +24,7 @@ namespace SemaforoWeb.DTO.CatalogsDTO
         public string MaritalStatus { get; set; }
         public bool Active { get; set; }
         public string Comments { get; set; }
+        public List<IFormFile> SingleImages { get; set; }
         public List<FileDTO> Files { get; set; }
         public List<RoleDTO> Roles { get; set; }
 

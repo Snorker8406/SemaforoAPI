@@ -38,7 +38,7 @@ namespace Semaforo.Logic.Services
                 Context.Employees.Add(employee);
                 await Context.SaveChangesAsync();
 
-                return newUser.EmployeeId;
+                return employee.EmployeeId;
             }
             catch (Exception ex)
             {

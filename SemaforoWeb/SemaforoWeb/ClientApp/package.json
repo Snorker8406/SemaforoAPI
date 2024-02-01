@@ -2,6 +2,7 @@
   "name": "@coreui/coreui-pro-react-admin-template-starter-ts",
   "version": "4.3.0",
   "description": "Semaforo administration",
+  "proxy": "http://localhost:23123",
   "homepage": ".",
   "bugs": {
     "url": "https://github.com/coreui/coreui-pro-react-admin-template/issues"

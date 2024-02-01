@@ -360,7 +360,7 @@
         "type": "string",
         "isColumn": true,
         "isInForm": true,
-        "size": 3
+        "size": 4
       },
       {
         "key": "firstLastName",
@@ -368,7 +368,7 @@
         "type": "string",
         "isColumn": true,
         "isInForm": true,
-        "size": 3
+        "size": 4
       },
       {
         "key": "secondLastName",
@@ -376,23 +376,56 @@
         "type": "string",
         "isColumn": true,
         "isInForm": true,
-        "size": 3
+        "size": 4
       },
       {
         "key": "gender",
-        "label": "sexo",
+        "label": "Genero",
         "type": "string",
         "isColumn": false,
         "isInForm": true,
         "size": 3
       },
       {
-        "key": "address",
-        "label": "Direccion",
+        "key": "email",
+        "label": "Email",
+        "type": "string",
+        "isColumn": true,
+        "isInForm": true,
+        "size": 3,
+        "validationPattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$"
+      },
+      {
+        "key": "cellphone",
+        "label": "Celular",
+        "type": "string",
+        "isColumn": true,
+        "isInForm": true,
+        "size": 2
+      },
+      {
+        "key": "whatsapp",
+        "label": "Whatsapp",
+        "type": "boolean",
+        "isColumn": false,
+        "isInForm": true,
+        "size": 1
+      },
+      {
+        "key": "facebook",
+        "label": "Facebook",
         "type": "string",
         "isColumn": false,
         "isInForm": true,
-        "size": 9
+        "size": 2
+      },
+      {
+        "key": "birthdate",
+        "label": "Fecha de Nacimiento",
+        "type": "datetime",
+        "isColumn": false,
+        "isInForm": true,
+        "size": 3
       },
       {
         "key": "startDate",
@@ -411,16 +444,25 @@
         "size": 3
       },
       {
-        "key": "birthdate",
-        "label": "Fecha de Nacimiento",
-        "type": "datetime",
+        "key": "address",
+        "label": "Direccion",
+        "type": "string",
         "isColumn": false,
         "isInForm": true,
-        "size": 3
+        "size": 12
       },
       {
         "key": "photo",
         "label": "Foto",
+        "type": "image",
+        "isColumn": false,
+        "isInForm": true,
+        "size": 2,
+        "rows": 4
+      },
+      {
+        "key": "facebookProfileImage",
+        "label": "Facebook",
         "type": "image",
         "isColumn": false,
         "isInForm": true,
@@ -433,7 +475,7 @@
         "type": "textarea",
         "isColumn": false,
         "isInForm": true,
-        "size": 10,
+        "size": 8,
         "rows": 4
       },
       {

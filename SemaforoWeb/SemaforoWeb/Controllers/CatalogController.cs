@@ -16,6 +16,7 @@ using System.Linq;
 using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
+using SemaforoWeb.Common;
 
 namespace SemaforoWeb.Controllers
 {
@@ -91,8 +92,8 @@ namespace SemaforoWeb.Controllers
         public async Task<IActionResult> PostItem(
             string entityName,
             [FromForm] string dto,
-            [FromForm(Name = "image")] IFormFile image,
-            [FromForm(Name = "images")] List<IFormFile> images,
+            [FromForm(Name = "singleImages")] List<IFormFile> singleImages,
+            [FromForm(Name = "gallery")] List<IFormFile> gallery,
             [FromForm(Name = "files")] List<IFormFile> files)
         {
             try
@@ -100,13 +101,13 @@ namespace SemaforoWeb.Controllers
                 Type typeBO = Type.GetType("Semaforo.Logic.BO." + entityName + "BO, Semaforo.Logic");
                 Type typeDTO = Type.GetType("SemaforoWeb.DTO.CatalogsDTO." + entityName + "DTO, SemaforoWeb");
                 var itemDTO = JsonConvert.DeserializeObject(dto.ToString(), typeDTO);
-                if (image != null)
+                if (singleImages.Any())
                 {
-                    typeDTO.GetProperty("Image").SetValue(itemDTO, image);
+                    typeDTO.GetProperty("SingleImages").SetValue(itemDTO, singleImages);
                 }
-                if (images.Any())
+                if (gallery.Any())
                 {
-                    typeDTO.GetProperty("Images").SetValue(itemDTO, images);
+                    typeDTO.GetProperty("Gallery").SetValue(itemDTO, gallery);
                 }
                 if (files.Any())
                 {
@@ -145,8 +146,8 @@ namespace SemaforoWeb.Controllers
             int id,
             string entityName,
             [FromForm] string dto,
-            [FromForm(Name = "image")] IFormFile image,
-            [FromForm(Name = "images")] List<IFormFile> images,
+            [FromForm(Name = "singleImages")] List<IFormFile> singleImages,
+            [FromForm(Name = "gallery")] List<IFormFile> gallery,
             [FromForm(Name = "files")] List<IFormFile> files,
             [FromForm(Name = "removedFiles")] List<string> removedFiles)
         {
@@ -155,13 +156,9 @@ namespace SemaforoWeb.Controllers
                 Type typeBO = Type.GetType("Semaforo.Logic.BO." + entityName + "BO, Semaforo.Logic");
                 Type typeDTO = Type.GetType("SemaforoWeb.DTO.CatalogsDTO." + entityName + "DTO, SemaforoWeb");
                 var itemDTO = JsonConvert.DeserializeObject(dto.ToString(), typeDTO);
-                if (image != null)
+                if (gallery.Any())
                 {
-                    typeDTO.GetProperty("Image").SetValue(itemDTO, image);
-                }
-                if (images.Any())
-                {
-                    typeDTO.GetProperty("Images").SetValue(itemDTO, images);
+                    typeDTO.GetProperty("Gallery").SetValue(itemDTO, gallery);
                 }
                 if (files.Any())
                 {
@@ -176,6 +173,13 @@ namespace SemaforoWeb.Controllers
                     typeDTO.GetProperty("Files").SetValue(itemDTO, filesDTO);
                 }
                 var itemBO = _mapper.Map(itemDTO, typeDTO, typeBO);
+                if (singleImages.Any())
+                {
+                    foreach (var image in singleImages)
+                    {
+                        itemBO.GetType().GetProperty(Shared.FirstCharToUpper(image.FileName)).SetValue(itemBO, Shared.mapFile(image));
+                    }
+                }
                 if (id != (int)typeBO.GetProperty(entityName + "Id").GetValue(itemBO))
                 {
                     return BadRequest("information inconsistent");

@@ -28,7 +28,7 @@ namespace  Semaforo.Logic.BO
         public string MaritalStatus { get; set; }
         public bool Active { get; set; }
         public string Comments { get; set; }
-        public DateTime CreateDate { get; set; }
+        public DateTime? CreateDate { get; set; }
         public int CreatedBy { get; set; }
         public DateTime LastModify { get; set; }
         public int LastModifiedBy { get; set; }

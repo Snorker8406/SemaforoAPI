@@ -45,8 +45,12 @@ export const FileUploader = forwardRef<HTMLDivElement, FileUploaderProps>(
     const [initialFiles, setInitialFiles] = useState([] as File[])
     const { setShowLoader } = useContext(LoaderContext)
 
+    // useEffect(() => {
+    //   setInitialFiles([...initialFiles, ...existingFiles])
+    // }, [existingFiles])
+
     useEffect(() => {
-      setInitialFiles([...initialFiles, ...existingFiles])
+      setInitialFiles([...existingFiles])
     }, [existingFiles])
 
     const toLower = (str: string) => {

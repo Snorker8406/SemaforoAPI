@@ -25,7 +25,13 @@ import {
   CDatePicker,
 } from '@coreui/react-pro'
 
-import { dataItem, dataColumn, fileDTO, dateField } from '../../types'
+import {
+  dataItem,
+  dataColumn,
+  fileDTO,
+  dateField,
+  sigleImageFile,
+} from '../../types'
 import useFetch from '../Utils/useFetch'
 import { useForm } from 'react-hook-form'
 import { FileUploader } from './FileUploader'
@@ -59,12 +65,13 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
     ref,
   ) => {
     const [formTitle, setFormTitle] = useState('')
-    const [images, setImages] = useState([])
-    const [image, setImage] = useState([])
+    const [gallery, setGallery] = useState([])
     const [saveResponse, saveItem] = useFetch(APIurl, 'POST')
     const [isSaving, setIsSaving] = useState(false)
     const [existingFiles, setExistingFiles] = useState([] as File[])
-    const [existingImage, setExistingImage] = useState([] as File[])
+    // const [existingImages, setExistingImages] = useState([] as File[]) // para el gallery
+
+    const [singleImages, setSingleImages] = useState([] as sigleImageFile[])
     const [dateValues, setDateValues] = useState([] as dateField[])
     const {
       register,
@@ -74,6 +81,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
     } = useForm<any>()
 
     let files: File[] = []
+    // const singleImages: sigleImageFile[] = [] as sigleImageFile[]
     let removedFileNames: string[] = []
 
     type dataItemKey = keyof typeof itemData
@@ -108,23 +116,24 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
         }
 
         const imageFields = catalogFields.filter((cf) => cf.type === 'image')
-        imageFields?.forEach((ifd) => {
-          const convertImage = async (dtoImage: string) => {
-            const convertedFiles = [] as File[]
-            const base64Response = await fetch(
-              `data:image/jpeg;base64,${dtoImage}`,
-            )
-            const buf = await base64Response.arrayBuffer()
-            const file = new File([buf], ifd.key + '.jpg', {
-              type: 'image/jpeg',
-            })
-            convertedFiles.push(file)
-            setExistingImage([...existingImage, ...convertedFiles])
+        const forLoopAsync = async () => {
+          for (let i = 0; i < imageFields.length; i++) {
+            const imageString = itemData[imageFields[i].key as dataItemKey]
+            if (imageString?.length > 0) {
+              const sif: sigleImageFile = {
+                key: imageFields[i].key,
+                file: await builtImage(
+                  itemData[imageFields[i].key as dataItemKey],
+                  imageFields[i],
+                ),
+              }
+              setSingleImages([...singleImages, sif])
+              console.log('singleImages', singleImages)
+              console.log('sif', sif)
+            }
           }
-          const imageString = itemData[ifd.key as dataItemKey]
-          if (imageString.length > 0)
-            convertImage(itemData[ifd.key as dataItemKey])
-        })
+        }
+        forLoopAsync()
       }
       reset(itemData)
     }, [itemData])
@@ -135,6 +144,15 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       setIsSaving(false)
       itemHasBeenUpdated(true)
     }, [saveResponse])
+
+    const builtImage = async (dtoImage: string, ifd: dataColumn) => {
+      const base64Response = await fetch(`data:image/jpeg;base64,${dtoImage}`)
+      const buf = await base64Response.arrayBuffer()
+      const file = new File([buf], ifd.key + '.jpg', {
+        type: 'image/jpeg',
+      })
+      return file
+    }
 
     const toLower = (str: string) => {
       return str.charAt(0).toLowerCase() + str.slice(1)
@@ -159,18 +177,20 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
               break
             files.push(file)
             break
-          case 'images':
+          case 'gallery':
             if (
-              itemData['images'] &&
-              itemData['images']?.find(
+              itemData['gallery'] &&
+              itemData['gallery']?.find(
                 (f: never) => f['fileName'] === file['name'],
               )
             )
               break
-            setImages([...images, file])
+            setGallery([...gallery, file])
             break
           case 'image':
-            setImage([file]) // por el momento solo recibe un item
+            const newSingleImage: sigleImageFile = { key: fieldKey, file: file }
+            setSingleImages([...singleImages, newSingleImage])
+            console.log('case done', singleImages)
             break
           default:
             break
@@ -179,8 +199,9 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
 
       if (status === 'removed') {
         if (fieldType === 'image') {
-          setImage([])
-        } else if (fieldType === 'files' || fieldType === 'images') {
+          console.log('caser', singleImages)
+          setSingleImages(singleImages.filter((si) => si.key !== fieldKey))
+        } else if (fieldType === 'files' || fieldType === 'gallery') {
           if (!files.find((f) => f.name === file['name'])) {
             removedFileNames.push(file['name'])
           } else {
@@ -188,19 +209,19 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
           }
         }
       }
-      // console.log(status, meta, file)
     }
 
     const saveChanges = async (data: any) => {
       await setIsSaving(true)
       const formData = new FormData()
-      if (image.length > 0) {
-        formData.append('image', image[0])
-        data.image = ''
+      if (singleImages.length > 0) {
+        for (const sImg of singleImages) {
+          formData.append('singleImages', sImg.file, sImg.key)
+        }
       }
-      if (images.length > 0) {
-        for (const img of images) {
-          formData.append('images', img)
+      if (gallery.length > 0) {
+        for (const img of gallery) {
+          formData.append('gallery', img)
         }
       }
       if (files.length > 0) {
@@ -228,10 +249,9 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       )
       files = []
       removedFileNames = []
-      setImages([])
-      setImage([])
+      setGallery([])
+      setSingleImages([])
       setExistingFiles([])
-      setExistingImage([])
     }
 
     const onCloseEdit = () => {
@@ -239,10 +259,9 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       if (onClose) {
         files = []
         removedFileNames = []
-        setImages([])
-        setImage([])
+        setGallery([])
+        setSingleImages([])
         setExistingFiles([])
-        setExistingImage([])
         onClose()
       }
     }
@@ -324,13 +343,15 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
               f={f}
               register={register}
               onChangeStatus={onFileStatusChanged}
-              existingFiles={existingImage}
+              existingFiles={singleImages
+                .filter((ei) => ei.key === f.key)
+                .map((ei) => ei.file)}
               APIurl={APIurl}
               itemIdField={itemIdField}
               className={'sigle-image'}
             />
           )
-        case 'images':
+        case 'gallery':
         case 'files':
           return (
             <Suspense fallback={<SpinnerLoading />}>

@@ -6,6 +6,8 @@ using SemaforoWeb.DTO;
 using SemaforoWeb.DTO.CatalogsDTO;
 using SemaforoWeb.DTO.CatalogsDTO.Catalogs;
 using System;
+using SemaforoWeb.Common;
+using System.Collections.Generic;
 using System.Data;
 using System.Net.Http;
 
@@ -13,14 +15,6 @@ namespace SemaforoWeb.Profiles
 {
     public class MapProfiles : Profile
     {
-        private byte[] mapFile(IFormFile file) {
-            if (file == null) return null;
-            using (var stream = new System.IO.MemoryStream())
-            {
-                file.CopyTo(stream);
-                return stream.ToArray();
-            }
-        }
         public MapProfiles()
         {
             CreateMap<Provider, ProviderBO>();
@@ -33,10 +27,10 @@ namespace SemaforoWeb.Profiles
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.LastName + " " + src.LastNameMother + " " + src.Name));
             CreateMap<ClientBO, Client>()
                 .ForMember(dest => dest.LastModify, opt => opt.MapFrom(src => DateTime.UtcNow));
-            CreateMap<ClientBO, ClientDTO>()
-                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.ProfileImage.Length > 0 ? src.ProfileImage : null));
+            CreateMap<ClientBO, ClientDTO>();
+                //.ForMember(dest => dest.test, opt => opt.MapFrom(src => src.ProfileImage.Length > 0 ? src.ProfileImage : null));
             CreateMap<ClientDTO, ClientBO>()
-                .ForMember(dest => dest.ProfileImage, opt => opt.MapFrom(src => mapFile(src.Image)))
+                .ForMember(dest => dest.ProfileImage, opt => opt.MapFrom(src => Shared.mapFile(src.SingleImages[0])))
                 .ForMember(dest => dest.Files, opt => opt.MapFrom(src => src.Files));
 
             CreateMap<ClientCategory, ClientCategoryBO>();
@@ -52,16 +46,15 @@ namespace SemaforoWeb.Profiles
             CreateMap<Employee, EmployeeBO>()
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FirstLastName + " " + src.SecondLastName + " " + src.Name));
             CreateMap<EmployeeBO, Employee>()
-                .ForMember(dest => dest.Birthdate, opt => opt.MapFrom(src => src.Birthdate == null ? src.Birthdate : src.Birthdate.Value.ToUniversalTime()))
                 .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.StartDate == null ? src.StartDate : src.StartDate.Value.ToUniversalTime()))
                 .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.EndDate == null ? src.EndDate : src.EndDate.Value.ToUniversalTime()));
 
             CreateMap<EmployeeDTO, EmployeeBO>()
-                .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => mapFile(src.Image)))
+                //.ForMember(dest => dest.Photo, opt => opt.MapFrom(src => Shared.mapFile(src.SingleImages[0])))
+                //.ForMember(dest => dest.FacebookProfileImage, opt => opt.MapFrom(src => Shared.mapFile(src.SingleImages[1])))
                 .ForMember(dest => dest.Files, opt => opt.MapFrom(src => src.Files));
             CreateMap<EmployeeBO, EmployeeDTO>()
-                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => "data:image/png;base64," + Convert.ToBase64String(src.Photo)))
-                .ForMember(dest => dest.Birthdate, opt => opt.MapFrom(src => src.Birthdate == null ? src.Birthdate : src.Birthdate.Value.ToUniversalTime()))
+                //.ForMember(dest => dest.Image, opt => opt.MapFrom(src => "data:image/png;base64," + Convert.ToBase64String(src.Photo)))
                 .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.StartDate == null ? src.StartDate : src.StartDate.Value.ToUniversalTime()))
                 .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.EndDate == null ? src.EndDate : src.EndDate.Value.ToUniversalTime()));
 
@@ -118,7 +111,10 @@ namespace SemaforoWeb.Profiles
 
 
             CreateMap<ApplicationUserBO, Employee>()
-                .ForMember(dest => dest.FacebookProfileImage, opt => opt.MapFrom(src => src.ProfileImage));
+                .ForMember(dest => dest.FacebookProfileImage, opt => opt.MapFrom(src => src.ProfileImage))
+                .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.CreateDate == null ? src.CreateDate : src.CreateDate.Value.ToUniversalTime()))
+                .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.StartDate == null ? src.StartDate : src.StartDate.Value.ToUniversalTime()))
+                .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.EndDate == null ? src.EndDate : src.EndDate.Value.ToUniversalTime()));
             CreateMap<ApplicationUserBO, EmployeeDTO>();
             CreateMap<Employee, ApplicationUserBO>()
                 .ForMember(dest => dest.ProfileImage, opt => opt.MapFrom(src =>src.FacebookProfileImage));
@@ -131,7 +127,7 @@ namespace SemaforoWeb.Profiles
             CreateMap<FileBO, FileDTO>();
             CreateMap<FileDTO, FileBO>();
             CreateMap<IFormFile, FileDTO>()
-                .ForMember(dest => dest.Archive, opt => opt.MapFrom(src => mapFile(src)))
+                .ForMember(dest => dest.Archive, opt => opt.MapFrom(src => Shared.mapFile(src)))
                 .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Length))
                 .ForMember(dest => dest.FieldType, opt => opt.MapFrom(src => src.Name));
 
