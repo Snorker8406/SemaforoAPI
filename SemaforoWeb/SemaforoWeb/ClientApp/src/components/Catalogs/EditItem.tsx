@@ -30,7 +30,7 @@ import {
   dataColumn,
   fileDTO,
   dateField,
-  sigleImageFile,
+  singleImageFile,
 } from '../../types'
 import useFetch from '../Utils/useFetch'
 import { useForm } from 'react-hook-form'
@@ -69,9 +69,11 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
     const [saveResponse, saveItem] = useFetch(APIurl, 'POST')
     const [isSaving, setIsSaving] = useState(false)
     const [existingFiles, setExistingFiles] = useState([] as File[])
+    const [files, setFiles] = useState([] as File[])
+    const [removedFilenames, setRemovedFilenames] = useState([] as string[])
     // const [existingImages, setExistingImages] = useState([] as File[]) // para el gallery
 
-    const [singleImages, setSingleImages] = useState([] as sigleImageFile[])
+    const [singleImages, setSingleImages] = useState([] as singleImageFile[])
     const [dateValues, setDateValues] = useState([] as dateField[])
     const {
       register,
@@ -79,10 +81,6 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       reset,
       formState: { errors },
     } = useForm<any>()
-
-    let files: File[] = []
-    // const singleImages: sigleImageFile[] = [] as sigleImageFile[]
-    let removedFileNames: string[] = []
 
     type dataItemKey = keyof typeof itemData
 
@@ -121,7 +119,7 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
           for (let i = 0; i < imageFields.length; i++) {
             const imageString = itemData[imageFields[i].key as dataItemKey]
             if (imageString?.length > 0) {
-              const sif: sigleImageFile = {
+              const sif: singleImageFile = {
                 key: imageFields[i].key,
                 file: await builtImage(
                   itemData[imageFields[i].key as dataItemKey],
@@ -158,54 +156,43 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
       return str.charAt(0).toLowerCase() + str.slice(1)
     }
 
-    const onFileStatusChanged = (
-      { meta, file }: never,
-      status: string,
-      fieldType: string,
-      fieldKey: string,
-    ) => {
-      if (isSaving) return
-      if (status === 'done') {
-        switch (fieldType) {
-          case 'files':
-            if (
-              itemData['files'] &&
-              itemData['files'].find(
-                (f: never) => f['fileName'] === file['name'],
-              )
-            )
-              break
-            files.push(file)
-            break
-          case 'gallery':
-            if (
-              itemData['gallery'] &&
-              itemData['gallery']?.find(
-                (f: never) => f['fileName'] === file['name'],
-              )
-            )
-              break
-            setGallery([...gallery, file])
-            break
-          case 'image':
-            const newSingleImage: sigleImageFile = { key: fieldKey, file: file }
-            setSingleImages([...singleImages, newSingleImage])
-            break
-          default:
-            break
-        }
-      }
-
-      if (status === 'removed') {
-        if (fieldType === 'image') {
-          setSingleImages(singleImages.filter((si) => si.key !== fieldKey))
-        } else if (fieldType === 'files' || fieldType === 'gallery') {
-          if (!files.find((f) => f.name === file['name'])) {
-            removedFileNames.push(file['name'])
-          } else {
-            files = files.filter((f) => f.name !== file['name'])
+    const handleFileChanges = ({
+      key,
+      image,
+      action,
+      removedFilename,
+      newFiles,
+    }: {
+      key: string
+      image?: File
+      action: string
+      removedFilename: string
+      newFiles?: File[]
+    }) => {
+      switch (action) {
+        case 'loadSingleImage':
+          if (image) {
+            const modifiedSingleImage: singleImageFile = { key, file: image }
+            setSingleImages([...singleImages, modifiedSingleImage])
           }
-        }
+          break
+        case 'removeSingleImage':
+          setSingleImages(singleImages.filter((si) => si.key !== key))
+          break
+        case 'updateRemovedFileList':
+          if (
+            itemData.files.find((f: fileDTO) => f.fileName === removedFilename)
+          ) {
+            setRemovedFilenames([...removedFilenames, removedFilename]) //remove from database
+          } else {
+            setFiles(files.filter((f) => f.name !== removedFilename)) // remove when just added not in db yet
+          }
+          break
+        case 'loadNewFiles':
+          if (newFiles) setFiles([...files, ...newFiles])
+          break
+        default:
+          break
       }
     }
 
@@ -227,8 +214,8 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
           formData.append('files', file)
         }
       }
-      if (removedFileNames.length > 0) {
-        for (const name of removedFileNames) {
+      if (removedFilenames.length > 0) {
+        for (const name of removedFilenames) {
           formData.append('removedFiles', name)
         }
       }
@@ -245,8 +232,8 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
         formData,
         isNewItem ? 'POST' : 'PUT',
       )
-      files = []
-      removedFileNames = []
+      setFiles([])
+      setRemovedFilenames([])
       setGallery([])
       setSingleImages([])
       setExistingFiles([])
@@ -255,8 +242,8 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
     const onCloseEdit = () => {
       setVisible(false)
       if (onClose) {
-        files = []
-        removedFileNames = []
+        setFiles([])
+        setRemovedFilenames([])
         setGallery([])
         setSingleImages([])
         setExistingFiles([])
@@ -340,13 +327,13 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
               itemData={itemData}
               f={f}
               register={register}
-              onChangeStatus={onFileStatusChanged}
-              existingFiles={singleImages
+              initialFiles={singleImages
                 .filter((ei) => ei.key === f.key)
                 .map((ei) => ei.file)}
               APIurl={APIurl}
               itemIdField={itemIdField}
               className={'sigle-image'}
+              handleFileChanges={handleFileChanges}
             />
           )
         case 'gallery':
@@ -357,12 +344,12 @@ export const EditItem = forwardRef<HTMLDivElement, EditItemProps>(
                 itemData={itemData}
                 f={f}
                 register={register}
-                onChangeStatus={onFileStatusChanged}
-                existingFiles={existingFiles}
+                initialFiles={existingFiles}
                 className={'all-type-files'}
                 APIurl={APIurl}
                 itemIdField={itemIdField}
                 rows={f.rows}
+                handleFileChanges={handleFileChanges}
               />
             </Suspense>
           )

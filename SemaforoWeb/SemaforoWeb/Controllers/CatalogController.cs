@@ -101,10 +101,6 @@ namespace SemaforoWeb.Controllers
                 Type typeBO = Type.GetType("Semaforo.Logic.BO." + entityName + "BO, Semaforo.Logic");
                 Type typeDTO = Type.GetType("SemaforoWeb.DTO.CatalogsDTO." + entityName + "DTO, SemaforoWeb");
                 var itemDTO = JsonConvert.DeserializeObject(dto.ToString(), typeDTO);
-                if (singleImages.Any())
-                {
-                    typeDTO.GetProperty("SingleImages").SetValue(itemDTO, singleImages);
-                }
                 if (gallery.Any())
                 {
                     typeDTO.GetProperty("Gallery").SetValue(itemDTO, gallery);
@@ -122,6 +118,13 @@ namespace SemaforoWeb.Controllers
                     typeDTO.GetProperty("Files").SetValue(itemDTO, filesDTO);
                 }
                 var itemBO = _mapper.Map(itemDTO, typeDTO, typeBO);
+                if (singleImages.Any())
+                {
+                    foreach (var image in singleImages)
+                    {
+                        itemBO.GetType().GetProperty(Shared.FirstCharToUpper(image.FileName)).SetValue(itemBO, Shared.mapFile(image));
+                    }
+                }
                 dynamic response = await _services[entityName].saveEntity(itemBO, entityName);
 
                 if (typeBO.GetProperty(entityName + "Id").GetValue(response) > 0)

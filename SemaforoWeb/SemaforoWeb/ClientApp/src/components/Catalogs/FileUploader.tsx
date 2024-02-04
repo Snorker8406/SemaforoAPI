@@ -6,10 +6,9 @@ import React, {
   useState,
 } from 'react'
 import PropTypes, { any } from 'prop-types'
-import { dataColumn, dataItem, fileDTO } from '../../types'
+import { dataColumn, dataItem, fileDTO, singleImageFile } from '../../types'
 import 'react-dropzone-uploader/dist/styles.css'
 import Dropzone from 'react-dropzone-uploader'
-import { useEffect } from 'react'
 import CIcon from '@coreui/icons-react'
 import * as icon from '@coreui/icons'
 import { SpinnerLoading } from '../Utils/spinnerLoading'
@@ -19,12 +18,12 @@ export interface FileUploaderProps extends HTMLAttributes<HTMLDivElement> {
   itemData: dataItem
   f: dataColumn
   register: any
-  onChangeStatus: any
-  existingFiles: File[]
+  initialFiles: File[]
   className?: string
   APIurl: string
   itemIdField: string
   rows?: number
+  handleFileChanges: any
 }
 
 export const FileUploader = forwardRef<HTMLDivElement, FileUploaderProps>(
@@ -33,31 +32,85 @@ export const FileUploader = forwardRef<HTMLDivElement, FileUploaderProps>(
       itemData,
       f,
       register,
-      onChangeStatus,
-      existingFiles,
+      initialFiles,
       className,
       APIurl,
       itemIdField,
       rows,
+      handleFileChanges,
     },
     ref,
   ) => {
-    const [initialFiles, setInitialFiles] = useState([] as File[])
+    const [singleImage, setSingleImage] = useState({} as singleImageFile)
     const { setShowLoader } = useContext(LoaderContext)
-
-    // useEffect(() => {
-    //   setInitialFiles([...initialFiles, ...existingFiles])
-    // }, [existingFiles])
-
-    useEffect(() => {
-      setInitialFiles([...existingFiles])
-    }, [existingFiles])
+    let files: File[] = []
+    let filesToLoadCount = 0
 
     const toLower = (str: string) => {
       return str.charAt(0).toLowerCase() + str.slice(1)
     }
     const handleChangeStatus = ({ meta, file }: never, status: string) => {
-      onChangeStatus({ meta, file }, status, f.type, f.key)
+      if (status === 'preparing') {
+        filesToLoadCount++
+      }
+      if (status === 'done') {
+        filesToLoadCount--
+        switch (f.type) {
+          case 'files':
+            if (
+              itemData['files'] &&
+              itemData['files'].find(
+                (f: never) => f['fileName'] === file['name'],
+              )
+            )
+              break
+            files.push(file)
+            if (filesToLoadCount === 0) {
+              handleFileChanges({
+                key: f.key,
+                newFiles: files,
+                action: 'loadNewFiles',
+              })
+              files = []
+            }
+            break
+          case 'gallery':
+            if (
+              itemData['gallery'] &&
+              itemData['gallery']?.find(
+                (f: never) => f['fileName'] === file['name'],
+              )
+            )
+              break
+            // setGallery([...gallery, file])
+            break
+          case 'image':
+            handleFileChanges({
+              key: f.key,
+              image: file,
+              action: 'loadSingleImage',
+            })
+            break
+          default:
+            break
+        }
+      }
+
+      if (status === 'removed') {
+        if (f.type === 'image') {
+          handleFileChanges({ key: f.key, action: 'removeSingleImage' })
+        } else if (f.type === 'files' || f.type === 'gallery') {
+          if (!files.find((f) => f.name === file['name'])) {
+            handleFileChanges({
+              key: f.key,
+              removedFilename: file['name'],
+              action: 'updateRemovedFileList',
+            })
+          } else {
+            files = files.filter((f) => f.name !== file['name'])
+          }
+        }
+      }
     }
 
     const getFileInfo = (fileName: string) => {
@@ -304,11 +357,12 @@ FileUploader.propTypes = {
   itemData: PropTypes.any.isRequired,
   f: PropTypes.any.isRequired,
   register: PropTypes.func.isRequired,
-  onChangeStatus: PropTypes.func.isRequired,
+  initialFiles: PropTypes.any,
   className: PropTypes.string,
   APIurl: PropTypes.string.isRequired,
   itemIdField: PropTypes.string.isRequired,
   rows: PropTypes.number,
+  handleFileChanges: PropTypes.func,
 }
 
 FileUploader.displayName = 'FileUploader'

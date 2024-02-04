@@ -1,5 +1,3 @@
-import { type } from "os"
-
 export type dataItem = {
   itemIdField: string | undefined
   name: string
@@ -43,7 +41,7 @@ export type dateField = {
   datetime: Date | null
 }
 
-export type sigleImageFile = {
+export type singleImageFile = {
   key: string
   file: File | never
 }
